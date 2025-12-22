@@ -6,23 +6,41 @@ import Link from "next/link";
 
 const Header = () => {
   const { user } = useUser();
+  const userRole = user?.unsafeMetadata?.role as string;
+
   return (
     <header className="flex gap-4">
       <div>Header Component</div>
-      <Link href="/">Home</Link>
-      {!user ? (
+      <nav className="flex justify-between w-full px-20 py-4">
         <div className="flex gap-4">
-          <Link href="/sign-in">Sign In</Link>
-          <Link href="/sign-up">Sign Up</Link>
+          <Link href="/">Home</Link>
+          {!user ? (
+            <div className="flex gap-4">
+              <Link href="/for-students">For Students</Link>
+              <Link href="/for-teachers">For Teachers</Link>
+            </div>
+          ) : (
+            <Link href={`/for-${userRole}s`}>Dashboard</Link>
+          )}
+          <Link href="/pricing">Pricing</Link>
+          <Link href="/faq">FAQ</Link>
+          <Link href="/about">About</Link>
         </div>
-      ) : (
-        <>
-          <SignOutButton>
-            <button>Log out</button>
-          </SignOutButton>
-          {user && <p>Hello, {user?.firstName ?? user.id}</p>}
-        </>
-      )}
+        {!user ? (
+          <div className="flex gap-4">
+            {}
+            <Link href="/sign-in">Sign In</Link>
+            <Link href="/sign-up">Sign Up</Link>
+          </div>
+        ) : (
+          <>
+            <p>
+              Hello, {user?.firstName ?? user.id}. You signed in as {userRole}
+            </p>
+            <SignOutButton />
+          </>
+        )}
+      </nav>
     </header>
   );
 };
