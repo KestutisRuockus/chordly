@@ -3,18 +3,19 @@
 import { useSignIn, useClerk } from "@clerk/nextjs";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import type { ClerkAPIResponseError } from "@clerk/shared";
 
 const SignInPage = () => {
   const { signIn, isLoaded } = useSignIn();
+  const { setActive } = useClerk();
   const router = useRouter();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-
-  const { setActive } = useClerk();
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -70,12 +71,34 @@ const SignInPage = () => {
           className="border p-2"
         />
 
+        <div className="flex items-center justify-between text-sm">
+          <label className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              checked={rememberMe}
+              onChange={(e) => setRememberMe(e.target.checked)}
+            />
+            Remember me
+          </label>
+
+          <Link href="/forgot-password" className="underline">
+            Forgot your password?
+          </Link>
+        </div>
+
         {error && <p className="text-red-500 text-sm">{error}</p>}
 
         <button disabled={loading} className="border p-2">
           {loading ? "Signing in..." : "Sign In"}
         </button>
       </form>
+
+      <p className="text-sm mt-4 text-center">
+        Don’t have an account?{" "}
+        <Link href="/sign-up" className="underline">
+          Sign up
+        </Link>
+      </p>
     </div>
   );
 };
