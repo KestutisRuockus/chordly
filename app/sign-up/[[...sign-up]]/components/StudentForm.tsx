@@ -2,7 +2,7 @@
 
 import { useSignUp } from "@clerk/nextjs";
 import { useActionState, useEffect, useState } from "react";
-import { LessonType, validateStudentAction } from "../../actions";
+import { LessonType, validateStudentAction } from "../../actions/validateForms";
 import Link from "next/link";
 import type { ClerkAPIResponseError } from "@clerk/shared";
 import { RoleType } from "../page";
@@ -24,13 +24,6 @@ const StudentForm = ({
 
   useEffect(() => {
     if (!state.success || !state.fields || !isLoaded) return;
-
-    const studentPayload = {
-      ...state.fields,
-      role: role,
-    };
-
-    console.log("STUDENT OBJECT (DB later):", studentPayload);
 
     const createClerkUser = async () => {
       if (!state.success || !state.fields || !isLoaded) return;

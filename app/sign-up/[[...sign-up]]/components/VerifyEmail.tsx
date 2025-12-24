@@ -4,8 +4,16 @@ import { useSignUp } from "@clerk/nextjs";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import type { ClerkAPIResponseError } from "@clerk/shared";
+import { createTeacherAction } from "../../actions/createTeacher";
+import { TeacherFormFields } from "../../actions/validateForms";
 
-const VerifyEmail = ({ onVerified }: { onVerified: () => void }) => {
+const VerifyEmail = ({
+  onVerified,
+  fields,
+}: {
+  onVerified: () => void;
+  fields: TeacherFormFields | null;
+}) => {
   const { signUp, setActive, isLoaded } = useSignUp();
   const router = useRouter();
 
@@ -22,24 +30,38 @@ const VerifyEmail = ({ onVerified }: { onVerified: () => void }) => {
     setError(null);
 
     try {
-      const result = await signUp.attemptEmailAddressVerification({
-        code,
+      if (!fields) {
+        throw new Error("Missing pendingFields");
+      }
+
+      const result = await signUp.attemptEmailAddressVerification({ code });
+
+      if (!result.createdSessionId) {
+        throw new Error("Verification failed");
+      }
+
+      await setActive({
+        session: result.createdSessionId,
       });
 
-      if (result.status === "complete") {
-        await setActive({
-          session: result.createdSessionId,
-        });
-
-        onVerified();
-        router.push("/");
+      const clerkUserId = result.createdUserId;
+      if (!clerkUserId) {
+        throw new Error("User ID missing after verification");
       }
-    } catch (err) {
-      const message =
-        (err as ClerkAPIResponseError).errors?.[0]?.message ??
-        "Invalid verification code";
 
-      setError(message);
+      await createTeacherAction({
+        clerkUserId,
+        fields,
+      });
+
+      onVerified();
+      router.push("/");
+    } catch (err) {
+      setError(
+        (err as ClerkAPIResponseError).errors?.[0]?.message ??
+          (err as Error).message ??
+          "Verification failed"
+      );
     } finally {
       setIsVerifying(false);
     }

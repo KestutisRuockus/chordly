@@ -1,57 +1,54 @@
 "use client";
 
 import { useSignUp } from "@clerk/nextjs";
-import { useActionState, useEffect, useState } from "react";
-import { LessonType, validateTeacherAction } from "../../actions";
+import { useEffect, useState } from "react";
+import {
+  LessonType,
+  TeacherFormFields,
+  TeacherFormState,
+} from "../../actions/validateForms";
 import Link from "next/link";
 import type { ClerkAPIResponseError } from "@clerk/shared";
-import { RoleType } from "../page";
+
+type Props = {
+  role: "teacher";
+  setVerifying: (v: boolean) => void;
+  setPendingFields: (f: TeacherFormFields) => void;
+  state: TeacherFormState;
+  formAction: (formData: FormData) => void | Promise<void>;
+  isPending: boolean;
+};
 
 const instrumentsList = ["Piano", "Guitar", "Violin", "Other"];
 
 const TeacherForm = ({
-  setVerifying,
   role,
-}: {
-  setVerifying: (v: boolean) => void;
-  role: RoleType | undefined;
-}) => {
+  setVerifying,
+  setPendingFields,
+  state,
+  formAction,
+  isPending,
+}: Props) => {
   const { signUp, isLoaded } = useSignUp();
-  const [state, formAction, isPending] = useActionState(
-    validateTeacherAction,
-    {}
-  );
-
   const [lessonType, setLessonType] = useState<LessonType>("hybrid");
 
   useEffect(() => {
-    if (!state.success || !state.fields || !isLoaded) return;
-
-    const teacherPayload = {
-      ...state.fields,
-      role: role,
-    };
-
-    console.log("TEACHER OBJECT (DB later):", teacherPayload);
-
     const createClerkUser = async () => {
-      if (!state.success || !state.fields || !isLoaded) return;
-
+      if (!state.fields || !isLoaded) return;
       try {
         await signUp.create({
-          emailAddress: state.fields!.email,
-          password: state.fields!.password,
-          firstName: state.fields!.fullName.split(" ")[0],
-          lastName: state.fields!.fullName.split(" ").slice(1).join(" "),
-          unsafeMetadata: {
-            role: role,
-          },
+          emailAddress: state.fields.email,
+          password: state.fields.password,
+          firstName: state.fields.fullName.split(" ")[0],
+          lastName: state.fields.fullName.split(" ").slice(1).join(" "),
+          unsafeMetadata: { role },
         });
 
         await signUp.prepareEmailAddressVerification({
           strategy: "email_code",
         });
 
+        setPendingFields(state.fields);
         setVerifying(true);
       } catch (err) {
         if ((err as ClerkAPIResponseError).errors) {
@@ -64,7 +61,15 @@ const TeacherForm = ({
     };
 
     createClerkUser();
-  }, [state.success, state.fields, isLoaded, signUp, setVerifying, role]);
+  }, [
+    isLoaded,
+    role,
+    setPendingFields,
+    setVerifying,
+    signUp,
+    state.fields,
+    state.success,
+  ]);
 
   return (
     <form action={formAction} className="flex flex-col gap-3 w-96">
