@@ -31,6 +31,7 @@ const TeacherForm = ({
 }: Props) => {
   const { signUp, isLoaded } = useSignUp();
   const [lessonType, setLessonType] = useState<LessonType>("hybrid");
+  const [clerkError, setClerkError] = useState<string | null>(null);
 
   useEffect(() => {
     const createClerkUser = async () => {
@@ -51,11 +52,10 @@ const TeacherForm = ({
         setPendingFields(state.fields);
         setVerifying(true);
       } catch (err) {
-        if ((err as ClerkAPIResponseError).errors) {
-          const clerkError = err as ClerkAPIResponseError;
-          console.error("Clerk signup error:", clerkError.errors[0]?.message);
-        } else {
-          console.error("Unknown signup error:", err);
+        const clerkErr = err as ClerkAPIResponseError;
+        if (clerkErr.errors?.[0]?.code === "form_identifier_exists") {
+          setClerkError("An account with this email already exists.");
+          return;
         }
       }
     };
@@ -181,6 +181,7 @@ const TeacherForm = ({
       <input type="file" disabled className="border" />
 
       {state.error && <p className="text-red-500">{state.error}</p>}
+      {clerkError && <p className="text-red-500">{clerkError}</p>}
 
       <button disabled={isPending} className="border">
         {isPending ? "Creating..." : "Create Account"}
