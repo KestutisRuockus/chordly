@@ -180,7 +180,6 @@ const TeacherForm = ({
       {/* Profile photo placeholder */}
       <input type="file" disabled className="border" />
 
-      {state.error && <p className="text-red-500">{state.error}</p>}
       {clerkError && <p className="text-red-500">{clerkError}</p>}
 
       <button disabled={isPending} className="border">

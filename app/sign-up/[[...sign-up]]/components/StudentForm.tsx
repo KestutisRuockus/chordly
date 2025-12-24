@@ -1,26 +1,35 @@
 "use client";
 
 import { useSignUp } from "@clerk/nextjs";
-import { useActionState, useEffect, useState } from "react";
-import { LessonType, validateStudentAction } from "../../actions/validateForms";
+import { useEffect, useState } from "react";
+import {
+  LessonType,
+  StudentFormFields,
+  StudentFormState,
+} from "../../actions/validateForms";
 import Link from "next/link";
 import type { ClerkAPIResponseError } from "@clerk/shared";
-import { RoleType } from "../page";
+
+type Props = {
+  role: "student";
+  setVerifying: (v: boolean) => void;
+  setPendingFields: (f: StudentFormFields) => void;
+  state: StudentFormState;
+  formAction: (formData: FormData) => void | Promise<void>;
+  isPending: boolean;
+};
 
 const StudentForm = ({
-  setVerifying,
   role,
-}: {
-  setVerifying: (v: boolean) => void;
-  role: RoleType | undefined;
-}) => {
+  setVerifying,
+  setPendingFields,
+  state,
+  formAction,
+  isPending,
+}: Props) => {
   const { signUp, isLoaded } = useSignUp();
-  const [state, formAction, isPending] = useActionState(
-    validateStudentAction,
-    {}
-  );
-
   const [lessonType, setLessonType] = useState<LessonType>("hybrid");
+  const [clerkError, setClerkError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!state.success || !state.fields || !isLoaded) return;
@@ -43,24 +52,31 @@ const StudentForm = ({
           strategy: "email_code",
         });
 
+        setPendingFields(state.fields);
         setVerifying(true);
       } catch (err) {
-        if ((err as ClerkAPIResponseError).errors) {
-          const clerkError = err as ClerkAPIResponseError;
-          console.error("Clerk signup error:", clerkError.errors[0]?.message);
-        } else {
-          console.error("Unknown signup error:", err);
+        const clerkErr = err as ClerkAPIResponseError;
+        if (clerkErr.errors?.[0]?.code === "form_identifier_exists") {
+          setClerkError("An account with this email already exists.");
+          return;
         }
       }
     };
 
     createClerkUser();
-  }, [state.success, state.fields, isLoaded, signUp, setVerifying, role]);
+  }, [
+    state.success,
+    state.fields,
+    isLoaded,
+    signUp,
+    setVerifying,
+    role,
+    setPendingFields,
+  ]);
 
   return (
     <form action={formAction} className="flex flex-col gap-3 w-96">
       <h2>Register as Student</h2>
-
       <input
         name="fullName"
         placeholder="Full Name"
@@ -92,7 +108,6 @@ const StudentForm = ({
         className="border"
         defaultValue={state.fields?.confirmPassword ?? ""}
       />
-
       <p>Preferred Lesson type:</p>
       <div className="flex gap-4">
         {["online", "in-person", "hybrid"].map((type) => (
@@ -108,7 +123,6 @@ const StudentForm = ({
           </label>
         ))}
       </div>
-
       {(lessonType === "in-person" || lessonType === "hybrid") && (
         <input
           name="location"
@@ -118,7 +132,6 @@ const StudentForm = ({
           defaultValue={state.fields?.location ?? ""}
         />
       )}
-
       <p>Skill level:</p>
       <select
         name="skillLevel"
@@ -130,14 +143,12 @@ const StudentForm = ({
         <option value="intermediate">Intermediate</option>
         <option value="advanced">Advanced</option>
       </select>
-
       <textarea
         name="bio"
         placeholder="Short bio"
         className="border"
         defaultValue={state.fields?.bio ?? ""}
       />
-
       <input
         name="age"
         type="number"
@@ -145,16 +156,12 @@ const StudentForm = ({
         className="border"
         defaultValue={state.fields?.age ?? ""}
       />
-
       {/* Profile photo placeholder */}
       <input type="file" disabled className="border" />
-
-      {state.error && <p className="text-red-500">{state.error}</p>}
-
+      {clerkError && <p className="text-red-500">{clerkError}</p>}
       <button disabled={isPending} className="border">
         {isPending ? "Creating..." : "Create Account"}
       </button>
-
       <Link href="/sign-in" className="text-sm underline">
         Already have an account? Sign in
       </Link>

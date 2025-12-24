@@ -27,7 +27,7 @@ export async function createTeacherAction({
       hourlyRate: Number(fields.hourlyRate),
     })
     .onConflictDoUpdate({
-      target: teachers.email, // 👈 because email is UNIQUE
+      target: teachers.email,
       set: {
         fullName: fields.fullName,
         instruments: fields.instruments,
@@ -36,7 +36,7 @@ export async function createTeacherAction({
         bio: fields.bio,
         experience: fields.experience || null,
         hourlyRate: Number(fields.hourlyRate),
-        clerkUserId, // keep it in sync
+        clerkUserId,
       },
     });
 }

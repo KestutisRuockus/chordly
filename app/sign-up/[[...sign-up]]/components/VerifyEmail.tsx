@@ -5,14 +5,20 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import type { ClerkAPIResponseError } from "@clerk/shared";
 import { createTeacherAction } from "../../actions/createTeacher";
-import { TeacherFormFields } from "../../actions/validateForms";
+import {
+  StudentFormFields,
+  TeacherFormFields,
+} from "../../actions/validateForms";
+import { createStudent } from "../../actions/createStudent";
 
 const VerifyEmail = ({
   onVerified,
   fields,
+  role,
 }: {
   onVerified: () => void;
-  fields: TeacherFormFields | null;
+  fields: TeacherFormFields | StudentFormFields | null;
+  role: "teacher" | "student" | undefined;
 }) => {
   const { signUp, setActive, isLoaded } = useSignUp();
   const router = useRouter();
@@ -49,10 +55,17 @@ const VerifyEmail = ({
         throw new Error("User ID missing after verification");
       }
 
-      await createTeacherAction({
-        clerkUserId,
-        fields,
-      });
+      if (role === "teacher") {
+        await createTeacherAction({
+          clerkUserId,
+          fields: fields as TeacherFormFields,
+        });
+      } else {
+        await createStudent({
+          clerkUserId,
+          fields: fields as StudentFormFields,
+        });
+      }
 
       onVerified();
       router.push("/");

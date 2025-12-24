@@ -5,6 +5,7 @@ import {
   uuid,
   json,
   numeric,
+  integer,
 } from "drizzle-orm/pg-core";
 
 export const users = pgTable("users", {
@@ -27,4 +28,16 @@ export const teachers = pgTable("teachers", {
   experience: text("experience"),
   hourlyRate: numeric("hourly_rate", { mode: "number" }).notNull(),
   createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const students = pgTable("students", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  clerkUserId: text("clerk_user_id").notNull().unique(),
+  fullName: text("full_name").notNull(),
+  email: text("email").notNull().unique(),
+  lessonType: text("lesson_type").notNull(),
+  location: text("location"),
+  skillLevel: text("skill_level").notNull(),
+  bio: text("bio"),
+  age: integer("age"),
 });
