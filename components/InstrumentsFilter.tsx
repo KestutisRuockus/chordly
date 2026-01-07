@@ -33,6 +33,15 @@ const InstrumentsFilter = () => {
     router.replace(`${pathName}?${params.toString()}`);
   };
 
+  const clearAllFilters = () => {
+    const params = new URLSearchParams(searchParams.toString());
+
+    params.delete("q");
+    params.delete("instruments");
+
+    router.replace(`${pathName}?${params.toString()}`);
+  };
+
   return (
     <>
       <h3 className="font-medium">Filter by Instruments:</h3>
@@ -47,6 +56,9 @@ const InstrumentsFilter = () => {
             {instrument}
           </label>
         ))}
+        <button onClick={clearAllFilters} className="border px-4">
+          Clear All Filters
+        </button>
       </div>
     </>
   );
