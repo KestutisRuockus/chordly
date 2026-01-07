@@ -19,7 +19,9 @@ const SearchInput = () => {
       params.set("q", query.trim());
     }
 
+    params.delete("limit");
     router.push(`${pathName}?${params.toString()}`);
+    setQuery("");
   };
 
   return (

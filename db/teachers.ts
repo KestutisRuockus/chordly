@@ -2,7 +2,7 @@ import { eq, or, ilike, sql, and } from "drizzle-orm";
 import { db } from "./index";
 import { teachers } from "./schema";
 
-export async function getTeachersSummary() {
+export async function getTeachersSummary(limit: number) {
   return await db
     .select({
       id: teachers.id,
@@ -10,7 +10,8 @@ export async function getTeachersSummary() {
       instruments: teachers.instruments,
       lessonType: teachers.lessonType,
     })
-    .from(teachers);
+    .from(teachers)
+    .limit(limit);
 }
 
 export async function getTeacherById(id: string) {
@@ -21,7 +22,8 @@ export async function getTeacherById(id: string) {
 
 export async function getTeachersSummaryByQuery(
   query?: string,
-  instruments?: string[]
+  instruments?: string[],
+  limit: number = 5
 ) {
   const conditions = [];
 
@@ -50,5 +52,6 @@ export async function getTeachersSummaryByQuery(
       lessonType: teachers.lessonType,
     })
     .from(teachers)
-    .where(conditions.length ? and(...conditions) : undefined);
+    .where(conditions.length ? and(...conditions) : undefined)
+    .limit(limit);
 }

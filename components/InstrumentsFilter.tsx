@@ -30,6 +30,7 @@ const InstrumentsFilter = () => {
       params.set("instruments", next.join(","));
     }
 
+    params.delete("limit");
     router.replace(`${pathName}?${params.toString()}`);
   };
 
@@ -38,6 +39,7 @@ const InstrumentsFilter = () => {
 
     params.delete("q");
     params.delete("instruments");
+    params.delete("limit");
 
     router.replace(`${pathName}?${params.toString()}`);
   };

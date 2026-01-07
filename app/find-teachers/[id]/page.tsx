@@ -1,4 +1,4 @@
-import BackButton from "@/components/BackButton";
+import BackButton from "@/components/common/buttons/BackButton";
 import { getTeacherById } from "@/db/teachers";
 import { TeacherFullProfile } from "@/types/teachers";
 import Link from "next/link";
