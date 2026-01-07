@@ -1,3 +1,4 @@
+import BackButton from "@/components/BackButton";
 import { getTeacherById } from "@/db/teachers";
 import { TeacherFullProfile } from "@/types/teachers";
 import Link from "next/link";
@@ -17,9 +18,7 @@ const TeacherFullProfileById = async ({ params }: Props) => {
 
   return (
     <section className="w-4/5 mx-auto my-8">
-      <Link href={"/find-teachers"} className="border px-4 w-fit">
-        Back to teachers list
-      </Link>
+      <BackButton text="Back to teachers list" />
       <div className="border p-8 my-4 w-fit mx-auto">
         <h1 className="mb-4">Teacher Profile</h1>
         <p>
