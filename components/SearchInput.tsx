@@ -1,22 +1,25 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
 const SearchInput = () => {
   const router = useRouter();
+  const pathName = usePathname();
   const searchParams = useSearchParams();
 
   const [query, setQuery] = useState(searchParams.get("q") ?? "");
 
   const handleSearch = async () => {
+    const params = new URLSearchParams(searchParams.toString());
+
     if (!query.trim()) {
-      router.push("find-teachers");
-      return;
+      params.delete("q");
+    } else {
+      params.set("q", query.trim());
     }
 
-    router.push(`/find-teachers?q=${encodeURIComponent(query)}`);
-    setQuery("");
+    router.push(`${pathName}?${params.toString()}`);
   };
 
   return (
@@ -26,7 +29,7 @@ const SearchInput = () => {
         onChange={(e) => setQuery(e.target.value)}
         type="text"
         className="border px-2"
-        placeholder="Search..."
+        placeholder="Enter name..."
       />
       <button onClick={handleSearch} className="border px-2">
         Search

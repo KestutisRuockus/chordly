@@ -14,7 +14,7 @@ const TeacherCard = ({ teacher }: Props) => {
       </p>
       Instruments :<p className="font-bold">{instrumensList}</p>
       <p>
-        Lesson Type: Full Name:{" "}
+        Lesson Type:
         <span className="font-bold">{teacher.lessonType}</span>
       </p>
       <div className="flex justify-center mt-2">

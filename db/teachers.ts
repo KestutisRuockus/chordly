@@ -1,4 +1,4 @@
-import { eq, or, ilike } from "drizzle-orm";
+import { eq, or, ilike, sql, and } from "drizzle-orm";
 import { db } from "./index";
 import { teachers } from "./schema";
 
@@ -19,8 +19,29 @@ export async function getTeacherById(id: string) {
   return teacher;
 }
 
-export async function getTeachersSummaryByQuery(query: string) {
-  const q = `%${query}%`;
+export async function getTeachersSummaryByQuery(
+  query?: string,
+  instruments?: string[]
+) {
+  const conditions = [];
+
+  if (query && query.trim()) {
+    conditions.push(ilike(teachers.fullName, `%${query.trim()}%`));
+  }
+
+  if (instruments && instruments.length > 0) {
+    conditions.push(
+      or(
+        ...instruments.map(
+          (instruments) =>
+            sql`${teachers.instruments}::jsonb @> ${JSON.stringify([
+              instruments,
+            ])}::jsonb`
+        )
+      )
+    );
+  }
+
   return await db
     .select({
       id: teachers.id,
@@ -29,5 +50,5 @@ export async function getTeachersSummaryByQuery(query: string) {
       lessonType: teachers.lessonType,
     })
     .from(teachers)
-    .where(or(ilike(teachers.fullName, q), ilike(teachers.lessonType, q)));
+    .where(conditions.length ? and(...conditions) : undefined);
 }
