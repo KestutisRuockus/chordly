@@ -1,4 +1,4 @@
-import LoadMoreButton from "@/components/common/buttons/LoadMoreButton";
+import LoadMoreButton from "@/components/ui/LoadMoreButton";
 import InstrumentsFilter from "@/components/InstrumentsFilter";
 import SearchInput from "@/components/SearchInput";
 import TeacherCard from "@/components/teachers/TeacherSummaryCard";
