@@ -1,8 +1,7 @@
 export const aboutContent = {
   header: {
-    sectionLabel: "About Chordly",
     title: "Chordly platform",
-    subtitle: "A platform designed to support meaningful music education.",
+    description: "A platform designed to support meaningful music education.",
   },
   mission: {
     sectionLabel: "Our Mission",
@@ -47,25 +46,25 @@ export const aboutContent = {
       "We envision a platform where learning and teaching music feels clear, structured, and human. Chordly is built to support long-term progress, meaningful connections, and a healthier learning rhythm for both students and teachers.",
     items: [
       {
-        icon: "",
+        icon: "Icon",
         title: "Clarity",
         description:
           "We believe simple tools lead to better learning experiences and less friction for everyone involved.",
       },
       {
-        icon: "",
+        icon: "Icon",
         title: "Respect for Teachers",
         description:
           "Teachers deserve control, fair conditions, and tools that support their work — not complicate it.",
       },
       {
-        icon: "",
+        icon: "Icon",
         title: "Consistency Over Perfection",
         description:
           "Progress comes from steady practice and guidance, not from chasing perfection.",
       },
       {
-        icon: "",
+        icon: "Icon",
         title: "Sustainable Growth",
         description:
           "We design features that support long-term learning and teaching, not short-term pressure.",
