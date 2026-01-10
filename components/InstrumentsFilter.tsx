@@ -1,10 +1,14 @@
 "use client";
 
+type Props = {
+  items: InstrumentGroup[];
+};
+
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import Section from "./layout/Section";
+import { InstrumentGroup } from "@/types/content";
 
-const INSTRUMENTS = ["Piano", "Guitar", "Violin", "Other"];
-
-const InstrumentsFilter = () => {
+const InstrumentsFilter = ({ items }: Props) => {
   const router = useRouter();
   const pathName = usePathname();
   const searchParams = useSearchParams();
@@ -45,24 +49,34 @@ const InstrumentsFilter = () => {
   };
 
   return (
-    <>
-      <h3 className="font-medium">Filter by Instruments:</h3>
-      <div className="flex gap-4">
-        {INSTRUMENTS.map((instrument) => (
-          <label key={instrument} className="flex items-center gap-2">
-            <input
-              type="checkbox"
-              checked={selected.has(instrument)}
-              onChange={() => toggleInstrument(instrument)}
-            />
-            {instrument}
-          </label>
+    <Section>
+      <h3 className="font-medium">Filter by instruments</h3>
+
+      <div className="flex flex-col gap-4">
+        {items.map((group) => (
+          <div key={group.instrumentType}>
+            <h4 className="font-medium">{group.instrumentType}</h4>
+
+            <div className="flex flex-wrap gap-4">
+              {group.instruments?.map((instrument) => (
+                <label key={instrument} className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    checked={selected.has(instrument)}
+                    onChange={() => toggleInstrument(instrument)}
+                  />
+                  {instrument}
+                </label>
+              ))}
+            </div>
+          </div>
         ))}
-        <button onClick={clearAllFilters} className="border px-4">
-          Clear All Filters
-        </button>
       </div>
-    </>
+
+      <button onClick={clearAllFilters} className="border px-4 mt-4">
+        Clear all filters
+      </button>
+    </Section>
   );
 };
 

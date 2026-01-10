@@ -44,7 +44,8 @@ export const findTeachers = {
         instruments: ["Singing", "Vocal Coaching"],
       },
       {
-        instrumentType: "Other",
+        instrumentType: "Did not find your instrument?",
+        instruments: ["Other"],
       },
     ],
   },

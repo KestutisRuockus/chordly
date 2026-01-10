@@ -3,10 +3,11 @@ import { homeContent } from "./content/home";
 import FeaturesWithIconsSection from "@/components/sections/FeaturesWithIconsSection";
 import CallToActionCard from "@/components/ui/CallToActionCard";
 import Section from "@/components/layout/Section";
+import Main from "@/components/layout/Main";
 
 export default function Home() {
   return (
-    <main className="w-4/5 mx-auto my-8 flex flex-col gap-8">
+    <Main>
       <HeroSection {...homeContent.hero} />
       <Section>
         <h2 className="text-xl font-bold">
@@ -60,6 +61,6 @@ export default function Home() {
           ))}
         </div>
       </Section>
-    </main>
+    </Main>
   );
 }

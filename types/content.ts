@@ -20,3 +20,18 @@ export type CallToActionCardType = {
   href: string;
   headingLevel?: "h2" | "h3" | "h4";
 };
+
+export type HeaderContent = {
+  title: string;
+  description: string;
+};
+
+export type InstrumentGroup = {
+  instrumentType: string;
+  instruments: string[];
+};
+
+export type InstrumentsFiltersContent = {
+  sectionLabel: string;
+  items: InstrumentGroup[];
+};

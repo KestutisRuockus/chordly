@@ -2,6 +2,7 @@
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
+import Section from "./layout/Section";
 
 const SearchInput = () => {
   const router = useRouter();
@@ -25,7 +26,7 @@ const SearchInput = () => {
   };
 
   return (
-    <div className="flex">
+    <Section className="flex">
       <input
         value={query}
         onChange={(e) => setQuery(e.target.value)}
@@ -36,7 +37,7 @@ const SearchInput = () => {
       <button onClick={handleSearch} className="border px-2">
         Search
       </button>
-    </div>
+    </Section>
   );
 };
 
