@@ -76,7 +76,7 @@ const StudentForm = ({
 
   return (
     <form action={formAction} className="flex flex-col gap-3 w-96">
-      <h2>Register as Student</h2>
+      <h3>Register as Student</h3>
       <input
         name="fullName"
         placeholder="Full Name"

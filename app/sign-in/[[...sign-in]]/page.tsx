@@ -5,6 +5,10 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import type { ClerkAPIResponseError } from "@clerk/shared";
+import HeaderSection from "@/components/sections/HeaderSection";
+import { auth } from "@/app/content/auth";
+import Main from "@/components/layout/Main";
+import Section from "@/components/layout/Section";
 
 const SignInPage = () => {
   const { signIn, isLoaded } = useSignIn();
@@ -49,57 +53,58 @@ const SignInPage = () => {
   };
 
   return (
-    <div className="max-w-sm mx-auto p-6">
-      <h2 className="text-lg font-medium mb-4">Sign In</h2>
+    <Main>
+      <HeaderSection {...auth.login} />
+      <Section>
+        <form onSubmit={handleSignIn} className="flex flex-col gap-3">
+          <input
+            type="email"
+            placeholder="Email address"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            className="border p-2"
+          />
 
-      <form onSubmit={handleSignIn} className="flex flex-col gap-3">
-        <input
-          type="email"
-          placeholder="Email address"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          className="border p-2"
-        />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            className="border p-2"
+          />
 
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-          className="border p-2"
-        />
+          <div className="flex items-center justify-between text-sm">
+            <label className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                checked={rememberMe}
+                onChange={(e) => setRememberMe(e.target.checked)}
+              />
+              Remember me
+            </label>
 
-        <div className="flex items-center justify-between text-sm">
-          <label className="flex items-center gap-2">
-            <input
-              type="checkbox"
-              checked={rememberMe}
-              onChange={(e) => setRememberMe(e.target.checked)}
-            />
-            Remember me
-          </label>
+            <Link href="/forgot-password" className="underline">
+              Forgot your password?
+            </Link>
+          </div>
 
-          <Link href="/forgot-password" className="underline">
-            Forgot your password?
+          {error && <p className="text-red-500 text-sm">{error}</p>}
+
+          <button disabled={loading} className="border p-2">
+            {loading ? "Signing in..." : "Sign In"}
+          </button>
+        </form>
+
+        <p className="text-sm mt-4 text-center">
+          Don’t have an account?{" "}
+          <Link href="/sign-up" className="underline">
+            Sign up
           </Link>
-        </div>
-
-        {error && <p className="text-red-500 text-sm">{error}</p>}
-
-        <button disabled={loading} className="border p-2">
-          {loading ? "Signing in..." : "Sign In"}
-        </button>
-      </form>
-
-      <p className="text-sm mt-4 text-center">
-        Don’t have an account?{" "}
-        <Link href="/sign-up" className="underline">
-          Sign up
-        </Link>
-      </p>
-    </div>
+        </p>
+      </Section>
+    </Main>
   );
 };
 

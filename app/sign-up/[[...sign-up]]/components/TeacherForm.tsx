@@ -73,7 +73,7 @@ const TeacherForm = ({
 
   return (
     <form action={formAction} className="flex flex-col gap-3 w-96">
-      <h2>Register as Teacher</h2>
+      <h3>Register as Teacher</h3>
 
       <input
         name="fullName"
