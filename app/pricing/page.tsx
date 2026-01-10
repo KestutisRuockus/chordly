@@ -1,14 +1,14 @@
 import HeaderSection from "@/components/sections/HeaderSection";
 import Main from "@/components/layout/Main";
 import Section from "@/components/layout/Section";
-// import { pricing } from "../content/pricing";
+import { pricing } from "../content/pricing";
 import CallToActionCard from "@/components/ui/CallToActionCard";
 import Accordion from "@/components/ui/Accordion";
 
 const PricingPage = () => {
   return (
     <Main>
-      {/* <HeaderSection {...pricing.header} />
+      <HeaderSection {...pricing.header} />
       <Section>
         <h2 className="font-bold text-xl mb-4 mx-auto w-fit">
           {pricing.plans.sectionLabel}
@@ -35,8 +35,7 @@ const PricingPage = () => {
         <h2 className="font-bold">{pricing.faq.sectionLabel}</h2>
         <Accordion items={pricing.faq.items} />
       </Section>
-      <CallToActionCard {...pricing.buttonCta} /> */}
-      <div>Pricing</div>
+      <CallToActionCard {...pricing.buttonCta} />
     </Main>
   );
 };
