@@ -1,4 +1,5 @@
 import { FeatureWithIconContent } from "@/types/content";
+import Section from "../layout/Section";
 
 type FeaturesWithIconsSectionProps = {
   features: FeatureWithIconContent[];
@@ -8,7 +9,7 @@ const FeaturesWithIconsSection = ({
   features,
 }: FeaturesWithIconsSectionProps) => {
   return (
-    <section className="mx-auto w-fit border p-6 flex flex-col gap-2">
+    <Section className="flex flex-col gap-2">
       {features.map((feature) => (
         <div key={feature.title}>
           <div className="flex gap-2">
@@ -18,7 +19,7 @@ const FeaturesWithIconsSection = ({
           <p>{feature.description}</p>
         </div>
       ))}
-    </section>
+    </Section>
   );
 };
 

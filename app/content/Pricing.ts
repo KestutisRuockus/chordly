@@ -3,14 +3,14 @@ export const pricing = {
     title: "Choose the Plan That Fits Your Teaching",
     description: "Flexible plans designed to support teachers at every stage.",
   },
-  plans: [
-    {
-      basic: {
-        studentsLimit: "3 students",
+  plans: {
+    sectionLabel: "Pricing Plans",
+    cards: [
+      {
+        studentsLimit: "Up to 5 students",
         label: "Basic",
         price: "19€",
         items: [
-          "Up to 7 students",
           "Unlimited lessons",
           "Assign exercises",
           "Practice tracking",
@@ -21,12 +21,11 @@ export const pricing = {
           href: "/dashboard/teacher",
         },
       },
-      medium: {
-        studentsLimit: "14 students",
+      {
+        studentsLimit: "Up to 14 students",
         label: "Medium",
         price: "39€",
         items: [
-          "Up to 14 students",
           "Unlimited lessons",
           "Exercise library + custom exercises",
           "Practice tracking + insights",
@@ -37,12 +36,11 @@ export const pricing = {
           href: "/dashboard/teacher",
         },
       },
-      pro: {
+      {
         studentsLimit: "Unlimited students",
         label: "Pro",
         price: "79€",
         items: [
-          "Unlimited students",
           "All featuress",
           "Advanced analytics",
           "Featured placement",
@@ -53,8 +51,8 @@ export const pricing = {
           href: "/dashboard/teacher",
         },
       },
-    },
-  ],
+    ],
+  },
   faq: {
     sectionLabel: "Pricing FAQ",
     items: [
@@ -81,7 +79,8 @@ export const pricing = {
     ],
   },
   buttonCta: {
-    buttonLabel: "Start Teaching with Chordly",
+    headline: "Start Teaching with Chordly",
+    buttonLabel: "Create account for free",
     href: "/dashboard/teacher",
   },
 };

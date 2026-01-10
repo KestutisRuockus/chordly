@@ -48,3 +48,9 @@ export type FeaturesPreviewContent = {
   sectionLabel: string;
   items: string[];
 };
+
+export type AccordionContent = {
+  header: string;
+  body: string;
+  icons?: string;
+};
