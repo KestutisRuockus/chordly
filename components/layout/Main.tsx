@@ -1,13 +1,10 @@
 type MainProps = {
   children: React.ReactNode;
-  className?: string;
 };
 
-const Main = ({ children, className }: MainProps) => {
+const Main = ({ children }: MainProps) => {
   return (
-    <main className={`w-4/5 mx-auto my-8 flex flex-col gap-8 ${className}`}>
-      {children}
-    </main>
+    <main className="w-4/5 mx-auto my-8 flex flex-col gap-8">{children}</main>
   );
 };
 

@@ -10,7 +10,7 @@ const CallToActionCard = ({
   const Heading = headingLevel;
 
   return (
-    <div className="border p-2 flex flex-col gap-2 items-center">
+    <div className="border p-2 flex flex-col gap-2 items-center w-fit mx-auto">
       {headline && <Heading className="font-medium">{headline}</Heading>}
       <Link className="border px-2" href={href}>
         {buttonLabel}

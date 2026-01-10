@@ -35,3 +35,16 @@ export type InstrumentsFiltersContent = {
   sectionLabel: string;
   items: InstrumentGroup[];
 };
+
+export type BenefitsContent = {
+  sectionLabel: string;
+  items: {
+    title: string;
+    description: string;
+  }[];
+};
+
+export type FeaturesPreviewContent = {
+  sectionLabel: string;
+  items: string[];
+};
