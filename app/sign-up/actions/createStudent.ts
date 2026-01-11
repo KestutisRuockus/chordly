@@ -3,6 +3,7 @@
 import { db } from "@/db";
 import { StudentFormFields } from "./validateForms";
 import { students } from "@/db/schema";
+import { clerkClient } from "@clerk/nextjs/server";
 
 type CreateStudentInput = {
   clerkUserId: string;
@@ -13,6 +14,12 @@ export async function createStudent({
   clerkUserId,
   fields,
 }: CreateStudentInput) {
+  const client = await clerkClient();
+  await client.users.updateUser(clerkUserId, {
+    publicMetadata: {
+      role: "student",
+    },
+  });
   await db
     .insert(students)
     .values({

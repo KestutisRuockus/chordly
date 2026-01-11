@@ -7,7 +7,7 @@ import Link from "next/link";
 
 const Header = () => {
   const { user } = useUser();
-  const userRole = user?.unsafeMetadata?.role as RoleType;
+  const userRole = user?.publicMetadata?.role as RoleType;
 
   return (
     <header className="flex gap-4">

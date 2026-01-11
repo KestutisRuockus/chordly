@@ -42,7 +42,6 @@ const TeacherForm = ({
           password: state.fields.password,
           firstName: state.fields.fullName.split(" ")[0],
           lastName: state.fields.fullName.split(" ").slice(1).join(" "),
-          unsafeMetadata: { role },
         });
 
         await signUp.prepareEmailAddressVerification({

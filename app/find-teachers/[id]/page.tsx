@@ -1,6 +1,8 @@
+import { RoleType } from "@/app/sign-up/[[...sign-up]]/page";
 import BackButton from "@/components/ui/BackButton";
 import { getTeacherById } from "@/db/teachers";
 import { TeacherFullProfile } from "@/types/teachers";
+import { currentUser } from "@clerk/nextjs/server";
 import Link from "next/link";
 
 type Props = {
@@ -9,6 +11,11 @@ type Props = {
 
 const TeacherFullProfileById = async ({ params }: Props) => {
   const { id } = await params;
+
+  const user = await currentUser();
+  const userRole = user?.publicMetadata?.role as RoleType | undefined;
+
+  console.log("role", userRole);
 
   const teacher: TeacherFullProfile | undefined = await getTeacherById(id);
 
@@ -60,11 +67,13 @@ const TeacherFullProfileById = async ({ params }: Props) => {
           Hourly rate: <span className="font-bold">{teacher.hourlyRate}€</span>
         </p>
 
-        <div className="border px-4 mx-auto w-fit mt-4">
-          <Link href={""}>
-            <button>Book a Lesson</button>
-          </Link>
-        </div>
+        {userRole === "student" && (
+          <div className="border px-4 mx-auto w-fit mt-4">
+            <Link href={""}>
+              <button>Book a Lesson</button>
+            </Link>
+          </div>
+        )}
       </div>
     </section>
   );
