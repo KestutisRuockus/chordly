@@ -12,4 +12,5 @@ export type LessonCardProps = {
   lessonStatus: LessonStatus;
   participantName: string;
   instrument: string;
+  isUpcomingCard?: boolean;
 };
