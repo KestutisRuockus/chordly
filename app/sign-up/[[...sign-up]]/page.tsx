@@ -14,8 +14,7 @@ import HeaderSection from "@/components/sections/HeaderSection";
 import { auth } from "@/app/content/auth";
 import Main from "@/components/layout/Main";
 import Section from "@/components/layout/Section";
-
-export type RoleType = "teacher" | "student";
+import { RoleType } from "@/types/role";
 
 const SingUpPage = () => {
   const [role, setRole] = useState<RoleType | undefined>(undefined);

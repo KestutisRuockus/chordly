@@ -1,6 +1,6 @@
 "use client";
 
-import { RoleType } from "@/app/sign-up/[[...sign-up]]/page";
+import { RoleType } from "@/types/role";
 import { SignOutButton } from "@clerk/nextjs";
 import { useUser } from "@clerk/nextjs";
 import Link from "next/link";

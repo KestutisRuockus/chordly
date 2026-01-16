@@ -1,6 +1,6 @@
-import { RoleType } from "@/app/sign-up/[[...sign-up]]/page";
 import BackButton from "@/components/ui/BackButton";
 import { getTeacherById } from "@/db/teachers";
+import { RoleType } from "@/types/role";
 import { TeacherFullProfile } from "@/types/teachers";
 import { currentUser } from "@clerk/nextjs/server";
 import Link from "next/link";
