@@ -4,14 +4,14 @@ import Main from "@/components/layout/Main";
 import Section from "@/components/layout/Section";
 import HeaderSection from "@/components/sections/HeaderSection";
 import { auth, currentUser } from "@clerk/nextjs/server";
-import { LessonCardProps } from "../types";
 import { RoleType } from "@/types/role";
 import WeekCalendar from "@/components/dashboard/calendar/WeekCalendar";
-import ExerciseCard, { Exercise } from "@/components/dashboard/ExerciseCard";
+import ExerciseCard from "@/components/dashboard/ExerciseCard";
 import PracticeSummary from "@/components/dashboard/PracticeSummary";
 import { getPracticeSummary } from "@/components/dashboard/helpers/getPracticeSummary";
+import type { Exercise, Lesson } from "../types";
 
-const lessons: Omit<LessonCardProps, "currentRole">[] = [
+const lessons: Lesson[] = [
   {
     id: "1",
     lessonDate: "2026-01-14",
@@ -59,7 +59,7 @@ const lessons: Omit<LessonCardProps, "currentRole">[] = [
   },
 ];
 
-export const exercises: Exercise[] = [
+const exercises: Exercise[] = [
   {
     id: "ex-1",
     title: "Basic Chord Transitions",
@@ -98,6 +98,8 @@ export const exercises: Exercise[] = [
   },
 ];
 
+const nextLesson = lessons[0];
+
 const StudentDashboardPage = async () => {
   const { userId } = await auth();
   if (!userId) return null;
@@ -106,12 +108,11 @@ const StudentDashboardPage = async () => {
   const summary = getPracticeSummary({ lessons, exercises });
   return (
     <Main>
-      <div>Student Dashboard Page - authenticated student`s dashboard</div>
       <HeaderSection {...studentsDashboard.header} />
       <WeekCalendar lessons={lessons} currentRole={role} />
       <Section>
         <h2 className="font-bold text-xl">Next Lesson</h2>
-        <LessonCard currentRole={role} {...lessons[0]} isUpcomingCard={true} />
+        <LessonCard currentRole={role} {...nextLesson} isUpcomingCard={true} />
       </Section>
       <Section>
         <h2 className="font-bold text-xl">Exercises</h2>

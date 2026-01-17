@@ -1,4 +1,4 @@
-import { LessonCardProps } from "@/app/dashboard/types";
+import type { LessonCardProps } from "@/app/dashboard/types";
 import StatusBadge from "./calendar/StatusBadge";
 import Link from "next/link";
 
@@ -14,7 +14,7 @@ const LessonCard = ({
 }: LessonCardProps) => {
   if (isUpcomingCard) {
     return (
-      <li className="list-none flex flex-col gap-2 my-3">
+      <article className="list-none flex flex-col gap-2 my-3">
         <p>
           Lesson Date: <span className="font-bold">{lessonDate}</span>
         </p>
@@ -37,7 +37,7 @@ const LessonCard = ({
           <span className="font-bold capitalize">{lessonStatus}</span>
         </p>
         <button className="border px-2">Reschedule lesson</button>
-      </li>
+      </article>
     );
   }
   return (

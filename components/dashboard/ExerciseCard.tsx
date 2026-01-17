@@ -1,29 +1,9 @@
 import { Check, X } from "lucide-react";
-
-export type ExerciseDifficulty = "beginner" | "intermediate" | "advanced";
-
-export type WeekDay = "Mon" | "Tue" | "Wed" | "Thu" | "Fri" | "Sat" | "Sun";
-
-export type Exercise = {
-  id: string;
-  title: string;
-  instrument: string;
-  difficulty: ExerciseDifficulty;
-  goal: string;
-
-  targetPerWeek: 1 | 3 | 5;
-  practicedDaysThisWeek: WeekDay[];
-};
+import { getTodayWeekDay } from "@/lib/date";
+import type { Exercise } from "@/app/dashboard/types";
 
 type Props = {
   exercise: Exercise;
-};
-
-const dayMap: WeekDay[] = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-
-const getTodayWeekDay = (): WeekDay => {
-  const jsDay = new Date().getDay();
-  return dayMap[jsDay];
 };
 
 const getButtonText = (isDoneThisWeek: boolean, practicedToday: boolean) => {

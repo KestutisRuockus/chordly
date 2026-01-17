@@ -1,12 +1,11 @@
 import Section from "@/components/layout/Section";
 import type { PracticeSummaryData } from "./helpers/getPracticeSummary";
-import type { WeekDay } from "./ExerciseCard";
+import type { WeekDay } from "@/app/dashboard/types";
+import { WEEK_DAYS } from "@/lib/date";
 
 type Props = {
   summary: PracticeSummaryData;
 };
-
-const weekDays: WeekDay[] = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
 const PracticeSummary = ({ summary }: Props) => {
   const practicedSet = new Set<WeekDay>(summary.practicedDays);
@@ -34,7 +33,7 @@ const PracticeSummary = ({ summary }: Props) => {
           </span>
         </p>
         <div className="flex gap-2 justify-center items-center">
-          {weekDays.map((day) => {
+          {WEEK_DAYS.map((day) => {
             const practiced = practicedSet.has(day);
 
             return (
@@ -42,7 +41,7 @@ const PracticeSummary = ({ summary }: Props) => {
                 <span className="text-xs text-gray-500">{day}</span>
                 <span
                   className={`w-3 h-3 rounded-sm border ${
-                    practiced ? "bg-green-500 border-green-500" : "bg-red-300"
+                    practiced ? "bg-green-500 border-green-500" : "bg-gray-300"
                   }`}
                 />
               </div>

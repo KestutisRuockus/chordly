@@ -1,7 +1,5 @@
-import { LessonCardProps } from "@/app/dashboard/types";
-import { Exercise, WeekDay } from "../ExerciseCard";
-
-type Lesson = Omit<LessonCardProps, "currentRole">;
+import { WeekDay, Lesson, Exercise } from "@/app/dashboard/types";
+import { formatDateKey, getMonday, WEEK_DAYS } from "@/lib/date";
 
 export type PracticeSummaryData = {
   lessonsThisWeek: number;
@@ -9,23 +7,6 @@ export type PracticeSummaryData = {
   practicedDays: WeekDay[];
   completedExercisesThisWeek: number;
   totalExercises: number;
-};
-
-const weekDays: WeekDay[] = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-
-const getMonday = (date: Date) => {
-  const d = new Date(date);
-  const day = d.getDay();
-  const diff = (day + 6) % 7;
-  d.setDate(d.getDate() - diff);
-  d.setHours(0, 0, 0, 0);
-  return d;
-};
-const formatDateKey = (date: Date) => {
-  const y = date.getFullYear();
-  const m = String(date.getMonth() + 1).padStart(2, "0");
-  const d = String(date.getDate()).padStart(2, "0");
-  return `${y}-${m}-${d}`;
 };
 
 export const getPracticeSummary = ({
@@ -38,12 +19,13 @@ export const getPracticeSummary = ({
   const now = new Date();
   const monday = getMonday(now);
 
-  const weekKeys = Array.from({ length: 7 }, (_, i) => {
-    const d = new Date(monday);
-    d.setDate(monday.getDate() + i);
-    return formatDateKey(d);
-  });
-  const weekKeySet = new Set(weekKeys);
+  const weekKeySet = new Set(
+    Array.from({ length: 7 }, (_, i) => {
+      const d = new Date(monday);
+      d.setDate(monday.getDate() + i);
+      return formatDateKey(d);
+    })
+  );
 
   const lessonsThisWeek = lessons.filter((lesson) =>
     weekKeySet.has(lesson.lessonDate)
@@ -59,7 +41,7 @@ export const getPracticeSummary = ({
     (ex) => ex.practicedDaysThisWeek.length >= ex.targetPerWeek
   ).length;
 
-  const practicedDays = weekDays.filter((day) => practicedDaysSet.has(day));
+  const practicedDays = WEEK_DAYS.filter((day) => practicedDaysSet.has(day));
   const practiceDaysCount = practicedDays.length;
 
   const totalExercises = exercises.length;
@@ -71,3 +53,8 @@ export const getPracticeSummary = ({
     totalExercises,
   };
 };
+
+export const isSameDay = (a: Date, b: Date) =>
+  a.getFullYear() === b.getFullYear() &&
+  a.getMonth() === b.getMonth() &&
+  a.getDate() === b.getDate();

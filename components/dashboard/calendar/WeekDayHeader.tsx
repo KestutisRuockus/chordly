@@ -1,8 +1,6 @@
-import { LessonCardProps } from "@/app/dashboard/types";
+import type { Lesson } from "@/app/dashboard/types";
+import type { RoleType } from "@/types/role";
 import LessonCard from "../LessonCard";
-import { RoleType } from "@/types/role";
-
-type Lesson = Omit<LessonCardProps, "currentRole">;
 
 type DayColumn = {
   key: string;
