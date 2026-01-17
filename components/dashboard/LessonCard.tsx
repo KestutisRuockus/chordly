@@ -41,7 +41,7 @@ const LessonCard = ({
     );
   }
   return (
-    <li className="text-xs list-none border p-2 relative rounded-lg">
+    <article className="text-xs border p-2 relative rounded-lg">
       <p>{lessonTime}</p>
       <p>{participantName}</p>
       <p className="mb-1">
@@ -51,7 +51,7 @@ const LessonCard = ({
         Reschedule lesson
       </Link>
       <StatusBadge status={lessonStatus} />
-    </li>
+    </article>
   );
 };
 

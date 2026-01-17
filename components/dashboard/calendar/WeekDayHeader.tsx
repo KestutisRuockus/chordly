@@ -39,12 +39,8 @@ const WeekDayHeader = ({ day, currentRole }: Props) => {
 
       {day.lessons.length > 0 ? (
         <div className="flex flex-col gap-2">
-          {day.lessons.map((lesson, index) => (
-            <LessonCard
-              key={`${day.key}-${index}`}
-              currentRole={currentRole}
-              {...lesson}
-            />
+          {day.lessons.map((lesson) => (
+            <LessonCard key={lesson.id} currentRole={currentRole} {...lesson} />
           ))}
         </div>
       ) : (

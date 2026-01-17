@@ -5,6 +5,7 @@ export type LessonStatus = "cancelled" | "scheduled" | "completed";
 export type LessonType = "online" | "in-person" | "hybrid";
 
 export type LessonCardProps = {
+  id: string;
   currentRole: RoleType;
   lessonDate: string;
   lessonTime: string;
