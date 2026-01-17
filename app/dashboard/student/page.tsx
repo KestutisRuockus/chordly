@@ -8,6 +8,8 @@ import { LessonCardProps } from "../types";
 import { RoleType } from "@/types/role";
 import WeekCalendar from "@/components/dashboard/calendar/WeekCalendar";
 import ExerciseCard, { Exercise } from "@/components/dashboard/ExerciseCard";
+import PracticeSummary from "@/components/dashboard/PracticeSummary";
+import { getPracticeSummary } from "@/components/dashboard/helpers/getPracticeSummary";
 
 const lessons: Omit<LessonCardProps, "currentRole">[] = [
   {
@@ -101,6 +103,7 @@ const StudentDashboardPage = async () => {
   if (!userId) return null;
   const user = await currentUser();
   const role = (user?.publicMetadata?.role as RoleType) ?? "student";
+  const summary = getPracticeSummary({ lessons, exercises });
   return (
     <Main>
       <div>Student Dashboard Page - authenticated student`s dashboard</div>
@@ -118,6 +121,7 @@ const StudentDashboardPage = async () => {
           ))}
         </div>
       </Section>
+      <PracticeSummary summary={summary} />
     </Main>
   );
 };
