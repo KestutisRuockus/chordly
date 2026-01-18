@@ -12,7 +12,7 @@ const StudentSummaryCard = ({ student }: Props) => {
       <p>Instrument: {student.instrument}</p>
       <p className="capitalize">Lesson Type: {student.lessonType}</p>
       <Link
-        href={`/dashboard/teacher/students/${student.id}`}
+        href={`/dashboard/teacher/student/${student.id}`}
         className="border rounded-lg px-2 mt-2 text-center"
       >
         View Profile

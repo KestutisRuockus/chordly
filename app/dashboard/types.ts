@@ -12,6 +12,8 @@ export type Lesson = {
   lessonStatus: LessonStatus;
   participantName: string;
   instrument: string;
+  studentId: string;
+  teacherId: string;
 };
 
 export type LessonCardProps = Lesson & {
@@ -31,6 +33,8 @@ export type Exercise = {
   goal: string;
   targetPerWeek: 1 | 3 | 5;
   practicedDaysThisWeek: WeekDay[];
+  teacherId: string;
+  studentId: string;
 };
 
 export type StudentSummary = {
@@ -39,3 +43,11 @@ export type StudentSummary = {
   instrument: string;
   lessonType: LessonType;
 };
+
+export interface StudentProfile extends StudentSummary {
+  email: string;
+  location: string;
+  skillLevel: string;
+  bio: string;
+  age: number;
+}
