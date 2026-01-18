@@ -3,7 +3,7 @@ import FeaturesPreview from "@/components/sections/FeaturesPreview";
 import HeroSection from "@/components/sections/HeroSection";
 import CallToActionCard from "@/components/ui/CallToActionCard";
 import Main from "@/components/layout/Main";
-import { forTeachers } from "../content/forTeachers";
+import { forTeachers } from "../../content/forTeachers";
 
 const ForTeachersPage = () => {
   return (

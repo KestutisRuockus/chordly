@@ -1,4 +1,4 @@
-import { studentsDashboard } from "@/app/content/studentsDashboard";
+import { studentsDashboard } from "@/content/studentsDashboard";
 import LessonCard from "@/components/dashboard/LessonCard";
 import Main from "@/components/layout/Main";
 import Section from "@/components/layout/Section";
@@ -9,7 +9,7 @@ import WeekCalendar from "@/components/dashboard/calendar/WeekCalendar";
 import ExerciseCard from "@/components/dashboard/ExerciseCard";
 import PracticeSummary from "@/components/dashboard/PracticeSummary";
 import { getPracticeSummary } from "@/components/dashboard/helpers/getPracticeSummary";
-import { exercises, lessons } from "@/app/content/dummyData";
+import { exercises, lessons } from "@/content/dummyData";
 
 const nextLesson = lessons[0];
 

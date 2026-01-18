@@ -1,7 +1,7 @@
 import HeaderSection from "@/components/sections/HeaderSection";
 import Main from "@/components/layout/Main";
 import Section from "@/components/layout/Section";
-import { pricing } from "../content/pricing";
+import { pricing } from "../../content/pricing";
 import CallToActionCard from "@/components/ui/CallToActionCard";
 import Accordion from "@/components/ui/Accordion";
 

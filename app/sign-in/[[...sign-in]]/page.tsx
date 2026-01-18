@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import type { ClerkAPIResponseError } from "@clerk/shared";
 import HeaderSection from "@/components/sections/HeaderSection";
-import { auth } from "@/app/content/auth";
+import { auth } from "@/content/auth";
 import Main from "@/components/layout/Main";
 import Section from "@/components/layout/Section";
 

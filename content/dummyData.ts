@@ -3,7 +3,7 @@ import type {
   Lesson,
   StudentProfile,
   StudentSummary,
-} from "../dashboard/types";
+} from "../app/dashboard/types";
 
 export const currentTeacherId = "t-1";
 

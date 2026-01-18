@@ -1,5 +1,5 @@
 import HeroSection from "@/components/sections/HeroSection";
-import { homeContent } from "./content/home";
+import { homeContent } from "../content/home";
 import FeaturesWithIconsSection from "@/components/sections/FeaturesWithIconsSection";
 import CallToActionCard from "@/components/ui/CallToActionCard";
 import Section from "@/components/layout/Section";

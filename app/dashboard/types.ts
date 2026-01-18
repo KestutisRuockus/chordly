@@ -4,6 +4,8 @@ export type LessonStatus = "cancelled" | "scheduled" | "completed";
 
 export type LessonType = "online" | "in-person" | "hybrid";
 
+export type TargetPerWeek = 1 | 3 | 5;
+
 export type Lesson = {
   id: string;
   lessonDate: string;
@@ -31,7 +33,7 @@ export type Exercise = {
   instrument: string;
   difficulty: ExerciseDifficulty;
   goal: string;
-  targetPerWeek: 1 | 3 | 5;
+  targetPerWeek: TargetPerWeek;
   practicedDaysThisWeek: WeekDay[];
   teacherId: string;
   studentId: string;

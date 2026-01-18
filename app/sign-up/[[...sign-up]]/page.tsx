@@ -11,7 +11,7 @@ import {
   validateTeacherAction,
 } from "../actions/validateForms";
 import HeaderSection from "@/components/sections/HeaderSection";
-import { auth } from "@/app/content/auth";
+import { auth } from "@/content/auth";
 import Main from "@/components/layout/Main";
 import Section from "@/components/layout/Section";
 import { RoleType } from "@/types/role";
@@ -21,12 +21,12 @@ const SingUpPage = () => {
   const [verifying, setVerifying] = useState(false);
   const [teacherState, teacherAction, teacherPending] = useActionState(
     validateTeacherAction,
-    {}
+    {},
   );
 
   const [studentState, studentAction, studentPending] = useActionState(
     validateStudentAction,
-    {}
+    {},
   );
 
   const [pendingFields, setPendingFields] = useState<

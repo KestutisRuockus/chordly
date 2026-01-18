@@ -1,6 +1,6 @@
 import Main from "@/components/layout/Main";
 import HeaderSection from "@/components/sections/HeaderSection";
-import { aboutContent } from "../content/about";
+import { aboutContent } from "../../content/about";
 import Section from "@/components/layout/Section";
 import CallToActionCard from "@/components/ui/CallToActionCard";
 

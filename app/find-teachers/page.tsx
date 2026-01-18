@@ -6,7 +6,7 @@ import { getTeachersSummary, getTeachersSummaryByQuery } from "@/db/teachers";
 import Main from "@/components/layout/Main";
 import Section from "@/components/layout/Section";
 import HeaderSection from "@/components/sections/HeaderSection";
-import { findTeachers } from "../content/findTeachers";
+import { findTeachers } from "../../content/findTeachers";
 
 type Props = {
   searchParams: Promise<{ q?: string; instruments?: string; limit?: string }>;

@@ -1,6 +1,6 @@
 import Main from "@/components/layout/Main";
 import HeaderSection from "@/components/sections/HeaderSection";
-import { faq } from "../content/faq";
+import { faq } from "../../content/faq";
 import Section from "@/components/layout/Section";
 import Accordion from "@/components/ui/Accordion";
 

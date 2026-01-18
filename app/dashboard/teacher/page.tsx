@@ -1,5 +1,5 @@
 import type { RoleType } from "@/types/role";
-import { teachersDashboard } from "@/app/content/teachersDashboard";
+import { teachersDashboard } from "@/content/teachersDashboard";
 import LessonCard from "@/components/dashboard/LessonCard";
 import Main from "@/components/layout/Main";
 import Section from "@/components/layout/Section";
@@ -7,7 +7,7 @@ import HeaderSection from "@/components/sections/HeaderSection";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import WeekCalendar from "@/components/dashboard/calendar/WeekCalendar";
 import StudentSummaryCard from "@/components/dashboard/StudentSummaryCard";
-import { studentsSummaries, teacherLessons } from "@/app/content/dummyData";
+import { studentsSummaries, teacherLessons } from "@/content/dummyData";
 
 const TeacherDashboardPage = async () => {
   const { userId } = await auth();
