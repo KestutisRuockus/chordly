@@ -32,3 +32,10 @@ export type Exercise = {
   targetPerWeek: 1 | 3 | 5;
   practicedDaysThisWeek: WeekDay[];
 };
+
+export type StudentSummary = {
+  id: string;
+  name: string;
+  instrument: string;
+  lessonType: LessonType;
+};
