@@ -1,6 +1,7 @@
 import type {
   Exercise,
   Lesson,
+  Note,
   StudentProfile,
   StudentSummary,
 } from "../app/dashboard/types";
@@ -12,7 +13,7 @@ export const lessons: Lesson[] = [
     id: "1",
     studentId: "st-1",
     teacherId: "t-1",
-    lessonDate: "2026-01-14",
+    lessonDate: "2026-01-19",
     lessonTime: "16:00 – 16:45",
     lessonType: "online",
     lessonStatus: "scheduled",
@@ -23,7 +24,7 @@ export const lessons: Lesson[] = [
     id: "2",
     studentId: "st-2",
     teacherId: "t-2",
-    lessonDate: "2026-01-16",
+    lessonDate: "2026-01-19",
     lessonTime: "18:30 – 19:15",
     lessonType: "in-person",
     lessonStatus: "completed",
@@ -34,7 +35,7 @@ export const lessons: Lesson[] = [
     id: "4",
     studentId: "st-3",
     teacherId: "t-3",
-    lessonDate: "2026-01-16",
+    lessonDate: "2026-01-11",
     lessonTime: "14:00 – 14:45",
     lessonType: "hybrid",
     lessonStatus: "cancelled",
@@ -45,7 +46,7 @@ export const lessons: Lesson[] = [
     id: "5",
     studentId: "st-4",
     teacherId: "t-4",
-    lessonDate: "2026-01-18",
+    lessonDate: "2026-01-23",
     lessonTime: "17:00 – 17:45",
     lessonType: "online",
     lessonStatus: "scheduled",
@@ -117,7 +118,7 @@ export const teacherLessons: Lesson[] = [
     id: "t-lesson-1",
     studentId: "st-1",
     teacherId: "t-1",
-    lessonDate: "2026-01-17",
+    lessonDate: "2026-01-19",
     lessonTime: "16:00 – 16:45",
     lessonType: "online",
     lessonStatus: "scheduled",
@@ -128,7 +129,7 @@ export const teacherLessons: Lesson[] = [
     id: "t-lesson-11",
     studentId: "st-1",
     teacherId: "t-1",
-    lessonDate: "2026-01-14",
+    lessonDate: "2026-01-19",
     lessonTime: "16:00 – 16:45",
     lessonType: "online",
     lessonStatus: "scheduled",
@@ -139,7 +140,7 @@ export const teacherLessons: Lesson[] = [
     id: "t-lesson-2",
     studentId: "st-2",
     teacherId: "t-1",
-    lessonDate: "2026-01-16",
+    lessonDate: "2026-01-21",
     lessonTime: "18:30 – 19:15",
     lessonType: "in-person",
     lessonStatus: "scheduled",
@@ -150,7 +151,7 @@ export const teacherLessons: Lesson[] = [
     id: "t-lesson-3",
     studentId: "st-3",
     teacherId: "t-1",
-    lessonDate: "2026-01-12",
+    lessonDate: "2026-01-22",
     lessonTime: "14:00 – 14:45",
     lessonType: "hybrid",
     lessonStatus: "completed",
@@ -161,7 +162,7 @@ export const teacherLessons: Lesson[] = [
     id: "t-lesson-4",
     studentId: "st-4",
     teacherId: "t-1",
-    lessonDate: "2026-01-12",
+    lessonDate: "2026-01-3",
     lessonTime: "17:00 – 17:45",
     lessonType: "online",
     lessonStatus: "cancelled",
@@ -241,5 +242,29 @@ export const students: StudentProfile[] = [
     skillLevel: "Intermediate",
     bio: "Drummer with experience in band rehearsals. Wants to improve groove, fills, and independence for live gigs.",
     age: 24,
+  },
+];
+
+export const notes: Note[] = [
+  {
+    id: "note-1",
+    studentId: "st-1",
+    teacherId: "t-1",
+    content:
+      "Great progress this week — chord transitions are smoother. Keep practicing with a metronome at 80 BPM.",
+  },
+  {
+    id: "note-2",
+    studentId: "st-1",
+    teacherId: "t-1",
+    content:
+      "Focus on cleaner strumming patterns. Try slow down-up exercises and pay attention to even volume between strokes.",
+  },
+  {
+    id: "note-3",
+    studentId: "st-1",
+    teacherId: "t-1",
+    content:
+      "Remember relaxed fretting hand pressure. If fingers get tired, take short breaks and repeat smaller sections.",
   },
 ];

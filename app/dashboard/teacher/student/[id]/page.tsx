@@ -8,10 +8,12 @@ import PracticeSummary from "@/components/dashboard/PracticeSummary";
 import {
   currentTeacherId,
   exercises,
+  notes,
   students,
   teacherLessons,
 } from "@/content/dummyData";
 import StudentProfileActions from "@/components/dashboard/StudentProfileActions";
+import Note from "@/components/dashboard/Note";
 
 type Props = {
   params: { id: string };
@@ -92,6 +94,11 @@ const StudentFullProfileById = async ({ params }: Props) => {
           </div>
         </aside>
         <div className="flex flex-col gap-4 col-span-3 bg-slate-300 p-4 rounded-lg">
+          <div className="flex gap-2">
+            {notes.map((note) => (
+              <Note key={note.id} note={note} />
+            ))}
+          </div>
           <div className="flex gap-2">
             {relatedLessons.map((l) => (
               <LessonCard currentRole={"teacher"} key={l.id} {...l} />

@@ -53,3 +53,10 @@ export interface StudentProfile extends StudentSummary {
   bio: string;
   age: number;
 }
+
+export type Note = {
+  id: string;
+  studentId: string;
+  teacherId: string;
+  content: string;
+};
