@@ -66,6 +66,20 @@ Open http://localhost:3000 in your browser to view the application.
 
 👉 https://chordly-tau.vercel.app/
 
+### 🔑 Demo Accounts
+
+If you want to test the app with different roles, you can log in using these demo credentials:
+
+**Teacher account**
+
+- Email: `demo.teacher@demo.com`
+- Password: `chordly_demo`
+
+**Student account**
+
+- Email: `demo.student@demo.com`
+- Password: `chordly_demo`
+
 ## 📌 Project Status
 
 Chordly is under active development.
