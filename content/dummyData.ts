@@ -1,3 +1,4 @@
+import { TeacherWeeklySchedule } from "@/components/teacherSchedule/types";
 import type {
   Exercise,
   Lesson,
@@ -268,3 +269,16 @@ export const notes: Note[] = [
       "Remember relaxed fretting hand pressure. If fingers get tired, take short breaks and repeat smaller sections.",
   },
 ];
+
+export const LESSON_LENGTH = 45;
+
+export const teacherWeeklySchedule: TeacherWeeklySchedule = {
+  teacherId: "t-1",
+  lessonDurationMin: LESSON_LENGTH,
+  days: [
+    { weekday: 0, hours: [8, 9, 10, 11, 13, 14, 15] },
+    { weekday: 2, hours: [9, 10, 11, 14, 15, 16] },
+    { weekday: 4, hours: [8, 9, 10, 13, 16, 17] },
+    { weekday: 5, hours: [10, 11, 12] },
+  ],
+};

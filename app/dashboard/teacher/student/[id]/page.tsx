@@ -12,7 +12,7 @@ import {
   students,
   teacherLessons,
 } from "@/content/dummyData";
-import StudentProfileActions from "@/components/dashboard/StudentProfileActions";
+import StudentProfileModal from "@/components/dashboard/StudentProfileActions";
 import Note from "@/components/dashboard/Note";
 
 type Props = {
@@ -90,7 +90,7 @@ const StudentFullProfileById = async ({ params }: Props) => {
           </div>
           <PracticeSummary summary={summary} showFullSummary={false} />
           <div className="w-full flex justify-between items-center">
-            <StudentProfileActions />
+            <StudentProfileModal />
           </div>
         </aside>
         <div className="flex flex-col gap-4 col-span-3 bg-slate-300 p-4 rounded-lg">

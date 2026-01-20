@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import type { ModalMode } from "../ui/ActiveModal";
-import ActiveModal from "../ui/ActiveModal";
+import StudentProfileModal from "../ui/StudentProfileModal";
+
+export type ModalMode = "notes" | "new-exercise" | null;
 
 const StudentProfileActions = () => {
   const [mode, setMode] = useState<ModalMode>(null);
@@ -26,7 +27,9 @@ const StudentProfileActions = () => {
         </button>
       </div>
 
-      {mode && <ActiveModal mode={mode} onClose={() => setMode(null)} />}
+      {mode && (
+        <StudentProfileModal mode={mode} onClose={() => setMode(null)} />
+      )}
     </>
   );
 };

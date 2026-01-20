@@ -8,6 +8,7 @@ import { auth, currentUser } from "@clerk/nextjs/server";
 import WeekCalendar from "@/components/dashboard/calendar/WeekCalendar";
 import StudentSummaryCard from "@/components/dashboard/StudentSummaryCard";
 import { studentsSummaries, teacherLessons } from "@/content/dummyData";
+import TeacherScheduleAction from "@/components/dashboard/TeacherScheduleAction";
 
 const TeacherDashboardPage = async () => {
   const { userId } = await auth();
@@ -31,6 +32,9 @@ const TeacherDashboardPage = async () => {
           ))}
         </div>
       </Section>
+      <TeacherScheduleAction
+        buttonLabel={teachersDashboard.button.buttonLabel}
+      />
     </Main>
   );
 };
