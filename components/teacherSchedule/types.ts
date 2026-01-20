@@ -7,6 +7,16 @@ export type WeeklyDaySchedule = {
 
 export type TeacherWeeklySchedule = {
   teacherId: string;
-  lessonDurationMin: number;
   days: WeeklyDaySchedule[];
+  updatedAt: Date | null;
+};
+
+export type SaveTeacherWeeklyScheduleInput = {
+  teacherId: string;
+  days: { weekday: number; hours: number[] }[];
+};
+
+export const toWeekDayNumber = (n: number): WeekDayNumber => {
+  if (n < 0 || n > 6) throw new Error(`Invalid weekday: ${n}`);
+  return n as WeekDayNumber;
 };

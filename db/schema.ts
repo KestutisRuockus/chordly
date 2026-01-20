@@ -6,6 +6,7 @@ import {
   json,
   numeric,
   integer,
+  jsonb,
 } from "drizzle-orm/pg-core";
 
 export const users = pgTable("users", {
@@ -40,4 +41,15 @@ export const students = pgTable("students", {
   skillLevel: text("skill_level").notNull(),
   bio: text("bio"),
   age: integer("age"),
+});
+
+export const teacherAvailability = pgTable("teacher_availability", {
+  teacherId: uuid("teacher_id")
+    .notNull()
+    .references(() => teachers.id, { onDelete: "cascade" })
+    .primaryKey(),
+  days: jsonb("days")
+    .$type<Array<{ weekday: number; hours: number[] }>>()
+    .notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });

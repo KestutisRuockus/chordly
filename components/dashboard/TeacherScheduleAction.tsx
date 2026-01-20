@@ -1,14 +1,21 @@
 "use client";
 
+import type { TeacherWeeklySchedule } from "../teacherSchedule/types";
 import { useState } from "react";
 import Modal from "@/components/ui/Modal";
 import TeacherScheduleForm from "../teacherSchedule/TeacherScheduleForm";
 
 type Props = {
   buttonLabel: string;
+  teacherId: string;
+  teacherWeeklySchedule: TeacherWeeklySchedule;
 };
 
-const TeacherScheduleAction = ({ buttonLabel }: Props) => {
+const TeacherScheduleAction = ({
+  buttonLabel,
+  teacherId,
+  teacherWeeklySchedule,
+}: Props) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -27,7 +34,11 @@ const TeacherScheduleAction = ({ buttonLabel }: Props) => {
           onClose={() => setIsOpen(false)}
           closeOnOverlayClick={true}
         >
-          <TeacherScheduleForm onClose={() => setIsOpen(false)} />
+          <TeacherScheduleForm
+            teacherId={teacherId}
+            onClose={() => setIsOpen(false)}
+            teacherWeeklySchedule={teacherWeeklySchedule}
+          />
         </Modal>
       )}
     </>

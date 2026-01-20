@@ -9,6 +9,11 @@ import WeekCalendar from "@/components/dashboard/calendar/WeekCalendar";
 import StudentSummaryCard from "@/components/dashboard/StudentSummaryCard";
 import { studentsSummaries, teacherLessons } from "@/content/dummyData";
 import TeacherScheduleAction from "@/components/dashboard/TeacherScheduleAction";
+import { db } from "@/db";
+import { teachers } from "@/db/schema";
+import { eq } from "drizzle-orm";
+import { getTeacherWeeklySchedule } from "@/db/teacherSchedule";
+import { TeacherWeeklySchedule } from "@/components/teacherSchedule/types";
 
 const TeacherDashboardPage = async () => {
   const { userId } = await auth();
@@ -16,6 +21,26 @@ const TeacherDashboardPage = async () => {
   const user = await currentUser();
   const role = (user?.publicMetadata?.role as RoleType) ?? "teacher";
   const nextLesson = teacherLessons[0];
+
+  const teacherRow = await db
+    .select({ id: teachers.id })
+    .from(teachers)
+    .where(eq(teachers.clerkUserId, userId))
+    .limit(1);
+
+  const teachersDbId = teacherRow[0]?.id;
+
+  const teacherWeeklySchedule: TeacherWeeklySchedule =
+    await getTeacherWeeklySchedule(teachersDbId);
+
+  if (!teachersDbId) {
+    return (
+      <div className="p-6">
+        Teacher profile not found in DB (no teacher record for this Clerk user).
+      </div>
+    );
+  }
+
   return (
     <Main>
       <HeaderSection {...teachersDashboard.header} />
@@ -34,6 +59,8 @@ const TeacherDashboardPage = async () => {
       </Section>
       <TeacherScheduleAction
         buttonLabel={teachersDashboard.button.buttonLabel}
+        teacherId={teachersDbId}
+        teacherWeeklySchedule={teacherWeeklySchedule}
       />
     </Main>
   );

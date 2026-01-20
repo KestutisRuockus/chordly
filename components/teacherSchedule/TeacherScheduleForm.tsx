@@ -1,19 +1,30 @@
 "use client";
 
-import type { WeekDayNumber } from "./types";
+import type {
+  SaveTeacherWeeklyScheduleInput,
+  TeacherWeeklySchedule,
+  WeekDayNumber,
+} from "./types";
+import { toWeekDayNumber } from "./types";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
-import { LESSON_LENGTH, teacherWeeklySchedule } from "@/content/dummyData";
 import { formatDateKey, getMonday, WEEK_DAYS } from "@/lib/date";
 import { isSameDay } from "../dashboard/helpers/getPracticeSummary";
 import WeekDayButton from "./WeekDayButton";
 import HourSlotButton from "./HourSlotButton";
+import { SaveTeacherScheduleAction } from "@/app/actions/teacherSchedule";
 
 type Props = {
   onClose: () => void;
+  teacherId: string;
+  teacherWeeklySchedule: TeacherWeeklySchedule;
 };
 
-const TeacherScheduleForm = ({ onClose }: Props) => {
+const TeacherScheduleForm = ({
+  onClose,
+  teacherId,
+  teacherWeeklySchedule,
+}: Props) => {
   const now = useMemo(() => new Date(), []);
   const monday = useMemo(() => getMonday(now), [now]);
 
@@ -36,9 +47,9 @@ const TeacherScheduleForm = ({ onClose }: Props) => {
     return Object.fromEntries(
       teacherWeeklySchedule.days.map((d) => [d.weekday, d.hours]),
     ) as Partial<Record<number, number[]>>;
-  }, []);
+  }, [teacherWeeklySchedule.days]);
 
-  const firstWorkingWeekday = teacherWeeklySchedule.days[0].weekday;
+  const firstWorkingWeekday = teacherWeeklySchedule.days[0]?.weekday ?? 0;
 
   const [scheduleMap, setScheduleMap] =
     useState<Partial<Record<number, number[]>>>(initialScheduleMap);
@@ -87,7 +98,7 @@ const TeacherScheduleForm = ({ onClose }: Props) => {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const nextMap = {
@@ -97,16 +108,15 @@ const TeacherScheduleForm = ({ onClose }: Props) => {
 
     setScheduleMap(nextMap);
 
-    const savedSchedule = {
-      teacherId: teacherWeeklySchedule.teacherId,
-      lessonDurationMin: LESSON_LENGTH,
-      days: Object.entries(scheduleMap).map(([weekday, hours]) => ({
-        weekday: Number(weekday),
+    const savedSchedule: SaveTeacherWeeklyScheduleInput = {
+      teacherId,
+      days: Object.entries(nextMap).map(([weekday, hours]) => ({
+        weekday: toWeekDayNumber(Number(weekday)),
         hours: (hours ?? []).slice().sort((a, b) => a - b),
       })),
     };
 
-    console.log("SAVED SCHEDULE", savedSchedule);
+    await SaveTeacherScheduleAction(savedSchedule);
 
     toast.success("Schedule saved!");
     onClose();
@@ -162,7 +172,6 @@ const TeacherScheduleForm = ({ onClose }: Props) => {
             <HourSlotButton
               key={hour}
               hour={hour}
-              durationMin={teacherWeeklySchedule.lessonDurationMin}
               selectedHours={selectedHours}
               onToggle={handleToggleHour}
             />

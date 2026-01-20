@@ -1,22 +1,18 @@
 "use client";
 
+import { LESSON_LENGTH } from "@/content/dummyData";
+
 type Props = {
   hour: number;
-  durationMin: number;
   selectedHours: number[];
   onToggle: (hour: number) => void;
 };
 
-const HourSlotButton = ({
-  hour,
-  durationMin,
-  selectedHours,
-  onToggle,
-}: Props) => {
+const HourSlotButton = ({ hour, selectedHours, onToggle }: Props) => {
   const isActive = selectedHours.includes(hour);
 
   const start = String(hour).padStart(2, "0");
-  const label = `${start}:00 - ${start}:${durationMin}`;
+  const label = `${start}:00 - ${start}:${LESSON_LENGTH}`;
 
   const baseClass = "rounded border px-3 py-2 text-sm text-center";
   const activeClass = "bg-emerald-600 text-white border-emerald-600";
