@@ -26,7 +26,11 @@ const StudentProfileModal = ({ mode, onClose, studentId }: Props) => {
           studentId={studentId}
         />
       ) : (
-        <ExerciseForm onClose={onClose} setFormIsEmpty={setFormIsEmpty} />
+        <ExerciseForm
+          onClose={onClose}
+          setFormIsEmpty={setFormIsEmpty}
+          studentId={studentId}
+        />
       )}
     </Modal>
   );

@@ -7,15 +7,14 @@ import { getPracticeSummary } from "@/components/dashboard/helpers/getPracticeSu
 import PracticeSummary from "@/components/dashboard/PracticeSummary";
 import {
   currentTeacherId,
-  exercises,
   students,
   teacherLessons,
 } from "@/content/dummyData";
 import StudentProfileActions from "@/components/dashboard/StudentProfileActions";
 import Note from "@/components/dashboard/Note";
-import { auth } from "@clerk/nextjs/server";
-import { getTeacherDbIdByClerkId } from "@/db/teachers";
+import { requireTeacherId } from "@/db/teachers";
 import { getTeacherNotes } from "@/db/teacherNotes";
+import { getExercisesByTeacherAndStudent } from "@/db/exercises";
 
 type Props = {
   params: { id: string };
@@ -29,19 +28,17 @@ const StudentFullProfileById = async ({ params }: Props) => {
     return <Main>Student not found</Main>;
   }
 
-  const { userId } = await auth();
-  if (!userId) return null;
-
-  const teacherId = await getTeacherDbIdByClerkId(userId);
+  const teacherId = await requireTeacherId();
 
   const relatedLessons = teacherLessons.filter(
     (lesson) =>
       lesson.teacherId === currentTeacherId && lesson.studentId === id,
   );
 
-  const relatedExercises = exercises.filter(
-    (ex) => ex.teacherId === currentTeacherId && ex.studentId === id,
-  );
+  const relatedExercises = await getExercisesByTeacherAndStudent({
+    teacherId,
+    studentId: id,
+  });
 
   const relatedNotes = await getTeacherNotes({ teacherId, studentId: id });
 
@@ -119,6 +116,7 @@ const StudentFullProfileById = async ({ params }: Props) => {
                 key={exercise.id}
                 exercise={exercise}
                 isStudent={false}
+                studentId={student.id}
               />
             ))}
           </div>

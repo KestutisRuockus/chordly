@@ -1,18 +1,14 @@
 "use client";
 
-import {
-  Exercise,
-  ExerciseDifficulty,
-  TargetPerWeek,
-} from "@/app/dashboard/types";
-import { currentTeacherId } from "@/content/dummyData";
-import { useParams } from "next/navigation";
+import type { ExerciseDifficulty, TargetPerWeek } from "@/app/dashboard/types";
+import { createExerciseAction } from "@/app/actions/exercisesActions";
 import React, { Dispatch, SetStateAction, useState } from "react";
 import { toast } from "sonner";
 
 type Props = {
   onClose: () => void;
   setFormIsEmpty: Dispatch<SetStateAction<boolean>>;
+  studentId: string;
 };
 
 type FormState = {
@@ -25,11 +21,7 @@ type FormState = {
 
 type FormErrors = Partial<Record<keyof FormState, string>>;
 
-type CreateExercise = Omit<Exercise, "id">;
-
-const ExerciseForm = ({ onClose, setFormIsEmpty }: Props) => {
-  const params = useParams<{ id: string }>();
-  const studentId = params.id;
+const ExerciseForm = ({ onClose, setFormIsEmpty, studentId }: Props) => {
   const [form, setForm] = useState<FormState>({
     title: "",
     instrument: "",
@@ -95,7 +87,7 @@ const ExerciseForm = ({ onClose, setFormIsEmpty }: Props) => {
     return formValErrors;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const formValErrors = validate(form);
@@ -116,9 +108,8 @@ const ExerciseForm = ({ onClose, setFormIsEmpty }: Props) => {
       return;
     }
 
-    const newExercise: CreateExercise = {
+    const newExercise = {
       studentId,
-      teacherId: currentTeacherId,
       title: form.title,
       instrument: form.instrument,
       difficulty: form.difficulty,
@@ -127,7 +118,8 @@ const ExerciseForm = ({ onClose, setFormIsEmpty }: Props) => {
       practicedDaysThisWeek: [],
     };
 
-    console.log("SUBMIT EXERCISE:", newExercise);
+    await createExerciseAction(newExercise);
+
     toast.success("Exercise created!");
     onClose();
   };

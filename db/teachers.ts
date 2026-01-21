@@ -1,6 +1,7 @@
 import { eq, or, ilike, sql, and } from "drizzle-orm";
 import { db } from "./index";
 import { teachers } from "./schema";
+import { auth } from "@clerk/nextjs/server";
 
 export const getTeacherDbIdByClerkId = async (clerkUserId: string) => {
   const rows = await db
@@ -16,6 +17,15 @@ export const getTeacherDbIdByClerkId = async (clerkUserId: string) => {
   }
 
   return row.id;
+};
+
+export const requireTeacherId = async () => {
+  const { userId } = await auth();
+  if (!userId) throw new Error("Unauthorized");
+
+  const teacherId = await getTeacherDbIdByClerkId(userId);
+
+  return teacherId;
 };
 
 export async function getTeachersSummary(limit: number) {

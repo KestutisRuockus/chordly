@@ -1,3 +1,4 @@
+import type { WeekDay } from "@/app/dashboard/types";
 import {
   pgTable,
   text,
@@ -63,6 +64,27 @@ export const teacherNotes = pgTable("teacher_notes", {
     .notNull()
     .references(() => students.id, { onDelete: "cascade" }),
   content: text("content").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const exercises = pgTable("exercises", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  teacherId: uuid("teacher_id")
+    .notNull()
+    .references(() => teachers.id, { onDelete: "cascade" }),
+  studentId: uuid("student_id")
+    .notNull()
+    .references(() => students.id, { onDelete: "cascade" }),
+  title: text("title").notNull(),
+  instrument: text("instrument").notNull(),
+  difficulty: text("difficulty").notNull(),
+  goal: text("goal").notNull(),
+  targetPerWeek: integer("target_per_week").notNull(),
+  practicedDaysThisWeek: jsonb("practiced_days_this_week")
+    .$type<Array<WeekDay>>()
+    .default([])
+    .notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });

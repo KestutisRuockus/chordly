@@ -1,6 +1,6 @@
 "use client";
 
-import { DeleteTeacherNoteAction } from "@/app/actions/teacherNotes";
+import { deleteTeacherNoteAction } from "@/app/actions/teacherNotes";
 import type { Note } from "@/app/dashboard/types";
 import { Trash2 } from "lucide-react";
 
@@ -11,7 +11,7 @@ type Props = {
 
 const Note = ({ note, studentId }: Props) => {
   const handleDelete = async () => {
-    await DeleteTeacherNoteAction({ noteId: note.id, studentId });
+    await deleteTeacherNoteAction({ noteId: note.id, studentId });
   };
 
   return (

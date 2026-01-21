@@ -1,4 +1,5 @@
-import { WeekDay, Lesson, Exercise } from "@/app/dashboard/types";
+import type { WeekDay, Lesson } from "@/app/dashboard/types";
+import { ExerciseRow } from "@/db/types";
 import { formatDateKey, getMonday, WEEK_DAYS } from "@/lib/date";
 
 export type PracticeSummaryData = {
@@ -14,7 +15,7 @@ export const getPracticeSummary = ({
   exercises,
 }: {
   lessons: Lesson[];
-  exercises: Exercise[];
+  exercises: ExerciseRow[];
 }): PracticeSummaryData => {
   const now = new Date();
   const monday = getMonday(now);
@@ -24,11 +25,11 @@ export const getPracticeSummary = ({
       const d = new Date(monday);
       d.setDate(monday.getDate() + i);
       return formatDateKey(d);
-    })
+    }),
   );
 
   const lessonsThisWeek = lessons.filter((lesson) =>
-    weekKeySet.has(lesson.lessonDate)
+    weekKeySet.has(lesson.lessonDate),
   ).length;
 
   const practicedDaysSet = new Set<WeekDay>();
@@ -38,7 +39,7 @@ export const getPracticeSummary = ({
   });
 
   const completedExercisesThisWeek = exercises.filter(
-    (ex) => ex.practicedDaysThisWeek.length >= ex.targetPerWeek
+    (ex) => ex.practicedDaysThisWeek.length >= ex.targetPerWeek,
   ).length;
 
   const practicedDays = WEEK_DAYS.filter((day) => practicedDaysSet.has(day));

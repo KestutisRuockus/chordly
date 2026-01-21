@@ -1,6 +1,6 @@
 "use client";
 
-import { AddTeacherNoteAction } from "@/app/actions/teacherNotes";
+import { addTeacherNoteAction } from "@/app/actions/teacherNotes";
 import { Dispatch, SetStateAction, useState } from "react";
 import { toast } from "sonner";
 
@@ -22,7 +22,7 @@ const NotesForm = ({ onClose, setFormIsEmpty, studentId }: Props) => {
       return;
     }
 
-    await AddTeacherNoteAction({
+    await addTeacherNoteAction({
       studentId,
       content: note.trim(),
     });

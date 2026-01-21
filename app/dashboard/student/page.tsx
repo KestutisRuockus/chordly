@@ -18,7 +18,7 @@ const StudentDashboardPage = async () => {
   if (!userId) return null;
   const user = await currentUser();
   const role = (user?.publicMetadata?.role as RoleType) ?? "student";
-  const summary = getPracticeSummary({ lessons, exercises });
+  // const summary = getPracticeSummary({ lessons, exercises });
   return (
     <Main>
       <HeaderSection {...studentsDashboard.header} />
@@ -29,13 +29,13 @@ const StudentDashboardPage = async () => {
       </Section>
       <Section>
         <h2 className="font-bold text-xl">Exercises</h2>
-        <div className="flex flex-wrap gap-4">
+        {/* <div className="flex flex-wrap gap-4">
           {exercises.map((exercise) => (
             <ExerciseCard key={exercise.id} exercise={exercise} />
           ))}
-        </div>
+        </div> */}
       </Section>
-      <PracticeSummary summary={summary} />
+      {/* <PracticeSummary summary={summary} /> */}
     </Main>
   );
 };
