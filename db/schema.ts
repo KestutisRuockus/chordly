@@ -53,3 +53,16 @@ export const teacherAvailability = pgTable("teacher_availability", {
     .notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
+
+export const teacherNotes = pgTable("teacher_notes", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  teacherId: uuid("teacher_id")
+    .notNull()
+    .references(() => teachers.id, { onDelete: "cascade" }),
+  studentId: uuid("student_id")
+    .notNull()
+    .references(() => students.id, { onDelete: "cascade" }),
+  content: text("content").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});

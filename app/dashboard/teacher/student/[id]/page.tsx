@@ -8,12 +8,14 @@ import PracticeSummary from "@/components/dashboard/PracticeSummary";
 import {
   currentTeacherId,
   exercises,
-  notes,
   students,
   teacherLessons,
 } from "@/content/dummyData";
-import StudentProfileModal from "@/components/dashboard/StudentProfileActions";
+import StudentProfileActions from "@/components/dashboard/StudentProfileActions";
 import Note from "@/components/dashboard/Note";
+import { auth } from "@clerk/nextjs/server";
+import { getTeacherDbIdByClerkId } from "@/db/teachers";
+import { getTeacherNotes } from "@/db/teacherNotes";
 
 type Props = {
   params: { id: string };
@@ -27,6 +29,11 @@ const StudentFullProfileById = async ({ params }: Props) => {
     return <Main>Student not found</Main>;
   }
 
+  const { userId } = await auth();
+  if (!userId) return null;
+
+  const teacherId = await getTeacherDbIdByClerkId(userId);
+
   const relatedLessons = teacherLessons.filter(
     (lesson) =>
       lesson.teacherId === currentTeacherId && lesson.studentId === id,
@@ -35,6 +42,8 @@ const StudentFullProfileById = async ({ params }: Props) => {
   const relatedExercises = exercises.filter(
     (ex) => ex.teacherId === currentTeacherId && ex.studentId === id,
   );
+
+  const relatedNotes = await getTeacherNotes({ teacherId, studentId: id });
 
   const summary = getPracticeSummary({
     lessons: relatedLessons,
@@ -90,13 +99,13 @@ const StudentFullProfileById = async ({ params }: Props) => {
           </div>
           <PracticeSummary summary={summary} showFullSummary={false} />
           <div className="w-full flex justify-between items-center">
-            <StudentProfileModal />
+            <StudentProfileActions studentId={id} />
           </div>
         </aside>
         <div className="flex flex-col gap-4 col-span-3 bg-slate-300 p-4 rounded-lg">
           <div className="flex gap-2">
-            {notes.map((note) => (
-              <Note key={note.id} note={note} />
+            {relatedNotes.map((note) => (
+              <Note key={note.id} note={note} studentId={id} />
             ))}
           </div>
           <div className="flex gap-2">

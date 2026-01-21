@@ -2,6 +2,22 @@ import { eq, or, ilike, sql, and } from "drizzle-orm";
 import { db } from "./index";
 import { teachers } from "./schema";
 
+export const getTeacherDbIdByClerkId = async (clerkUserId: string) => {
+  const rows = await db
+    .select({ id: teachers.id })
+    .from(teachers)
+    .where(eq(teachers.clerkUserId, clerkUserId))
+    .limit(1);
+
+  const row = rows[0];
+
+  if (!row) {
+    throw new Error(`Teacher not found for clerkUserId: ${clerkUserId}`);
+  }
+
+  return row.id;
+};
+
 export async function getTeachersSummary(limit: number) {
   return await db
     .select({
@@ -23,7 +39,7 @@ export async function getTeacherById(id: string) {
 export async function getTeachersSummaryByQuery(
   query?: string,
   instruments?: string[],
-  limit: number = 5
+  limit: number = 5,
 ) {
   const conditions = [];
 
@@ -38,9 +54,9 @@ export async function getTeachersSummaryByQuery(
           (instruments) =>
             sql`${teachers.instruments}::jsonb @> ${JSON.stringify([
               instruments,
-            ])}::jsonb`
-        )
-      )
+            ])}::jsonb`,
+        ),
+      ),
     );
   }
 

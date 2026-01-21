@@ -1,25 +1,32 @@
 "use client";
 
+import { AddTeacherNoteAction } from "@/app/actions/teacherNotes";
 import { Dispatch, SetStateAction, useState } from "react";
 import { toast } from "sonner";
 
 type Props = {
   onClose: () => void;
   setFormIsEmpty: Dispatch<SetStateAction<boolean>>;
+  studentId: string;
 };
 
-const NotesForm = ({ onClose, setFormIsEmpty }: Props) => {
+const NotesForm = ({ onClose, setFormIsEmpty, studentId }: Props) => {
   const [note, setNote] = useState("");
   const [errMsg, setErrmsg] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (note.trim() === "") {
       setErrmsg("Text area cannot be empty.");
       toast.error("Text area cannot be empty.");
       return;
     }
-    console.log("SUBMIT NOTE", note);
+
+    await AddTeacherNoteAction({
+      studentId,
+      content: note.trim(),
+    });
+
     toast.success("Note saved!");
     onClose();
   };

@@ -59,4 +59,6 @@ export type Note = {
   studentId: string;
   teacherId: string;
   content: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 };

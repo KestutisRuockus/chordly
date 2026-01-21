@@ -9,9 +9,10 @@ import Modal from "@/components/ui/Modal";
 type Props = {
   mode: ModalMode;
   onClose: () => void;
+  studentId: string;
 };
 
-const StudentProfileModal = ({ mode, onClose }: Props) => {
+const StudentProfileModal = ({ mode, onClose, studentId }: Props) => {
   const [formIsEmpty, setFormIsEmpty] = useState(true);
 
   const title = mode === "notes" ? "Note" : "New Exercise";
@@ -19,7 +20,11 @@ const StudentProfileModal = ({ mode, onClose }: Props) => {
   return (
     <Modal title={title} onClose={onClose} closeOnOverlayClick={formIsEmpty}>
       {mode === "notes" ? (
-        <NotesForm onClose={onClose} setFormIsEmpty={setFormIsEmpty} />
+        <NotesForm
+          onClose={onClose}
+          setFormIsEmpty={setFormIsEmpty}
+          studentId={studentId}
+        />
       ) : (
         <ExerciseForm onClose={onClose} setFormIsEmpty={setFormIsEmpty} />
       )}

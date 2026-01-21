@@ -5,7 +5,11 @@ import StudentProfileModal from "../ui/StudentProfileModal";
 
 export type ModalMode = "notes" | "new-exercise" | null;
 
-const StudentProfileActions = () => {
+type Props = {
+  studentId: string;
+};
+
+const StudentProfileActions = ({ studentId }: Props) => {
   const [mode, setMode] = useState<ModalMode>(null);
   return (
     <>
@@ -28,7 +32,11 @@ const StudentProfileActions = () => {
       </div>
 
       {mode && (
-        <StudentProfileModal mode={mode} onClose={() => setMode(null)} />
+        <StudentProfileModal
+          mode={mode}
+          onClose={() => setMode(null)}
+          studentId={studentId}
+        />
       )}
     </>
   );
