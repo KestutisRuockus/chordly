@@ -4,7 +4,10 @@ import type { ExerciseRow } from "@/db/types";
 import { Check, X } from "lucide-react";
 import { getTodayWeekDay } from "@/lib/date";
 import { Trash2 } from "lucide-react";
-import { deleteExerciseAction } from "@/app/actions/exercisesActions";
+import {
+  deleteExerciseAction,
+  markExercisePracticedTodayAction,
+} from "@/app/actions/exercisesActions";
 import { toast } from "sonner";
 
 type Props = {
@@ -37,11 +40,19 @@ const ExerciseCard = ({ exercise, isStudent = true, studentId }: Props) => {
     await deleteExerciseAction({ exerciseId: exercise.id, studentId });
     toast.success("Exercises successfully delted!");
   };
+
+  const handleMarkPracticedToday = async () => {
+    await markExercisePracticedTodayAction(exercise.id);
+    toast.success("Exercises marked as practiced today");
+  };
+
   return (
     <div className="flex flex-col justify-between gap-2 max-w-72 p-2 border rounded-lg relative">
-      <div className="absolute right-0.5 top-0.5 flex gap-1">
-        <Trash2 onClick={handleDelete} className="w-4 h-4 cursor-pointer" />
-      </div>
+      {!isStudent && (
+        <div className="absolute right-0.5 top-0.5 flex gap-1">
+          <Trash2 onClick={handleDelete} className="w-4 h-4 cursor-pointer" />
+        </div>
+      )}
       <div>
         <p>{exercise.title}</p>
         <p>
@@ -66,6 +77,7 @@ const ExerciseCard = ({ exercise, isStudent = true, studentId }: Props) => {
       <div>
         {isStudent && (
           <button
+            onClick={handleMarkPracticedToday}
             className="border px-2 py-1 rounded-lg disabled:opacity-50 w-full"
             disabled={isDoneThisWeek || practicedToday}
           >

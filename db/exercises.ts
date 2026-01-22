@@ -76,3 +76,45 @@ export const deleteExercise = async (input: {
 
   return { status: "deleted" };
 };
+
+export const markExercisePracticedToday = async (input: {
+  studentId: string;
+  exerciseId: string;
+  today: WeekDay;
+}) => {
+  const rows = await db
+    .select({ practicedDaysThisWeek: exercises.practicedDaysThisWeek })
+    .from(exercises)
+    .where(
+      and(
+        eq(exercises.id, input.exerciseId),
+        eq(exercises.studentId, input.studentId),
+      ),
+    )
+    .limit(1);
+
+  const exercise = rows[0];
+
+  if (!exercise) {
+    throw new Error("Exercise not found");
+  }
+
+  const practicedDays = exercise.practicedDaysThisWeek ?? [];
+
+  const updatedDays = [...practicedDays, input.today];
+
+  await db
+    .update(exercises)
+    .set({
+      practicedDaysThisWeek: updatedDays,
+      updatedAt: new Date(),
+    })
+    .where(
+      and(
+        eq(exercises.id, input.exerciseId),
+        eq(exercises.studentId, input.studentId),
+      ),
+    );
+
+  return { status: "updated" as const };
+};

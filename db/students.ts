@@ -1,6 +1,7 @@
 import { eq } from "drizzle-orm";
 import { db } from ".";
 import { students } from "./schema";
+import { auth } from "@clerk/nextjs/server";
 
 export const getStudentDbIdByClerkId = async (clerkUserId: string) => {
   const rows = await db
@@ -16,4 +17,13 @@ export const getStudentDbIdByClerkId = async (clerkUserId: string) => {
   }
 
   return row.id;
+};
+
+export const requireStudentId = async () => {
+  const { userId } = await auth();
+  if (!userId) throw new Error("Unauthorized");
+
+  const studentId = await getStudentDbIdByClerkId(userId);
+
+  return studentId;
 };
