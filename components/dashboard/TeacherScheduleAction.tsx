@@ -1,9 +1,14 @@
 "use client";
 
-import type { TeacherWeeklySchedule } from "../teacherSchedule/types";
+import type {
+  TeacherWeeklySchedule,
+  SaveTeacherWeeklyScheduleInput,
+} from "../teacherSchedule/types";
 import { useState } from "react";
 import Modal from "@/components/ui/Modal";
-import TeacherScheduleForm from "../teacherSchedule/TeacherScheduleForm";
+import { toast } from "sonner";
+import { SaveTeacherScheduleAction } from "@/app/actions/teacherSchedule";
+import SchedulePicker from "../SchedulePicker";
 
 type Props = {
   buttonLabel: string;
@@ -17,6 +22,18 @@ const TeacherScheduleAction = ({
   teacherWeeklySchedule,
 }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
+
+  const handleSubmit = async (payload: {
+    days: SaveTeacherWeeklyScheduleInput["days"];
+  }) => {
+    await SaveTeacherScheduleAction({
+      teacherId,
+      days: payload.days,
+    });
+
+    toast.success("Schedule saved!");
+    setIsOpen(false);
+  };
 
   return (
     <>
@@ -34,10 +51,10 @@ const TeacherScheduleAction = ({
           onClose={() => setIsOpen(false)}
           closeOnOverlayClick={true}
         >
-          <TeacherScheduleForm
-            teacherId={teacherId}
-            onClose={() => setIsOpen(false)}
+          <SchedulePicker
             teacherWeeklySchedule={teacherWeeklySchedule}
+            onSubmit={handleSubmit}
+            selectionMode="multi"
           />
         </Modal>
       )}

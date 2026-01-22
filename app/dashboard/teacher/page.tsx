@@ -30,9 +30,6 @@ const TeacherDashboardPage = async () => {
 
   const teachersDbId = teacherRow[0]?.id;
 
-  const teacherWeeklySchedule: TeacherWeeklySchedule =
-    await getTeacherWeeklySchedule(teachersDbId);
-
   if (!teachersDbId) {
     return (
       <div className="p-6">
@@ -40,6 +37,9 @@ const TeacherDashboardPage = async () => {
       </div>
     );
   }
+
+  const teacherWeeklySchedule: TeacherWeeklySchedule =
+    await getTeacherWeeklySchedule(teachersDbId);
 
   return (
     <Main>

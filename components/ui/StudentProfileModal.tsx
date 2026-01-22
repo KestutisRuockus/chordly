@@ -2,8 +2,8 @@
 
 import type { ModalMode } from "../dashboard/StudentProfileActions";
 import { useState } from "react";
-import NotesForm from "../dashboard/forms/NotesForm";
-import ExerciseForm from "../dashboard/forms/ExerciseForm";
+import NotesForm from "../forms/NotesForm";
+import ExerciseForm from "../forms/ExerciseForm";
 import Modal from "@/components/ui/Modal";
 
 type Props = {
