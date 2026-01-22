@@ -25,6 +25,16 @@ export const getExercisesByTeacherAndStudent = async (input: {
   return rows;
 };
 
+export const getExercisesByStudentId = async (studentId: string) => {
+  const rows = await db
+    .select()
+    .from(exercises)
+    .where(eq(exercises.studentId, studentId))
+    .orderBy(desc(exercises.createdAt));
+
+  return rows;
+};
+
 export const createExercise = async (input: {
   teacherId: string;
   studentId: string;

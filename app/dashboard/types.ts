@@ -27,18 +27,6 @@ export type WeekDay = "Mon" | "Tue" | "Wed" | "Thu" | "Fri" | "Sat" | "Sun";
 
 export type ExerciseDifficulty = "beginner" | "intermediate" | "advanced";
 
-export type Exercise = {
-  id: string;
-  title: string;
-  instrument: string;
-  difficulty: ExerciseDifficulty;
-  goal: string;
-  targetPerWeek: TargetPerWeek;
-  practicedDaysThisWeek: WeekDay[];
-  teacherId: string;
-  studentId: string;
-};
-
 export type StudentSummary = {
   id: string;
   name: string;

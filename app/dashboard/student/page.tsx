@@ -9,7 +9,9 @@ import WeekCalendar from "@/components/dashboard/calendar/WeekCalendar";
 import ExerciseCard from "@/components/dashboard/ExerciseCard";
 import PracticeSummary from "@/components/dashboard/PracticeSummary";
 import { getPracticeSummary } from "@/components/dashboard/helpers/getPracticeSummary";
-import { exercises, lessons } from "@/content/dummyData";
+import { lessons } from "@/content/dummyData";
+import { getStudentDbIdByClerkId } from "@/db/students";
+import { getExercisesByStudentId } from "@/db/exercises";
 
 const nextLesson = lessons[0];
 
@@ -18,7 +20,10 @@ const StudentDashboardPage = async () => {
   if (!userId) return null;
   const user = await currentUser();
   const role = (user?.publicMetadata?.role as RoleType) ?? "student";
-  // const summary = getPracticeSummary({ lessons, exercises });
+  const studentId = await getStudentDbIdByClerkId(userId);
+
+  const exercises = await getExercisesByStudentId(studentId);
+  const summary = getPracticeSummary({ lessons, exercises });
   return (
     <Main>
       <HeaderSection {...studentsDashboard.header} />
@@ -29,13 +34,17 @@ const StudentDashboardPage = async () => {
       </Section>
       <Section>
         <h2 className="font-bold text-xl">Exercises</h2>
-        {/* <div className="flex flex-wrap gap-4">
+        <div className="flex flex-wrap gap-4">
           {exercises.map((exercise) => (
-            <ExerciseCard key={exercise.id} exercise={exercise} />
+            <ExerciseCard
+              key={exercise.id}
+              exercise={exercise}
+              studentId={studentId}
+            />
           ))}
-        </div> */}
+        </div>
       </Section>
-      {/* <PracticeSummary summary={summary} /> */}
+      <PracticeSummary summary={summary} />
     </Main>
   );
 };
