@@ -1,24 +1,17 @@
+import { LessonRow } from "@/db/types";
 import { RoleType } from "@/types/role";
 
-export type LessonStatus = "cancelled" | "scheduled" | "completed";
+export type LessonStatus =
+  | "cancelled"
+  | "scheduled"
+  | "completed"
+  | "rescheduled";
 
 export type LessonType = "online" | "in-person" | "hybrid";
 
 export type TargetPerWeek = 1 | 3 | 5;
 
-export type Lesson = {
-  id: string;
-  lessonDate: string;
-  lessonTime: string;
-  lessonType: LessonType;
-  lessonStatus: LessonStatus;
-  participantName: string;
-  instrument: string;
-  studentId: string;
-  teacherId: string;
-};
-
-export type LessonCardProps = Lesson & {
+export type LessonCardProps = LessonRow & {
   currentRole: RoleType;
   isUpcomingCard?: boolean;
 };

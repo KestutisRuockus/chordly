@@ -1,9 +1,12 @@
+import type { TeacherWeeklySchedule } from "@/components/teacherSchedule/types";
+import type { RoleType } from "@/types/role";
+import type { TeacherFullProfile } from "@/types/teachers";
+import BookingScheduleAction from "@/components/find-teacher/BookingScheduleAction";
 import BackButton from "@/components/ui/BackButton";
+import { getStudentDbIdByClerkId } from "@/db/students";
 import { getTeacherById } from "@/db/teachers";
-import { RoleType } from "@/types/role";
-import { TeacherFullProfile } from "@/types/teachers";
-import { currentUser } from "@clerk/nextjs/server";
-import Link from "next/link";
+import { getTeacherWeeklySchedule } from "@/db/teacherSchedule";
+import { auth, currentUser } from "@clerk/nextjs/server";
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -11,17 +14,21 @@ type Props = {
 
 const TeacherFullProfileById = async ({ params }: Props) => {
   const { id } = await params;
-
+  const { userId } = await auth();
+  if (!userId) return null;
   const user = await currentUser();
   const userRole = user?.publicMetadata?.role as RoleType | undefined;
 
-  console.log("role", userRole);
+  const studentDbId = await getStudentDbIdByClerkId(userId);
 
   const teacher: TeacherFullProfile | undefined = await getTeacherById(id);
 
   if (!teacher) {
     return <div>Teacher not found</div>;
   }
+
+  const teacherWeeklySchedule: TeacherWeeklySchedule =
+    await getTeacherWeeklySchedule(teacher.id);
 
   return (
     <section className="w-4/5 mx-auto my-8">
@@ -68,11 +75,12 @@ const TeacherFullProfileById = async ({ params }: Props) => {
         </p>
 
         {userRole === "student" && (
-          <div className="border px-4 mx-auto w-fit mt-4">
-            <Link href={""}>
-              <button>Book a Lesson</button>
-            </Link>
-          </div>
+          <BookingScheduleAction
+            buttonLabel={"Book a lesson"}
+            studentId={studentDbId}
+            teacherId={teacher.id}
+            teacherWeeklySchedule={teacherWeeklySchedule}
+          />
         )}
       </div>
     </section>

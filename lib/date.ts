@@ -32,3 +32,13 @@ export const getTodayWeekDay = (): WeekDay => {
   const jsDay = new Date().getDay();
   return DAY_MAP[jsDay];
 };
+
+export const getLessonDateFromWeekday = (weekday: number) => {
+  const now = new Date();
+  const monday = getMonday(now);
+
+  const d = new Date(monday);
+  d.setDate(monday.getDate() + weekday);
+
+  return formatDateKey(d);
+};

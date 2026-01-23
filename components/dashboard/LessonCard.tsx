@@ -5,11 +5,9 @@ import Link from "next/link";
 const LessonCard = ({
   currentRole,
   lessonDate,
-  lessonTime,
+  lessonHour,
   lessonType,
   lessonStatus,
-  participantName,
-  instrument,
   isUpcomingCard,
 }: LessonCardProps) => {
   if (isUpcomingCard) {
@@ -19,14 +17,14 @@ const LessonCard = ({
           Lesson Date: <span className="font-bold">{lessonDate}</span>
         </p>
         <p>
-          Lesson Time: <span className="font-bold">{lessonTime}</span>
+          Lesson Time: <span className="font-bold">{lessonHour}</span>
         </p>
         <p>
           {currentRole === "student" ? "Teacher" : "Student"} Name:{" "}
-          <span className="font-bold">{participantName}</span>
+          <span className="font-bold">must be a name</span>
         </p>
         <p>
-          Instrument: <span className="font-bold">{instrument}</span>
+          Instrument: <span className="font-bold">Must Be an Instrument</span>
         </p>
         <p>
           Lesson Type:{" "}
@@ -42,11 +40,9 @@ const LessonCard = ({
   }
   return (
     <article className="text-xs border p-2 relative rounded-lg">
-      <p>{lessonTime}</p>
-      <p>{participantName}</p>
-      <p className="mb-1">
-        {instrument} • {lessonType}
-      </p>
+      <p>{lessonHour}</p>
+      <p>must be a name</p>
+      <p className="mb-1">must be an instrument • {lessonType}</p>
       <Link href={""} className="border px-5">
         Reschedule lesson
       </Link>

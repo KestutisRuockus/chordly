@@ -1,5 +1,5 @@
-import type { Lesson } from "@/app/dashboard/types";
 import type { RoleType } from "@/types/role";
+import type { LessonRow } from "@/db/types";
 import LessonCard from "../LessonCard";
 
 type DayColumn = {
@@ -7,7 +7,7 @@ type DayColumn = {
   label: string;
   dayNumber: number;
   isToday: boolean;
-  lessons: Lesson[];
+  lessons: LessonRow[];
 };
 
 type Props = {

@@ -9,11 +9,9 @@ import WeekCalendar from "@/components/dashboard/calendar/WeekCalendar";
 import ExerciseCard from "@/components/dashboard/ExerciseCard";
 import PracticeSummary from "@/components/dashboard/PracticeSummary";
 import { getPracticeSummary } from "@/components/dashboard/helpers/getPracticeSummary";
-import { lessons } from "@/content/dummyData";
 import { getStudentDbIdByClerkId } from "@/db/students";
 import { getExercisesByStudentId } from "@/db/exercises";
-
-const nextLesson = lessons[0];
+import { getAllLessonsByRoleAndId } from "@/db/lesson";
 
 const StudentDashboardPage = async () => {
   const { userId } = await auth();
@@ -21,6 +19,9 @@ const StudentDashboardPage = async () => {
   const user = await currentUser();
   const role = (user?.publicMetadata?.role as RoleType) ?? "student";
   const studentId = await getStudentDbIdByClerkId(userId);
+
+  const lessons = await getAllLessonsByRoleAndId({ role, id: studentId });
+  const nextLesson = lessons[0];
 
   const exercises = await getExercisesByStudentId(studentId);
   const summary = getPracticeSummary({ lessons, exercises });

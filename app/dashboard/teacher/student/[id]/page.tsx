@@ -1,3 +1,4 @@
+import type { RoleType } from "@/types/role";
 import Main from "@/components/layout/Main";
 import Section from "@/components/layout/Section";
 import BackButton from "@/components/ui/BackButton";
@@ -5,16 +6,14 @@ import LessonCard from "@/components/dashboard/LessonCard";
 import ExerciseCard from "@/components/dashboard/ExerciseCard";
 import { getPracticeSummary } from "@/components/dashboard/helpers/getPracticeSummary";
 import PracticeSummary from "@/components/dashboard/PracticeSummary";
-import {
-  currentTeacherId,
-  students,
-  teacherLessons,
-} from "@/content/dummyData";
+import { students } from "@/content/dummyData";
 import StudentProfileActions from "@/components/dashboard/StudentProfileActions";
 import Note from "@/components/dashboard/Note";
 import { requireTeacherId } from "@/db/teachers";
 import { getTeacherNotes } from "@/db/teacherNotes";
 import { getExercisesByTeacherAndStudent } from "@/db/exercises";
+import { getAllLessonsByRoleAndId } from "@/db/lesson";
+import { currentUser } from "@clerk/nextjs/server";
 
 type Props = {
   params: { id: string };
@@ -28,11 +27,17 @@ const StudentFullProfileById = async ({ params }: Props) => {
     return <Main>Student not found</Main>;
   }
 
+  const user = await currentUser();
+  const role = (user?.publicMetadata?.role as RoleType) ?? "teacher";
+
   const teacherId = await requireTeacherId();
+  const teacherLessons = await getAllLessonsByRoleAndId({
+    role,
+    id: teacherId,
+  });
 
   const relatedLessons = teacherLessons.filter(
-    (lesson) =>
-      lesson.teacherId === currentTeacherId && lesson.studentId === id,
+    (lesson) => lesson.teacherId === teacherId && lesson.studentId === id,
   );
 
   const relatedExercises = await getExercisesByTeacherAndStudent({

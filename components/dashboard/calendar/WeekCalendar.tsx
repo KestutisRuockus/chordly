@@ -1,12 +1,12 @@
-import Section from "../../layout/Section";
 import type { RoleType } from "@/types/role";
+import type { LessonRow } from "@/db/types";
+import Section from "../../layout/Section";
 import WeekDayHeader from "./WeekDayHeader";
 import { formatDateKey, getMonday, WEEK_DAYS } from "@/lib/date";
-import type { Lesson } from "@/app/dashboard/types";
 import { isSameDay } from "../helpers/getPracticeSummary";
 
 type Props = {
-  lessons: Lesson[];
+  lessons: LessonRow[];
   currentRole: RoleType;
 };
 
@@ -14,13 +14,16 @@ const WeekCalendar = ({ lessons, currentRole }: Props) => {
   const now = new Date();
   const monday = getMonday(now);
 
-  const lessonsByDate = lessons.reduce<Record<string, Lesson[]>>((acc, l) => {
-    (acc[l.lessonDate] ??= []).push(l);
-    return acc;
-  }, {});
+  const lessonsByDate = lessons.reduce<Record<string, LessonRow[]>>(
+    (acc, l) => {
+      (acc[l.lessonDate] ??= []).push(l);
+      return acc;
+    },
+    {},
+  );
 
   Object.values(lessonsByDate).forEach((arr) =>
-    arr.sort((a, b) => a.lessonTime.localeCompare(b.lessonTime))
+    arr.sort((a, b) => a.lessonHour - b.lessonHour),
   );
 
   const weekDays = Array.from({ length: 7 }, (_, i) => {

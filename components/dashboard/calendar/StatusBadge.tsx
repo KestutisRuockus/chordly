@@ -5,6 +5,10 @@ const statusConfig = {
     label: "Scheduled",
     className: "bg-blue-200 text-blue-600 border-blue-300",
   },
+  rescheduled: {
+    label: "Scheduled",
+    className: "bg-blue-200 text-orange-600 border-orange-300",
+  },
   completed: {
     label: "Completed",
     className: "bg-green-200 text-green-600 border-green-300",

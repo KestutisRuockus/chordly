@@ -7,28 +7,24 @@ import HeaderSection from "@/components/sections/HeaderSection";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import WeekCalendar from "@/components/dashboard/calendar/WeekCalendar";
 import StudentSummaryCard from "@/components/dashboard/StudentSummaryCard";
-import { studentsSummaries, teacherLessons } from "@/content/dummyData";
+import { studentsSummaries } from "@/content/dummyData";
 import TeacherScheduleAction from "@/components/dashboard/TeacherScheduleAction";
-import { db } from "@/db";
-import { teachers } from "@/db/schema";
-import { eq } from "drizzle-orm";
 import { getTeacherWeeklySchedule } from "@/db/teacherSchedule";
 import { TeacherWeeklySchedule } from "@/components/teacherSchedule/types";
+import { getTeacherDbIdByClerkId } from "@/db/teachers";
+import { getAllLessonsByRoleAndId } from "@/db/lesson";
 
 const TeacherDashboardPage = async () => {
   const { userId } = await auth();
   if (!userId) return null;
   const user = await currentUser();
   const role = (user?.publicMetadata?.role as RoleType) ?? "teacher";
+  const teachersDbId = await getTeacherDbIdByClerkId(userId);
+  const teacherLessons = await getAllLessonsByRoleAndId({
+    role,
+    id: teachersDbId,
+  });
   const nextLesson = teacherLessons[0];
-
-  const teacherRow = await db
-    .select({ id: teachers.id })
-    .from(teachers)
-    .where(eq(teachers.clerkUserId, userId))
-    .limit(1);
-
-  const teachersDbId = teacherRow[0]?.id;
 
   if (!teachersDbId) {
     return (

@@ -1,5 +1,5 @@
-import type { WeekDay, Lesson } from "@/app/dashboard/types";
-import { ExerciseRow } from "@/db/types";
+import type { WeekDay } from "@/app/dashboard/types";
+import type { ExerciseRow, LessonRow } from "@/db/types";
 import { formatDateKey, getMonday, WEEK_DAYS } from "@/lib/date";
 
 export type PracticeSummaryData = {
@@ -14,7 +14,7 @@ export const getPracticeSummary = ({
   lessons,
   exercises,
 }: {
-  lessons: Lesson[];
+  lessons: LessonRow[];
   exercises: ExerciseRow[];
 }): PracticeSummaryData => {
   const now = new Date();
