@@ -29,22 +29,34 @@ const StudentDashboardPage = async () => {
     <Main>
       <HeaderSection {...studentsDashboard.header} />
       <WeekCalendar lessons={lessons} currentRole={role} />
-      <Section>
-        <h2 className="font-bold text-xl">Next Lesson</h2>
-        <LessonCard currentRole={role} {...nextLesson} isUpcomingCard={true} />
-      </Section>
-      <Section>
-        <h2 className="font-bold text-xl">Exercises</h2>
-        <div className="flex flex-wrap gap-4">
-          {exercises.map((exercise) => (
-            <ExerciseCard
-              key={exercise.id}
-              exercise={exercise}
-              studentId={studentId}
-            />
-          ))}
-        </div>
-      </Section>
+      {nextLesson && (
+        <Section>
+          <h2 className="font-bold text-xl">Next Lesson</h2>
+          <LessonCard
+            currentRole={role}
+            {...nextLesson}
+            isUpcomingCard={true}
+          />
+        </Section>
+      )}
+      {exercises.length > 0 ? (
+        <Section>
+          <h2 className="font-bold text-xl">Exercises</h2>
+          <div className="flex flex-wrap gap-4">
+            {exercises.map((exercise) => (
+              <ExerciseCard
+                key={exercise.id}
+                exercise={exercise}
+                studentId={studentId}
+              />
+            ))}
+          </div>
+        </Section>
+      ) : (
+        <Section>
+          <h2 className="font-bold text-xl">There is no exercises</h2>
+        </Section>
+      )}
       <PracticeSummary summary={summary} />
     </Main>
   );

@@ -101,6 +101,7 @@ export const lessons = pgTable("lessons", {
   lessonHour: integer("lesson_hour").notNull(),
   lessonType: text("lesson_type").$type<LessonType>().notNull(),
   lessonStatus: text("lesson_status").$type<LessonStatus>().notNull(),
+  instrument: text("instrument").notNull(),
   statusNote: text("status_note"),
   meetingUrl: text("meeting_url"),
   location: text("location"),

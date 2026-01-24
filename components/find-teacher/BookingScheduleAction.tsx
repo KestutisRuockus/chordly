@@ -16,6 +16,7 @@ type Props = {
   studentId: string;
   teacherId: string;
   teacherWeeklySchedule: TeacherWeeklySchedule;
+  teacherInstruments: string[];
 };
 
 const BookingScheduleAction = ({
@@ -23,8 +24,10 @@ const BookingScheduleAction = ({
   studentId,
   teacherId,
   teacherWeeklySchedule,
+  teacherInstruments,
 }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [instrument, setInstrument] = useState("");
 
   const handleSubmit = async (saved: {
     days: { weekday: WeekDayNumber; hours: number[] }[];
@@ -36,6 +39,10 @@ const BookingScheduleAction = ({
       toast.error("Pick a time slot first");
       return;
     }
+    if (!instrument) {
+      toast.error("Select an instrument");
+      return;
+    }
 
     const lessonDate = getLessonDateFromWeekday(selectedDay.weekday);
 
@@ -44,6 +51,7 @@ const BookingScheduleAction = ({
       teacherId,
       lessonDate,
       lessonHour: selectedHour,
+      instrument,
     });
 
     toast.success("Lesson booked successfully!");
@@ -71,6 +79,23 @@ const BookingScheduleAction = ({
             onSubmit={handleSubmit}
             selectionMode="single"
           />
+          <div className="border-t mt-2">
+            <h3 className="my-2">Selecet instrument</h3>
+            <select
+              value={instrument}
+              onChange={(e) => setInstrument(e.target.value)}
+              className="border rounded px-2 py-1"
+            >
+              <option value="" disabled>
+                Select an instrument
+              </option>
+              {teacherInstruments.map((item) => (
+                <option key={item} value={item}>
+                  {item}
+                </option>
+              ))}
+            </select>
+          </div>
         </Modal>
       )}
     </>

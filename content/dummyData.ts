@@ -1,8 +1,4 @@
-import type {
-  Note,
-  StudentProfile,
-  StudentSummary,
-} from "../app/dashboard/types";
+import type { StudentProfile, StudentSummary } from "../app/dashboard/types";
 
 export const studentsSummaries: StudentSummary[] = [
   {
@@ -75,30 +71,6 @@ export const students: StudentProfile[] = [
     skillLevel: "beginner",
     bio: "Drummer with experience in band rehearsals. Wants to improve groove, fills, and independence for live gigs.",
     age: 21,
-  },
-];
-
-export const notes: Note[] = [
-  {
-    id: "note-1",
-    studentId: "172c4029-a1ef-4684-9748-bb334994f8d7",
-    teacherId: "5aeb8108-511f-47bf-8beb-d3e9d48da411",
-    content:
-      "Great progress this week — chord transitions are smoother. Keep practicing with a metronome at 80 BPM.",
-  },
-  {
-    id: "note-2",
-    studentId: "172c4029-a1ef-4684-9748-bb334994f8d7",
-    teacherId: "5aeb8108-511f-47bf-8beb-d3e9d48da411",
-    content:
-      "Focus on cleaner strumming patterns. Try slow down-up exercises and pay attention to even volume between strokes.",
-  },
-  {
-    id: "note-3",
-    studentId: "5c212784-da06-48b7-be14-c79b81761188",
-    teacherId: "5aeb8108-511f-47bf-8beb-d3e9d48da411",
-    content:
-      "Remember relaxed fretting hand pressure. If fingers get tired, take short breaks and repeat smaller sections.",
   },
 ];
 

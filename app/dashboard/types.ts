@@ -11,7 +11,11 @@ export type LessonType = "online" | "in-person" | "hybrid";
 
 export type TargetPerWeek = 1 | 3 | 5;
 
-export type LessonCardProps = LessonRow & {
+export type LessonWithParticipant = LessonRow & {
+  participantName?: string;
+};
+
+export type LessonCardProps = LessonWithParticipant & {
   currentRole: RoleType;
   isUpcomingCard?: boolean;
 };

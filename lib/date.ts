@@ -1,4 +1,5 @@
 import { WeekDay } from "@/app/dashboard/types";
+import { LESSON_LENGTH } from "@/content/dummyData";
 
 export const WEEK_DAYS: WeekDay[] = [
   "Mon",
@@ -41,4 +42,9 @@ export const getLessonDateFromWeekday = (weekday: number) => {
   d.setDate(monday.getDate() + weekday);
 
   return formatDateKey(d);
+};
+
+export const formatLessonTime = (hour: number) => {
+  const start = String(hour).padStart(2, "0");
+  return `${start}:00 - ${start}:${LESSON_LENGTH}`;
 };

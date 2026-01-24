@@ -1,6 +1,7 @@
 import type { LessonCardProps } from "@/app/dashboard/types";
 import StatusBadge from "./calendar/StatusBadge";
 import Link from "next/link";
+import { formatLessonTime } from "@/lib/date";
 
 const LessonCard = ({
   currentRole,
@@ -9,6 +10,8 @@ const LessonCard = ({
   lessonType,
   lessonStatus,
   isUpcomingCard,
+  instrument,
+  participantName,
 }: LessonCardProps) => {
   if (isUpcomingCard) {
     return (
@@ -17,14 +20,15 @@ const LessonCard = ({
           Lesson Date: <span className="font-bold">{lessonDate}</span>
         </p>
         <p>
-          Lesson Time: <span className="font-bold">{lessonHour}</span>
+          Lesson Time:{" "}
+          <span className="font-bold">{formatLessonTime(lessonHour)}</span>
         </p>
         <p>
           {currentRole === "student" ? "Teacher" : "Student"} Name:{" "}
-          <span className="font-bold">must be a name</span>
+          <span className="font-bold">{participantName}</span>
         </p>
         <p>
-          Instrument: <span className="font-bold">Must Be an Instrument</span>
+          Instrument: <span className="font-bold">{instrument}</span>
         </p>
         <p>
           Lesson Type:{" "}
@@ -40,9 +44,11 @@ const LessonCard = ({
   }
   return (
     <article className="text-xs border p-2 relative rounded-lg">
-      <p>{lessonHour}</p>
-      <p>must be a name</p>
-      <p className="mb-1">must be an instrument • {lessonType}</p>
+      <p>{formatLessonTime(lessonHour)}</p>
+      <p>{participantName}</p>
+      <p className="mb-1">
+        {instrument} • {lessonType}
+      </p>
       <Link href={""} className="border px-5">
         Reschedule lesson
       </Link>

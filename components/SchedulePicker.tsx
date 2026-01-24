@@ -81,10 +81,12 @@ const SchedulePicker = ({
     }
   };
 
+  const availableHoursForSelectedDay =
+    availableScheduleMap[selectedWeekday] ?? [];
+
   const handleToggleHour = (hour: number) => {
     if (selectionMode === "single") {
-      const availableHours = availableScheduleMap[selectedWeekday] ?? [];
-      if (!availableHours.includes(hour)) return;
+      if (!availableHoursForSelectedDay.includes(hour)) return;
 
       setSelectedHours((prev) => (prev[0] === hour ? [] : [hour]));
       return;
@@ -131,8 +133,6 @@ const SchedulePicker = ({
         [selectedWeekday]: selectedHours,
       };
 
-      setScheduleMap(nextMap);
-
       const days = Object.entries(nextMap).map(([weekday, hours]) => ({
         weekday: toWeekDayNumber(Number(weekday)),
         hours: (hours ?? []).slice().sort((a, b) => a - b),
@@ -151,9 +151,6 @@ const SchedulePicker = ({
 
     onSubmit({ days });
   };
-
-  const availableHoursForSelectedDay =
-    availableScheduleMap[selectedWeekday] ?? [];
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-6">

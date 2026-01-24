@@ -9,13 +9,14 @@ type CreateLessonInput = {
   teacherId: string;
   lessonDate: string;
   lessonHour: number;
+  instrument: string;
 };
 
 export const createLessonAction = async (input: CreateLessonInput) => {
   const lessonType: LessonType = "hybrid";
   const lessonStatus: LessonStatus = "scheduled";
 
-  const { lessonDate, lessonHour, studentId, teacherId } = input;
+  const { lessonDate, lessonHour, studentId, teacherId, instrument } = input;
 
   await saveNewLesson({
     studentId,
@@ -24,6 +25,7 @@ export const createLessonAction = async (input: CreateLessonInput) => {
     lessonHour,
     lessonType,
     lessonStatus,
+    instrument,
   });
 
   revalidatePath(`/find-teacher/${input.teacherId}`);

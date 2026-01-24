@@ -80,6 +80,7 @@ const TeacherFullProfileById = async ({ params }: Props) => {
             studentId={studentDbId}
             teacherId={teacher.id}
             teacherWeeklySchedule={teacherWeeklySchedule}
+            teacherInstruments={teacher.instruments}
           />
         )}
       </div>
