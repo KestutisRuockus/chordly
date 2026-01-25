@@ -1,4 +1,5 @@
 import { WeekDay } from "@/app/dashboard/types";
+import { WeekDayNumber } from "@/components/teacherSchedule/types";
 import { LESSON_LENGTH } from "@/content/dummyData";
 
 export const WEEK_DAYS: WeekDay[] = [
@@ -47,4 +48,14 @@ export const getLessonDateFromWeekday = (weekday: number) => {
 export const formatLessonTime = (hour: number) => {
   const start = String(hour).padStart(2, "0");
   return `${start}:00 - ${start}:${LESSON_LENGTH}`;
+};
+
+export const getWeekdayNumberFromDateString = (
+  dateStr: string,
+): WeekDayNumber => {
+  const [y, m, d] = dateStr.split("-").map(Number);
+  const date = new Date(y, m - 1, d);
+
+  const jsDay = date.getDay();
+  return ((jsDay + 6) % 7) as WeekDayNumber;
 };

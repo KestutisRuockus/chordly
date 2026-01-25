@@ -6,8 +6,8 @@ const statusConfig = {
     className: "bg-blue-200 text-blue-600 border-blue-300",
   },
   rescheduled: {
-    label: "Scheduled",
-    className: "bg-blue-200 text-orange-600 border-orange-300",
+    label: "Rescheduled",
+    className: "bg-black text-orange-400 border-orange-300",
   },
   completed: {
     label: "Completed",

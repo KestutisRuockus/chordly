@@ -12,6 +12,8 @@ import { getPracticeSummary } from "@/components/dashboard/helpers/getPracticeSu
 import { getStudentDbIdByClerkId } from "@/db/students";
 import { getExercisesByStudentId } from "@/db/exercises";
 import { getAllLessonsByRoleAndId } from "@/db/lesson";
+import { getTeacherWeeklySchedule } from "@/db/teacherSchedule";
+import { TeacherScheduleByTeacherId } from "@/components/teacherSchedule/types";
 
 const StudentDashboardPage = async () => {
   const { userId } = await auth();
@@ -23,12 +25,30 @@ const StudentDashboardPage = async () => {
   const lessons = await getAllLessonsByRoleAndId({ role, id: studentId });
   const nextLesson = lessons[0];
 
+  const teacherIds = Array.from(
+    new Set(lessons.map((lesson) => lesson.teacherId)),
+  );
+
+  const scheduleEntries = await Promise.all(
+    teacherIds.map(async (teacherId) => {
+      const schedule = await getTeacherWeeklySchedule(teacherId);
+      return [teacherId, schedule] as const;
+    }),
+  );
+
+  const scheduleByTeacherId: TeacherScheduleByTeacherId =
+    Object.fromEntries(scheduleEntries);
+
   const exercises = await getExercisesByStudentId(studentId);
   const summary = getPracticeSummary({ lessons, exercises });
   return (
     <Main>
       <HeaderSection {...studentsDashboard.header} />
-      <WeekCalendar lessons={lessons} currentRole={role} />
+      <WeekCalendar
+        lessons={lessons}
+        currentRole={role}
+        scheduleByTeacherId={scheduleByTeacherId}
+      />
       {nextLesson && (
         <Section>
           <h2 className="font-bold text-xl">Next Lesson</h2>
@@ -36,6 +56,7 @@ const StudentDashboardPage = async () => {
             currentRole={role}
             {...nextLesson}
             isUpcomingCard={true}
+            teacherWeeklySchedule={scheduleByTeacherId[nextLesson.teacherId]}
           />
         </Section>
       )}

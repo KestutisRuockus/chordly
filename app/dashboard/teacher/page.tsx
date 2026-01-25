@@ -10,7 +10,10 @@ import StudentSummaryCard from "@/components/dashboard/StudentSummaryCard";
 import { studentsSummaries } from "@/content/dummyData";
 import TeacherScheduleAction from "@/components/dashboard/TeacherScheduleAction";
 import { getTeacherWeeklySchedule } from "@/db/teacherSchedule";
-import { TeacherWeeklySchedule } from "@/components/teacherSchedule/types";
+import {
+  TeacherScheduleByTeacherId,
+  TeacherWeeklySchedule,
+} from "@/components/teacherSchedule/types";
 import { getTeacherDbIdByClerkId } from "@/db/teachers";
 import { getAllLessonsByRoleAndId } from "@/db/lesson";
 
@@ -20,11 +23,6 @@ const TeacherDashboardPage = async () => {
   const user = await currentUser();
   const role = (user?.publicMetadata?.role as RoleType) ?? "teacher";
   const teachersDbId = await getTeacherDbIdByClerkId(userId);
-  const teacherLessons = await getAllLessonsByRoleAndId({
-    role,
-    id: teachersDbId,
-  });
-  const nextLesson = teacherLessons[0];
 
   if (!teachersDbId) {
     return (
@@ -34,16 +32,35 @@ const TeacherDashboardPage = async () => {
     );
   }
 
+  const teacherLessons = await getAllLessonsByRoleAndId({
+    role,
+    id: teachersDbId,
+  });
+  const nextLesson = teacherLessons[0];
+
   const teacherWeeklySchedule: TeacherWeeklySchedule =
     await getTeacherWeeklySchedule(teachersDbId);
+
+  const scheduleByTeacherId: TeacherScheduleByTeacherId = {
+    [teachersDbId]: teacherWeeklySchedule,
+  };
 
   return (
     <Main>
       <HeaderSection {...teachersDashboard.header} />
-      <WeekCalendar lessons={teacherLessons} currentRole={role} />
+      <WeekCalendar
+        lessons={teacherLessons}
+        currentRole={role}
+        scheduleByTeacherId={scheduleByTeacherId}
+      />
       <Section>
         <h2 className="font-bold text-xl">Next Lesson</h2>
-        <LessonCard currentRole={role} {...nextLesson} isUpcomingCard={true} />
+        <LessonCard
+          currentRole={role}
+          {...nextLesson}
+          isUpcomingCard={true}
+          teacherWeeklySchedule={teacherWeeklySchedule}
+        />
       </Section>
       <Section>
         <h2 className="font-bold text-xl">Students</h2>

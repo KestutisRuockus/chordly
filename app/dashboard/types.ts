@@ -1,5 +1,6 @@
-import { LessonRow } from "@/db/types";
-import { RoleType } from "@/types/role";
+import type { TeacherWeeklySchedule } from "@/components/teacherSchedule/types";
+import type { LessonRow } from "@/db/types";
+import type { RoleType } from "@/types/role";
 
 export type LessonStatus =
   | "cancelled"
@@ -18,6 +19,7 @@ export type LessonWithParticipant = LessonRow & {
 export type LessonCardProps = LessonWithParticipant & {
   currentRole: RoleType;
   isUpcomingCard?: boolean;
+  teacherWeeklySchedule?: TeacherWeeklySchedule;
 };
 
 export type WeekDay = "Mon" | "Tue" | "Wed" | "Thu" | "Fri" | "Sat" | "Sun";

@@ -1,5 +1,6 @@
 import type { RoleType } from "@/types/role";
 import type { LessonRow } from "@/db/types";
+import type { TeacherScheduleByTeacherId } from "@/components/teacherSchedule/types";
 import LessonCard from "../LessonCard";
 
 type DayColumn = {
@@ -13,9 +14,10 @@ type DayColumn = {
 type Props = {
   day: DayColumn;
   currentRole: RoleType;
+  scheduleByTeacherId: TeacherScheduleByTeacherId;
 };
 
-const WeekDayHeader = ({ day, currentRole }: Props) => {
+const WeekDayHeader = ({ day, currentRole, scheduleByTeacherId }: Props) => {
   return (
     <div
       className={`rounded-xl border p-3 flex flex-col gap-3 ${
@@ -38,7 +40,12 @@ const WeekDayHeader = ({ day, currentRole }: Props) => {
       {day.lessons.length > 0 ? (
         <div className="flex flex-col gap-2">
           {day.lessons.map((lesson) => (
-            <LessonCard key={lesson.id} currentRole={currentRole} {...lesson} />
+            <LessonCard
+              key={lesson.id}
+              currentRole={currentRole}
+              {...lesson}
+              teacherWeeklySchedule={scheduleByTeacherId[lesson.teacherId]}
+            />
           ))}
         </div>
       ) : (

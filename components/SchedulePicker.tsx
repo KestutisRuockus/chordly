@@ -1,10 +1,17 @@
 "use client";
 
-import { formatDateKey, getMonday, WEEK_DAYS } from "@/lib/date";
+import {
+  formatDateKey,
+  formatLessonTime,
+  getMonday,
+  getWeekdayNumberFromDateString,
+  WEEK_DAYS,
+} from "@/lib/date";
 import { useMemo, useState } from "react";
 import { isSameDay } from "./dashboard/helpers/getPracticeSummary";
 import HourSlotButton from "./teacherSchedule/HourSlotButton";
 import {
+  CurrentScheduledLesson,
   TeacherWeeklySchedule,
   WeekDayNumber,
   toWeekDayNumber,
@@ -19,15 +26,25 @@ type Props = {
     days: { weekday: WeekDayNumber; hours: number[] }[];
   }) => void;
   selectionMode: "multi" | "single";
+  currentScheduledLesson?: CurrentScheduledLesson;
+  handleDeleteStatus?: () => void;
 };
 
 const SchedulePicker = ({
   teacherWeeklySchedule,
   onSubmit,
   selectionMode,
+  currentScheduledLesson,
+  handleDeleteStatus,
 }: Props) => {
   const now = useMemo(() => new Date(), []);
   const monday = useMemo(() => getMonday(now), [now]);
+  const [showCancelValidationWindow, setShowCancelValidationWindow] =
+    useState(false);
+
+  const currentLessonInfo = currentScheduledLesson
+    ? `${currentScheduledLesson.currentScheduledLessonDate} • ${formatLessonTime(currentScheduledLesson?.currentScheduledLessonHour)}`
+    : null;
 
   const weekDays = useMemo(() => {
     return Array.from({ length: 7 }, (_, i) => {
@@ -50,16 +67,24 @@ const SchedulePicker = ({
     ) as ScheduleMap;
   }, [teacherWeeklySchedule.days]);
 
-  const firstWorkingWeekday = teacherWeeklySchedule.days[0]?.weekday ?? 0;
+  const activeWeekDay = currentScheduledLesson
+    ? getWeekdayNumberFromDateString(
+        currentScheduledLesson.currentScheduledLessonDate,
+      )
+    : (teacherWeeklySchedule.days[0]?.weekday ?? 0);
 
   const [scheduleMap, setScheduleMap] =
     useState<ScheduleMap>(availableScheduleMap);
 
   const [selectedWeekday, setSelectedWeekday] =
-    useState<WeekDayNumber>(firstWorkingWeekday);
+    useState<WeekDayNumber>(activeWeekDay);
 
   const [selectedHours, setSelectedHours] = useState<number[]>(
-    selectionMode === "single" ? [] : (scheduleMap[firstWorkingWeekday] ?? []),
+    selectionMode === "single"
+      ? currentScheduledLesson
+        ? [currentScheduledLesson.currentScheduledLessonHour]
+        : []
+      : (scheduleMap[activeWeekDay] ?? []),
   );
 
   const dayTimeSlots = useMemo(() => {
@@ -71,8 +96,24 @@ const SchedulePicker = ({
     );
   }, []);
 
+  const currenScheduledtWeekday =
+    currentScheduledLesson &&
+    getWeekdayNumberFromDateString(
+      currentScheduledLesson.currentScheduledLessonDate,
+    );
+
   const handleSelectDay = (weekday: WeekDayNumber) => {
     setSelectedWeekday(weekday);
+
+    if (selectionMode === "single" && currentScheduledLesson) {
+      setSelectedHours(
+        weekday === currenScheduledtWeekday
+          ? [currentScheduledLesson.currentScheduledLessonHour]
+          : [],
+      );
+
+      return;
+    }
 
     if (selectionMode === "single") {
       setSelectedHours([]);
@@ -152,8 +193,39 @@ const SchedulePicker = ({
     onSubmit({ days });
   };
 
+  const openCancelValidationWindow = () => {
+    setShowCancelValidationWindow(true);
+  };
+
+  const handleDelete = () => {
+    handleDeleteStatus?.();
+    setShowCancelValidationWindow(false);
+  };
+
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-6 relative">
+      {showCancelValidationWindow && (
+        <div className="absolute -top-11 right-0 bg-red-400 w-full h-101 z-50 rounded-lg flex flex-col gap-0 justify-center items-center">
+          <p className="text-xl">Do you want to cancel Lesson?</p>
+          <p>This action is permanent</p>
+          <div className="flex gap-2 justify-center text-lg mt-6">
+            <button
+              type="button"
+              onClick={handleDelete}
+              className="px-4 border rounded-lg"
+            >
+              Yes
+            </button>
+            <button
+              type="button"
+              onClick={() => setShowCancelValidationWindow(false)}
+              className="px-4 border rounded-lg"
+            >
+              No
+            </button>
+          </div>
+        </div>
+      )}
       <div className="grid grid-cols-7 gap-3 mt-4">
         {weekDays.map((day) => {
           const isEnabled =
@@ -212,10 +284,31 @@ const SchedulePicker = ({
         </div>
       </div>
 
-      <div className="flex justify-end gap-2">
-        <button type="submit" className="rounded border px-4 py-2">
-          Save
-        </button>
+      <div
+        className={`flex ${currentScheduledLesson ? "justify-between" : "justify-end"} items-center gap-2`}
+      >
+        {currentScheduledLesson && (
+          <div className="flex flex-col">
+            <p>Current lesson scheduled at:</p>
+            <p>{currentLessonInfo}</p>
+          </div>
+        )}
+        <div className="flex gap-2">
+          <button type="submit" className="rounded border px-4 py-2">
+            Save
+          </button>
+          {currentScheduledLesson &&
+            currentScheduledLesson.currentScheduledLessonStatus !==
+              "cancelled" && (
+              <button
+                type="button"
+                onClick={openCancelValidationWindow}
+                className="rounded border px-4 py-2 bg-red-300 color"
+              >
+                Cancel lesson
+              </button>
+            )}
+        </div>
       </div>
     </form>
   );

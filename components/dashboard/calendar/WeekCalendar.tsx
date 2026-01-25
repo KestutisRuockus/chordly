@@ -1,5 +1,6 @@
 import type { RoleType } from "@/types/role";
 import type { LessonRow } from "@/db/types";
+import type { TeacherScheduleByTeacherId } from "@/components/teacherSchedule/types";
 import Section from "../../layout/Section";
 import WeekDayHeader from "./WeekDayHeader";
 import { formatDateKey, getMonday, WEEK_DAYS } from "@/lib/date";
@@ -8,9 +9,10 @@ import { isSameDay } from "../helpers/getPracticeSummary";
 type Props = {
   lessons: LessonRow[];
   currentRole: RoleType;
+  scheduleByTeacherId: TeacherScheduleByTeacherId;
 };
 
-const WeekCalendar = ({ lessons, currentRole }: Props) => {
+const WeekCalendar = ({ lessons, currentRole, scheduleByTeacherId }: Props) => {
   const now = new Date();
   const monday = getMonday(now);
 
@@ -47,7 +49,12 @@ const WeekCalendar = ({ lessons, currentRole }: Props) => {
 
       <div className="grid grid-cols-7 gap-3 mt-4">
         {weekDays.map((day) => (
-          <WeekDayHeader key={day.key} day={day} currentRole={currentRole} />
+          <WeekDayHeader
+            key={day.key}
+            day={day}
+            currentRole={currentRole}
+            scheduleByTeacherId={scheduleByTeacherId}
+          />
         ))}
       </div>
     </Section>

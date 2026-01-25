@@ -1,7 +1,7 @@
 import { LessonStatus, LessonType } from "@/app/dashboard/types";
 import { db } from ".";
 import { lessons, students, teachers } from "./schema";
-import { eq, desc } from "drizzle-orm";
+import { eq, desc, and } from "drizzle-orm";
 import { RoleType } from "@/types/role";
 
 export const saveNewLesson = async (input: {
@@ -67,4 +67,30 @@ export const getAllLessonsByRoleAndId = async (input: {
     ...row.lesson,
     participantName: row.participantName,
   }));
+};
+
+export const updateLessonScheduleAndStatus = async ({
+  lessonId,
+  teacherId,
+  lessonDate,
+  lessonHour,
+  lessonStatus,
+}: {
+  lessonId: string;
+  teacherId: string;
+  lessonDate: string;
+  lessonHour: number;
+  lessonStatus: LessonStatus;
+}) => {
+  await db
+    .update(lessons)
+    .set({
+      lessonDate,
+      lessonHour,
+      lessonStatus,
+      updatedAt: new Date(),
+    })
+    .where(and(eq(lessons.id, lessonId), eq(lessons.teacherId, teacherId)));
+
+  return { status: "updated" as const };
 };

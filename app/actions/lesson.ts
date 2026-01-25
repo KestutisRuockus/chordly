@@ -1,7 +1,7 @@
 "use server";
 
-import { saveNewLesson } from "@/db/lesson";
-import { LessonStatus, LessonType } from "../dashboard/types";
+import type { LessonStatus, LessonType } from "../dashboard/types";
+import { updateLessonScheduleAndStatus, saveNewLesson } from "@/db/lesson";
 import { revalidatePath } from "next/cache";
 
 type CreateLessonInput = {
@@ -31,4 +31,27 @@ export const createLessonAction = async (input: CreateLessonInput) => {
   revalidatePath(`/find-teacher/${input.teacherId}`);
 
   return { status: "ok" as const };
+};
+
+export const updateLessonScheduleAndStatusAction = async (input: {
+  lessonId: string;
+  teacherId: string;
+  lessonDate: string;
+  lessonHour: number;
+  lessonStatus?: LessonStatus;
+}) => {
+  const { lessonId, teacherId, lessonDate, lessonHour } = input;
+  const newLessonStatus = input.lessonStatus ?? "rescheduled";
+
+  await updateLessonScheduleAndStatus({
+    lessonId,
+    teacherId,
+    lessonDate,
+    lessonHour,
+    lessonStatus: newLessonStatus,
+  });
+
+  revalidatePath(`/find-teacher/${input.teacherId}`);
+
+  return { status: "updated" as const };
 };

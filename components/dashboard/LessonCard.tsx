@@ -1,9 +1,12 @@
 import type { LessonCardProps } from "@/app/dashboard/types";
 import StatusBadge from "./calendar/StatusBadge";
-import Link from "next/link";
 import { formatLessonTime } from "@/lib/date";
+import BookingScheduleAction from "../find-teacher/BookingScheduleAction";
 
 const LessonCard = ({
+  id,
+  teacherId,
+  studentId,
   currentRole,
   lessonDate,
   lessonHour,
@@ -12,6 +15,7 @@ const LessonCard = ({
   isUpcomingCard,
   instrument,
   participantName,
+  teacherWeeklySchedule,
 }: LessonCardProps) => {
   if (isUpcomingCard) {
     return (
@@ -38,7 +42,9 @@ const LessonCard = ({
           Lesson Status:{" "}
           <span className="font-bold capitalize">{lessonStatus}</span>
         </p>
-        <button className="border px-2">Reschedule lesson</button>
+        {lessonStatus !== "cancelled" && (
+          <button className="border px-2">Reschedule lesson</button>
+        )}
       </article>
     );
   }
@@ -49,9 +55,27 @@ const LessonCard = ({
       <p className="mb-1">
         {instrument} • {lessonType}
       </p>
-      <Link href={""} className="border px-5">
-        Reschedule lesson
-      </Link>
+      <div className="flex justify-center">
+        {teacherWeeklySchedule ? (
+          <BookingScheduleAction
+            buttonLabel="Reschedule lesson"
+            teacherId={teacherId}
+            studentId={studentId}
+            teacherWeeklySchedule={teacherWeeklySchedule}
+            teacherInstruments={[instrument]}
+            currentScheduledLesson={{
+              currentScheduledLessonLessonId: id,
+              currentScheduledLessonDate: lessonDate,
+              currentScheduledLessonHour: lessonHour,
+              currentScheduledLessonStatus: lessonStatus,
+            }}
+          />
+        ) : (
+          <span className="text-[10px] text-gray-400">
+            Schedule not available
+          </span>
+        )}
+      </div>
       <StatusBadge status={lessonStatus} />
     </article>
   );
