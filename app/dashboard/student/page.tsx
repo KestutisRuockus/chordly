@@ -14,6 +14,7 @@ import { getExercisesByStudentId } from "@/db/exercises";
 import { getAllLessonsByRoleAndId } from "@/db/lesson";
 import { getTeacherWeeklySchedule } from "@/db/teacherSchedule";
 import { TeacherScheduleByTeacherId } from "@/components/teacherSchedule/types";
+import { getNextUpcomingLesson } from "@/lib/lessons";
 
 const StudentDashboardPage = async () => {
   const { userId } = await auth();
@@ -23,7 +24,7 @@ const StudentDashboardPage = async () => {
   const studentId = await getStudentDbIdByClerkId(userId);
 
   const lessons = await getAllLessonsByRoleAndId({ role, id: studentId });
-  const nextLesson = lessons[0];
+  const nextLesson = getNextUpcomingLesson(lessons);
 
   const teacherIds = Array.from(
     new Set(lessons.map((lesson) => lesson.teacherId)),

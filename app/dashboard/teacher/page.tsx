@@ -16,6 +16,7 @@ import {
 } from "@/components/teacherSchedule/types";
 import { getTeacherDbIdByClerkId } from "@/db/teachers";
 import { getAllLessonsByRoleAndId } from "@/db/lesson";
+import { getNextUpcomingLesson } from "@/lib/lessons";
 
 const TeacherDashboardPage = async () => {
   const { userId } = await auth();
@@ -36,7 +37,7 @@ const TeacherDashboardPage = async () => {
     role,
     id: teachersDbId,
   });
-  const nextLesson = teacherLessons[0];
+  const nextLesson = getNextUpcomingLesson(teacherLessons);
 
   const teacherWeeklySchedule: TeacherWeeklySchedule =
     await getTeacherWeeklySchedule(teachersDbId);
@@ -53,15 +54,17 @@ const TeacherDashboardPage = async () => {
         currentRole={role}
         scheduleByTeacherId={scheduleByTeacherId}
       />
-      <Section>
-        <h2 className="font-bold text-xl">Next Lesson</h2>
-        <LessonCard
-          currentRole={role}
-          {...nextLesson}
-          isUpcomingCard={true}
-          teacherWeeklySchedule={teacherWeeklySchedule}
-        />
-      </Section>
+      {nextLesson && (
+        <Section>
+          <h2 className="font-bold text-xl">Next Lesson</h2>
+          <LessonCard
+            currentRole={role}
+            {...nextLesson}
+            isUpcomingCard={true}
+            teacherWeeklySchedule={teacherWeeklySchedule}
+          />
+        </Section>
+      )}
       <Section>
         <h2 className="font-bold text-xl">Students</h2>
         <div className="flex flex-wrap gap-4">
