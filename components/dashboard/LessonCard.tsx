@@ -1,6 +1,6 @@
 import type { LessonCardProps } from "@/app/dashboard/types";
 import StatusBadge from "./calendar/StatusBadge";
-import { formatLessonTime } from "@/lib/date";
+import { formatLessonTime, formatMonthDayFromKey } from "@/lib/date";
 import BookingScheduleAction from "../find-teacher/BookingScheduleAction";
 
 const LessonCard = ({
@@ -43,16 +43,16 @@ const LessonCard = ({
           Lesson Status:{" "}
           <span className="font-bold capitalize">{lessonStatus}</span>
         </p>
-        {lessonStatus !== "cancelled" && (
-          <button className="border px-2">Reschedule lesson</button>
-        )}
       </article>
     );
   }
   return (
     <article className="text-xs border p-2 pt-5 relative rounded-lg">
-      <p>{formatLessonTime(lessonHour)}</p>
-      <p>{participantName}</p>
+      <div className="flex">
+        <p>{formatLessonTime(lessonHour)}</p>
+        {!participantName && <p>{`, ${formatMonthDayFromKey(lessonDate)}`}</p>}
+      </div>
+      <p className="w-fit">{participantName}</p>
       <p className="mb-1">
         {instrument} • {lessonType}
       </p>

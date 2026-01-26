@@ -19,7 +19,7 @@ export type LessonWithParticipant = LessonRow & {
 export type LessonCardProps = LessonWithParticipant & {
   currentRole: RoleType;
   isUpcomingCard?: boolean;
-  teacherWeeklySchedule?: TeacherWeeklySchedule;
+  teacherWeeklySchedule: TeacherWeeklySchedule;
 };
 
 export type WeekDay = "Mon" | "Tue" | "Wed" | "Thu" | "Fri" | "Sat" | "Sun";
