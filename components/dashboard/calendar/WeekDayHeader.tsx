@@ -2,6 +2,7 @@ import type { RoleType } from "@/types/role";
 import type { LessonRow } from "@/db/types";
 import type { TeacherScheduleByTeacherId } from "@/components/teacherSchedule/types";
 import LessonCard from "../LessonCard";
+import { formatMonthDayFromKey } from "@/lib/date";
 
 type DayColumn = {
   key: string;
@@ -27,7 +28,9 @@ const WeekDayHeader = ({ day, currentRole, scheduleByTeacherId }: Props) => {
       <div className="flex items-baseline justify-between">
         <div>
           <p className="text-xs text-gray-500">{day.label}</p>
-          <p className="font-semibold">{day.dayNumber}</p>
+          <p className="font-semibold text-sm">
+            {formatMonthDayFromKey(day.key)}
+          </p>
         </div>
 
         {day.lessons.length > 0 && (

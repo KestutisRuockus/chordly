@@ -9,7 +9,7 @@ import { toast } from "sonner";
 import { useState } from "react";
 import Modal from "../ui/Modal";
 import SchedulePicker from "../SchedulePicker";
-import { getLessonDateFromWeekday } from "@/lib/date";
+import { getLessonDateFromWeekday, isLessonInPast } from "@/lib/date";
 import {
   createLessonAction,
   updateLessonScheduleAndStatusAction,
@@ -34,6 +34,13 @@ const BookingScheduleAction = ({
 }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const [instrument, setInstrument] = useState("");
+
+  const isDisabled =
+    currentScheduledLesson &&
+    isLessonInPast(
+      currentScheduledLesson.currentScheduledLessonDate,
+      currentScheduledLesson.currentScheduledLessonHour,
+    );
 
   const handleSubmit = async (saved: {
     days: { weekday: WeekDayNumber; hours: number[] }[];
@@ -119,7 +126,8 @@ const BookingScheduleAction = ({
         <button
           type="button"
           onClick={() => setIsOpen(true)}
-          className="rounded border px-3 py-2 w-fit mx-auto"
+          className={`rounded border px-3 py-2 w-fit mx-auto ${isDisabled ? "opacity-40" : ""}`}
+          disabled={isDisabled}
         >
           {buttonLabel}
         </button>

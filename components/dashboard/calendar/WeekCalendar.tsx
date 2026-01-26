@@ -1,3 +1,5 @@
+"use client";
+
 import type { RoleType } from "@/types/role";
 import type { LessonRow } from "@/db/types";
 import type { TeacherScheduleByTeacherId } from "@/components/teacherSchedule/types";
@@ -6,12 +8,14 @@ import WeekDayHeader from "./WeekDayHeader";
 import { addDays, formatDateKey, getTodayWeekDay } from "@/lib/date";
 import { isSameDay } from "../helpers/getPracticeSummary";
 import { CALENDAR_RANGE_DAYS } from "@/lib/constants";
+import Link from "next/link";
 
 type Props = {
   lessons: LessonRow[];
   currentRole: RoleType;
   scheduleByTeacherId: TeacherScheduleByTeacherId;
   fromDate: string;
+  offsetWeeks: number;
 };
 
 const WeekCalendar = ({
@@ -19,6 +23,7 @@ const WeekCalendar = ({
   currentRole,
   scheduleByTeacherId,
   fromDate,
+  offsetWeeks,
 }: Props) => {
   const now = new Date();
 
@@ -51,9 +56,31 @@ const WeekCalendar = ({
     };
   });
 
+  const prevOffsetWeeks = offsetWeeks - 1;
+  const nextOffsetWeeks = offsetWeeks + 1;
+
   return (
     <Section>
-      <h2 className="text-xl font-bold">Next 7 days</h2>
+      <h2 className="text-xl font-bold">Your schedule</h2>
+      <div className="flex gap-4 mt-2 mb-1">
+        <Link
+          href={`/dashboard/${currentRole}?offset=${prevOffsetWeeks}`}
+          className="text-sm"
+        >
+          ← Previous
+        </Link>
+
+        <Link href={`/dashboard/${currentRole}?offset=0`} className="text-sm">
+          Today
+        </Link>
+
+        <Link
+          href={`/dashboard/${currentRole}?offset=${nextOffsetWeeks}`}
+          className="text-sm"
+        >
+          Next →
+        </Link>
+      </div>
       <div className="grid grid-cols-7 gap-3">
         {weekDays.map((day) => (
           <WeekDayHeader

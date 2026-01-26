@@ -18,9 +18,13 @@ import { getTeacherDbIdByClerkId } from "@/db/teachers";
 import { getAllLessonsByRoleAndId } from "@/db/lesson";
 import { getNextUpcomingLesson } from "@/lib/lessons";
 import { addDays, getDateRange } from "@/lib/date";
-import { DEFAULT_OFFSET_DAYS } from "@/lib/constants";
+import { CALENDAR_RANGE_DAYS } from "@/lib/constants";
 
-const TeacherDashboardPage = async () => {
+type Props = {
+  searchParams?: Promise<{ offset?: string }>;
+};
+
+const TeacherDashboardPage = async ({ searchParams }: Props) => {
   const { userId } = await auth();
   if (!userId) return null;
   const user = await currentUser();
@@ -35,8 +39,12 @@ const TeacherDashboardPage = async () => {
     );
   }
 
-  const anchor = addDays(new Date(), DEFAULT_OFFSET_DAYS);
-  const { fromDate, toDate } = getDateRange(anchor, 7);
+  const queryParams = (await searchParams) ?? {};
+  const offsetFromUrl = Number(queryParams.offset ?? 0);
+  const offsetWeeks = Number.isFinite(offsetFromUrl) ? offsetFromUrl : 0;
+
+  const anchor = addDays(new Date(), offsetWeeks * CALENDAR_RANGE_DAYS);
+  const { fromDate, toDate } = getDateRange(anchor, CALENDAR_RANGE_DAYS);
 
   const teacherLessons = await getAllLessonsByRoleAndId({
     role,
@@ -61,6 +69,7 @@ const TeacherDashboardPage = async () => {
         currentRole={role}
         scheduleByTeacherId={scheduleByTeacherId}
         fromDate={fromDate}
+        offsetWeeks={offsetWeeks}
       />
       {nextLesson && (
         <Section>

@@ -83,3 +83,22 @@ export const getDateRange = (anchor: Date, days: number) => {
 
   return { fromDate: formatDateKey(start), toDate: formatDateKey(end) };
 };
+
+export const formatMonthDayFromKey = (dateKey: string) => {
+  const [year, month, day] = dateKey.split("-").map(Number);
+  const date = new Date(year, month - 1, day);
+
+  return date.toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+  });
+};
+
+export const isLessonInPast = (lessonDate: string, lessonHour: number) => {
+  const [y, m, d] = lessonDate.split("-").map(Number);
+
+  const lessonStart = new Date(y, m - 1, d, lessonHour, 0, 0, 0);
+  const now = new Date();
+
+  return lessonStart.getTime() < now.getTime();
+};
