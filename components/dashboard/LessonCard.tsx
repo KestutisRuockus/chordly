@@ -12,6 +12,7 @@ const LessonCard = ({
   lessonHour,
   lessonType,
   lessonStatus,
+  statusNote,
   isUpcomingCard,
   instrument,
   participantName,
@@ -49,7 +50,7 @@ const LessonCard = ({
     );
   }
   return (
-    <article className="text-xs border p-2 relative rounded-lg">
+    <article className="text-xs border p-2 pt-5 relative rounded-lg">
       <p>{formatLessonTime(lessonHour)}</p>
       <p>{participantName}</p>
       <p className="mb-1">
@@ -76,7 +77,7 @@ const LessonCard = ({
           </span>
         )}
       </div>
-      <StatusBadge status={lessonStatus} />
+      <StatusBadge status={lessonStatus} statusNote={statusNote} />
     </article>
   );
 };

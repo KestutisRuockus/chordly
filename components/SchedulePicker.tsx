@@ -1,5 +1,11 @@
 "use client";
 
+import type {
+  CurrentScheduledLesson,
+  TeacherWeeklySchedule,
+  WeekDayNumber,
+} from "./teacherSchedule/types";
+import { toWeekDayNumber } from "./teacherSchedule/types";
 import {
   formatDateKey,
   formatLessonTime,
@@ -10,13 +16,8 @@ import {
 import { useMemo, useState } from "react";
 import { isSameDay } from "./dashboard/helpers/getPracticeSummary";
 import HourSlotButton from "./teacherSchedule/HourSlotButton";
-import {
-  CurrentScheduledLesson,
-  TeacherWeeklySchedule,
-  WeekDayNumber,
-  toWeekDayNumber,
-} from "./teacherSchedule/types";
 import WeekDayButton from "./teacherSchedule/WeekDayButton";
+import { toast } from "sonner";
 
 type ScheduleMap = Partial<Record<number, number[]>>;
 
@@ -24,10 +25,11 @@ type Props = {
   teacherWeeklySchedule: TeacherWeeklySchedule;
   onSubmit: (saved: {
     days: { weekday: WeekDayNumber; hours: number[] }[];
+    statusNote?: string;
   }) => void;
   selectionMode: "multi" | "single";
   currentScheduledLesson?: CurrentScheduledLesson;
-  handleDeleteStatus?: () => void;
+  handleDeleteStatus?: (statusNote: string) => void;
 };
 
 const SchedulePicker = ({
@@ -41,6 +43,7 @@ const SchedulePicker = ({
   const monday = useMemo(() => getMonday(now), [now]);
   const [showCancelValidationWindow, setShowCancelValidationWindow] =
     useState(false);
+  const [statusNote, setStatusNote] = useState("");
 
   const currentLessonInfo = currentScheduledLesson
     ? `${currentScheduledLesson.currentScheduledLessonDate} • ${formatLessonTime(currentScheduledLesson?.currentScheduledLessonHour)}`
@@ -179,7 +182,7 @@ const SchedulePicker = ({
         hours: (hours ?? []).slice().sort((a, b) => a - b),
       }));
 
-      onSubmit({ days });
+      onSubmit({ days, statusNote });
       return;
     }
 
@@ -190,15 +193,23 @@ const SchedulePicker = ({
       },
     ];
 
-    onSubmit({ days });
+    onSubmit({ days, statusNote });
   };
 
   const openCancelValidationWindow = () => {
+    if (!statusNote.trim()) {
+      toast.error("Reason field is required");
+      return;
+    }
     setShowCancelValidationWindow(true);
   };
 
   const handleDelete = () => {
-    handleDeleteStatus?.();
+    if (!statusNote.trim()) {
+      toast.error("Reason field is required");
+      return;
+    }
+    handleDeleteStatus?.(statusNote);
     setShowCancelValidationWindow(false);
   };
 
@@ -282,6 +293,15 @@ const SchedulePicker = ({
             );
           })}
         </div>
+      </div>
+
+      <div className="flex flex-col w-full h-40">
+        <h3 className="p-1">Reason for rescheduling or cancelling</h3>
+        <textarea
+          value={statusNote}
+          onChange={(e) => setStatusNote(e.target.value)}
+          className="w-full h-full border rounded-lg bg-slate-100 resize-none p-4"
+        />
       </div>
 
       <div

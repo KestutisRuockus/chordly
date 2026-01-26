@@ -37,6 +37,7 @@ const BookingScheduleAction = ({
 
   const handleSubmit = async (saved: {
     days: { weekday: WeekDayNumber; hours: number[] }[];
+    statusNote?: string;
   }) => {
     const selectedDay = saved.days[0];
     const selectedHour = selectedDay?.hours?.[0];
@@ -60,11 +61,17 @@ const BookingScheduleAction = ({
         return;
       }
 
+      if (!saved.statusNote?.trim()) {
+        toast.error("Reason field is required");
+        return;
+      }
+
       await updateLessonScheduleAndStatusAction({
         lessonId: currentScheduledLesson.currentScheduledLessonLessonId,
         teacherId,
         lessonDate,
         lessonHour: selectedHour,
+        statusNote: saved.statusNote,
       });
 
       toast.success("Lesson rescheduled successfully!");
@@ -90,7 +97,7 @@ const BookingScheduleAction = ({
     setIsOpen(false);
   };
 
-  const handleCancelStatus = async () => {
+  const handleCancelStatus = async (statusNote: string) => {
     if (currentScheduledLesson) {
       await updateLessonScheduleAndStatusAction({
         lessonId: currentScheduledLesson.currentScheduledLessonLessonId,
@@ -98,6 +105,7 @@ const BookingScheduleAction = ({
         lessonDate: currentScheduledLesson.currentScheduledLessonDate,
         lessonHour: currentScheduledLesson.currentScheduledLessonHour,
         lessonStatus: "cancelled",
+        statusNote,
       });
     }
 

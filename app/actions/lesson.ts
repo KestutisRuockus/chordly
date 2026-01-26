@@ -39,8 +39,9 @@ export const updateLessonScheduleAndStatusAction = async (input: {
   lessonDate: string;
   lessonHour: number;
   lessonStatus?: LessonStatus;
+  statusNote: string;
 }) => {
-  const { lessonId, teacherId, lessonDate, lessonHour } = input;
+  const { lessonId, teacherId, lessonDate, lessonHour, statusNote } = input;
   const newLessonStatus = input.lessonStatus ?? "rescheduled";
 
   await updateLessonScheduleAndStatus({
@@ -49,6 +50,7 @@ export const updateLessonScheduleAndStatusAction = async (input: {
     lessonDate,
     lessonHour,
     lessonStatus: newLessonStatus,
+    statusNote,
   });
 
   revalidatePath(`/find-teacher/${input.teacherId}`);

@@ -75,12 +75,14 @@ export const updateLessonScheduleAndStatus = async ({
   lessonDate,
   lessonHour,
   lessonStatus,
+  statusNote,
 }: {
   lessonId: string;
   teacherId: string;
   lessonDate: string;
   lessonHour: number;
   lessonStatus: LessonStatus;
+  statusNote: string;
 }) => {
   await db
     .update(lessons)
@@ -88,6 +90,7 @@ export const updateLessonScheduleAndStatus = async ({
       lessonDate,
       lessonHour,
       lessonStatus,
+      statusNote,
       updatedAt: new Date(),
     })
     .where(and(eq(lessons.id, lessonId), eq(lessons.teacherId, teacherId)));
