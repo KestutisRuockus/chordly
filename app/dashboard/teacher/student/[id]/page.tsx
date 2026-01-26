@@ -14,6 +14,8 @@ import { getTeacherNotes } from "@/db/teacherNotes";
 import { getExercisesByTeacherAndStudent } from "@/db/exercises";
 import { getAllLessonsByRoleAndId } from "@/db/lesson";
 import { currentUser } from "@clerk/nextjs/server";
+import { DEFAULT_OFFSET_DAYS } from "@/lib/constants";
+import { addDays, getDateRange } from "@/lib/date";
 
 type Props = {
   params: { id: string };
@@ -31,9 +33,14 @@ const StudentFullProfileById = async ({ params }: Props) => {
   const role = (user?.publicMetadata?.role as RoleType) ?? "teacher";
 
   const teacherId = await requireTeacherId();
+
+  const anchor = addDays(new Date(), DEFAULT_OFFSET_DAYS);
+  const { fromDate, toDate } = getDateRange(anchor, 7);
   const teacherLessons = await getAllLessonsByRoleAndId({
     role,
     id: teacherId,
+    fromDate,
+    toDate,
   });
 
   const relatedLessons = teacherLessons.filter(

@@ -295,14 +295,16 @@ const SchedulePicker = ({
         </div>
       </div>
 
-      <div className="flex flex-col w-full h-40">
-        <h3 className="p-1">Reason for rescheduling or cancelling</h3>
-        <textarea
-          value={statusNote}
-          onChange={(e) => setStatusNote(e.target.value)}
-          className="w-full h-full border rounded-lg bg-slate-100 resize-none p-4"
-        />
-      </div>
+      {currentScheduledLesson && (
+        <div className="flex flex-col w-full h-40">
+          <h3 className="p-1">Reason for rescheduling or cancelling</h3>
+          <textarea
+            value={statusNote}
+            onChange={(e) => setStatusNote(e.target.value)}
+            className="w-full h-full border rounded-lg bg-slate-100 resize-none p-4"
+          />
+        </div>
+      )}
 
       <div
         className={`flex ${currentScheduledLesson ? "justify-between" : "justify-end"} items-center gap-2`}

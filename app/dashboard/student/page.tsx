@@ -15,6 +15,8 @@ import { getAllLessonsByRoleAndId } from "@/db/lesson";
 import { getTeacherWeeklySchedule } from "@/db/teacherSchedule";
 import { TeacherScheduleByTeacherId } from "@/components/teacherSchedule/types";
 import { getNextUpcomingLesson } from "@/lib/lessons";
+import { addDays, getDateRange } from "@/lib/date";
+import { DEFAULT_OFFSET_DAYS } from "@/lib/constants";
 
 const StudentDashboardPage = async () => {
   const { userId } = await auth();
@@ -23,7 +25,15 @@ const StudentDashboardPage = async () => {
   const role = (user?.publicMetadata?.role as RoleType) ?? "student";
   const studentId = await getStudentDbIdByClerkId(userId);
 
-  const lessons = await getAllLessonsByRoleAndId({ role, id: studentId });
+  const anchor = addDays(new Date(), DEFAULT_OFFSET_DAYS);
+  const { fromDate, toDate } = getDateRange(anchor, 7);
+
+  const lessons = await getAllLessonsByRoleAndId({
+    role,
+    id: studentId,
+    fromDate,
+    toDate,
+  });
   const nextLesson = getNextUpcomingLesson(lessons);
 
   const teacherIds = Array.from(
@@ -49,6 +59,7 @@ const StudentDashboardPage = async () => {
         lessons={lessons}
         currentRole={role}
         scheduleByTeacherId={scheduleByTeacherId}
+        fromDate={fromDate}
       />
       {nextLesson && (
         <Section>

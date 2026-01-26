@@ -1,6 +1,6 @@
 "use client";
 
-import { LESSON_LENGTH } from "@/content/dummyData";
+import { LESSON_LENGTH } from "@/lib/constants";
 
 type Props = {
   hour: number;

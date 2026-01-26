@@ -1,7 +1,7 @@
 import { LessonStatus, LessonType } from "@/app/dashboard/types";
 import { db } from ".";
 import { lessons, students, teachers } from "./schema";
-import { eq, desc, and } from "drizzle-orm";
+import { eq, desc, and, gte, lte } from "drizzle-orm";
 import { RoleType } from "@/types/role";
 
 export const saveNewLesson = async (input: {
@@ -35,7 +35,14 @@ export const saveNewLesson = async (input: {
 export const getAllLessonsByRoleAndId = async (input: {
   role: RoleType;
   id: string;
+  fromDate: string;
+  toDate: string;
 }) => {
+  const dateRangeFilter = and(
+    gte(lessons.lessonDate, input.fromDate),
+    lte(lessons.lessonDate, input.toDate),
+  );
+
   if (input.role === "student") {
     const rows = await db
       .select({
@@ -44,7 +51,7 @@ export const getAllLessonsByRoleAndId = async (input: {
       })
       .from(lessons)
       .innerJoin(teachers, eq(teachers.id, lessons.teacherId))
-      .where(eq(lessons.studentId, input.id))
+      .where(and(eq(lessons.studentId, input.id), dateRangeFilter))
       .orderBy(desc(lessons.lessonDate));
 
     return rows.map((row) => ({
@@ -60,7 +67,7 @@ export const getAllLessonsByRoleAndId = async (input: {
     })
     .from(lessons)
     .innerJoin(students, eq(students.id, lessons.studentId))
-    .where(eq(lessons.teacherId, input.id))
+    .where(and(eq(lessons.teacherId, input.id), dateRangeFilter))
     .orderBy(desc(lessons.lessonDate));
 
   return rows.map((row) => ({

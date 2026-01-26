@@ -1,6 +1,6 @@
 import { WeekDay } from "@/app/dashboard/types";
 import { WeekDayNumber } from "@/components/teacherSchedule/types";
-import { LESSON_LENGTH } from "@/content/dummyData";
+import { LESSON_LENGTH } from "./constants";
 
 export const WEEK_DAYS: WeekDay[] = [
   "Mon",
@@ -23,6 +23,12 @@ export const getMonday = (date: Date) => {
   return d;
 };
 
+export const getToday = (date: Date) => {
+  const d = new Date(date);
+  d.setHours(0, 0, 0, 0);
+  return d;
+};
+
 export const formatDateKey = (date: Date) => {
   const y = date.getFullYear();
   const m = String(date.getMonth() + 1).padStart(2, "0");
@@ -30,8 +36,13 @@ export const formatDateKey = (date: Date) => {
   return `${y}-${m}-${d}`;
 };
 
-export const getTodayWeekDay = (): WeekDay => {
-  const jsDay = new Date().getDay();
+export const getTodayWeekDay = (date: Date = new Date()): WeekDay => {
+  const jsDay = date.getDay();
+  return DAY_MAP[jsDay];
+};
+
+export const getWeekDayFromDate = (date = new Date()): WeekDay => {
+  const jsDay = date.getDay();
   return DAY_MAP[jsDay];
 };
 
@@ -58,4 +69,17 @@ export const getWeekdayNumberFromDateString = (
 
   const jsDay = date.getDay();
   return ((jsDay + 6) % 7) as WeekDayNumber;
+};
+
+export const addDays = (date: Date, days: number) => {
+  const d = new Date(date);
+  d.setDate(d.getDate() + days);
+  return d;
+};
+
+export const getDateRange = (anchor: Date, days: number) => {
+  const start = getToday(anchor);
+  const end = addDays(start, days - 1);
+
+  return { fromDate: formatDateKey(start), toDate: formatDateKey(end) };
 };

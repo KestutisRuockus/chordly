@@ -73,5 +73,3 @@ export const students: StudentProfile[] = [
     age: 21,
   },
 ];
-
-export const LESSON_LENGTH = 45;
