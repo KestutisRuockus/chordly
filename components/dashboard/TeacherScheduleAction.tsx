@@ -40,7 +40,7 @@ const TeacherScheduleAction = ({
       <button
         type="button"
         onClick={() => setIsOpen(true)}
-        className="rounded border px-3 py-2 w-fit mx-auto"
+        className="rounded border px-3 py-2 w-fit mx-auto h-fit"
       >
         {buttonLabel}
       </button>

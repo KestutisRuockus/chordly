@@ -81,7 +81,7 @@ const WeekCalendar = ({
           Next →
         </Link>
       </div>
-      <div className="grid grid-cols-7 gap-3">
+      <div className="grid grid-cols-7 gap-3 max-h-120 overflow-y-auto">
         {weekDays.map((day) => (
           <WeekDayHeader
             key={day.key}

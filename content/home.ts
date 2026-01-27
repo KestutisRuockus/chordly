@@ -79,10 +79,25 @@ export const homeContent = {
     buttonLabel: "Find Teacher",
     href: "/find-teachers",
   },
+  forStudentsCta2: {
+    headline: "Start Learning Music Today",
+    buttonLabel: "Studnet Dashboard",
+    href: "/dashboard/student",
+  },
   forTeachersCta: {
     headline: "Grow Your Teaching Practice",
     buttonLabel: "Teachers Dashboard",
     href: "/dashboard/teacher",
+  },
+  noRoleSignInCta: {
+    headline: "SIgn In and book a lesson",
+    buttonLabel: "Sign In",
+    href: "/sign-in",
+  },
+  noRoleSignUpCta: {
+    headline: "Still do not have an account?",
+    buttonLabel: "Sign-up",
+    href: "/sign-up",
   },
   testimonials: {
     sectionLabel: "Testimonials",

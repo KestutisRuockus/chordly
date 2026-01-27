@@ -23,9 +23,9 @@ const WeekDayHeader = ({ day, currentRole, scheduleByTeacherId }: Props) => {
     <div
       className={`rounded-xl border p-3 flex flex-col gap-3 ${
         day.isToday ? "border-black" : "border-gray-300"
-      }`}
+      } relative`}
     >
-      <div className="flex items-baseline justify-between">
+      <div className="flex items-baseline justify-between sticky top-0 p-1 bg-gray-100 z-10">
         <div>
           <p className="text-xs text-gray-500">{day.label}</p>
           <p className="font-semibold text-sm">

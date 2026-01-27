@@ -51,7 +51,6 @@ const FindTeachersPage = async ({ searchParams }: Props) => {
     <Main>
       <HeaderSection {...findTeachers.header} />
       <SearchInput />
-      <InstrumentsFilter items={findTeachers.filters.items} />
       <Section>
         <h2>Teachers List:</h2>
         {visibleTeachersList.length === 0 && <p>No teachers found</p>}
@@ -62,6 +61,7 @@ const FindTeachersPage = async ({ searchParams }: Props) => {
         </div>
         {hasMore && <LoadMoreButton />}
       </Section>
+      <InstrumentsFilter items={findTeachers.filters.items} />
     </Main>
   );
 };

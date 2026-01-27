@@ -4,8 +4,12 @@ import FeaturesWithIconsSection from "@/components/sections/FeaturesWithIconsSec
 import CallToActionCard from "@/components/ui/CallToActionCard";
 import Section from "@/components/layout/Section";
 import Main from "@/components/layout/Main";
+import { RoleType } from "@/types/role";
+import { currentUser } from "@clerk/nextjs/server";
 
-export default function Home() {
+export default async function Home() {
+  const user = await currentUser();
+  const role = user?.publicMetadata?.role as RoleType;
   return (
     <Main>
       <HeroSection {...homeContent.hero} />
@@ -38,10 +42,37 @@ export default function Home() {
         </div>
       </Section>
       <FeaturesWithIconsSection features={homeContent.features} />
-      <Section className="flex justify-center gap-4">
-        <CallToActionCard {...homeContent.forStudentsCta} headingLevel="h2" />
-        <CallToActionCard {...homeContent.forTeachersCta} headingLevel="h3" />
-      </Section>
+      {role === "student" && (
+        <Section className="flex justify-center gap-4">
+          <>
+            <CallToActionCard
+              {...homeContent.forStudentsCta}
+              headingLevel="h3"
+            />
+            <CallToActionCard
+              {...homeContent.forStudentsCta2}
+              headingLevel="h3"
+            />
+          </>
+        </Section>
+      )}
+      {role === "teacher" && (
+        <Section className="flex justify-center gap-4">
+          <CallToActionCard {...homeContent.forTeachersCta} headingLevel="h3" />
+        </Section>
+      )}
+      {!role && (
+        <Section className="flex justify-center gap-4">
+          <CallToActionCard
+            {...homeContent.noRoleSignInCta}
+            headingLevel="h3"
+          />
+          <CallToActionCard
+            {...homeContent.noRoleSignUpCta}
+            headingLevel="h3"
+          />
+        </Section>
+      )}
       <Section>
         <h2 className="font-bold">{homeContent.testimonials.sectionLabel}</h2>
         <div className="flex gap-4">

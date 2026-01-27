@@ -15,11 +15,13 @@ type Props = {
 const TeacherFullProfileById = async ({ params }: Props) => {
   const { id } = await params;
   const { userId } = await auth();
-  if (!userId) return null;
   const user = await currentUser();
   const userRole = user?.publicMetadata?.role as RoleType | undefined;
 
-  const studentDbId = await getStudentDbIdByClerkId(userId);
+  const studentDbId =
+    userId && userRole === "student"
+      ? await getStudentDbIdByClerkId(userId)
+      : null;
 
   const teacher: TeacherFullProfile | undefined = await getTeacherById(id);
 
@@ -74,7 +76,7 @@ const TeacherFullProfileById = async ({ params }: Props) => {
           Hourly rate: <span className="font-bold">{teacher.hourlyRate}€</span>
         </p>
 
-        {userRole === "student" && (
+        {userRole === "student" && studentDbId && (
           <BookingScheduleAction
             buttonLabel={"Book a lesson"}
             studentId={studentDbId}

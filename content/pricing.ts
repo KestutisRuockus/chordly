@@ -4,7 +4,7 @@ export const pricing = {
     description: "Flexible plans designed to support teachers at every stage.",
   },
   plans: {
-    sectionLabel: "Pricing Plans",
+    sectionLabel: "Pricing Plans ( For teachers only )",
     cards: [
       {
         studentsLimit: "Up to 5 students",
@@ -17,7 +17,7 @@ export const pricing = {
           "Teacher profile shown",
         ],
         buttonCta: {
-          buttonLabel: "Start for free",
+          buttonLabel: "Go Basic",
           href: "/dashboard/teacher",
         },
       },
@@ -32,7 +32,7 @@ export const pricing = {
           "Priority profile placement",
         ],
         buttonCta: {
-          buttonLabel: "Choose Medium",
+          buttonLabel: "Go Medium",
           href: "/dashboard/teacher",
         },
       },

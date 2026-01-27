@@ -70,36 +70,38 @@ const StudentDashboardPage = async ({ searchParams }: Props) => {
         fromDate={fromDate}
         offsetWeeks={offsetWeeks}
       />
-      {nextLesson && (
-        <Section>
-          <h2 className="font-bold text-xl">Next Lesson</h2>
-          <LessonCard
-            currentRole={role}
-            {...nextLesson}
-            isUpcomingCard={true}
-            teacherWeeklySchedule={scheduleByTeacherId[nextLesson.teacherId]}
-          />
-        </Section>
-      )}
-      {exercises.length > 0 ? (
-        <Section>
-          <h2 className="font-bold text-xl">Exercises</h2>
-          <div className="flex flex-wrap gap-4">
-            {exercises.map((exercise) => (
-              <ExerciseCard
-                key={exercise.id}
-                exercise={exercise}
-                studentId={studentId}
-              />
-            ))}
-          </div>
-        </Section>
-      ) : (
-        <Section>
-          <h2 className="font-bold text-xl">There is no exercises</h2>
-        </Section>
-      )}
-      <PracticeSummary summary={summary} />
+      <div className="flex justify-center gap-4 w-[85%] mx-auto border py-6">
+        {nextLesson && (
+          <Section>
+            <h2 className="font-bold text-xl">Next Lesson</h2>
+            <LessonCard
+              currentRole={role}
+              {...nextLesson}
+              isUpcomingCard={true}
+              teacherWeeklySchedule={scheduleByTeacherId[nextLesson.teacherId]}
+            />
+          </Section>
+        )}
+        {exercises.length > 0 ? (
+          <Section className="max-1/2 overflow-x-auto">
+            <h2 className="font-bold text-xl">Exercises</h2>
+            <div className="flex flex-wrap gap-4">
+              {exercises.map((exercise) => (
+                <ExerciseCard
+                  key={exercise.id}
+                  exercise={exercise}
+                  studentId={studentId}
+                />
+              ))}
+            </div>
+          </Section>
+        ) : (
+          <Section>
+            <h2 className="font-bold text-xl">There is no exercises</h2>
+          </Section>
+        )}
+        <PracticeSummary summary={summary} />
+      </div>
     </Main>
   );
 };

@@ -71,30 +71,32 @@ const TeacherDashboardPage = async ({ searchParams }: Props) => {
         fromDate={fromDate}
         offsetWeeks={offsetWeeks}
       />
-      {nextLesson && (
+      <div className="flex justify-center gap-4 w-[85%] mx-auto border py-6">
+        {nextLesson && (
+          <Section>
+            <h2 className="font-bold text-xl">Next Lesson</h2>
+            <LessonCard
+              currentRole={role}
+              {...nextLesson}
+              isUpcomingCard={true}
+              teacherWeeklySchedule={teacherWeeklySchedule}
+            />
+          </Section>
+        )}
         <Section>
-          <h2 className="font-bold text-xl">Next Lesson</h2>
-          <LessonCard
-            currentRole={role}
-            {...nextLesson}
-            isUpcomingCard={true}
-            teacherWeeklySchedule={teacherWeeklySchedule}
-          />
+          <h2 className="font-bold text-xl">Students</h2>
+          <div className="flex flex-wrap gap-4">
+            {studentsSummaries.map((student) => (
+              <StudentSummaryCard key={student.id} student={student} />
+            ))}
+          </div>
         </Section>
-      )}
-      <Section>
-        <h2 className="font-bold text-xl">Students</h2>
-        <div className="flex flex-wrap gap-4">
-          {studentsSummaries.map((student) => (
-            <StudentSummaryCard key={student.id} student={student} />
-          ))}
-        </div>
-      </Section>
-      <TeacherScheduleAction
-        buttonLabel={teachersDashboard.button.buttonLabel}
-        teacherId={teachersDbId}
-        teacherWeeklySchedule={teacherWeeklySchedule}
-      />
+        <TeacherScheduleAction
+          buttonLabel={teachersDashboard.button.buttonLabel}
+          teacherId={teachersDbId}
+          teacherWeeklySchedule={teacherWeeklySchedule}
+        />
+      </div>
     </Main>
   );
 };
