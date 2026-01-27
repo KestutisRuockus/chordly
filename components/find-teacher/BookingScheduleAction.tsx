@@ -9,11 +9,16 @@ import { toast } from "sonner";
 import { useState } from "react";
 import Modal from "../ui/Modal";
 import SchedulePicker from "../SchedulePicker";
-import { getLessonDateFromWeekday, isLessonInPast } from "@/lib/date";
+import {
+  getLessonDateFromWeekday,
+  isLessonFinished,
+  isLessonInPast,
+} from "@/lib/date";
 import {
   createLessonAction,
   updateLessonScheduleAndStatusAction,
 } from "@/app/actions/lesson";
+import { RoleType } from "@/types/role";
 
 type Props = {
   buttonLabel: string;
@@ -22,6 +27,7 @@ type Props = {
   teacherWeeklySchedule: TeacherWeeklySchedule;
   teacherInstruments: string[];
   currentScheduledLesson?: CurrentScheduledLesson;
+  currentRole?: RoleType;
 };
 
 const BookingScheduleAction = ({
@@ -31,6 +37,7 @@ const BookingScheduleAction = ({
   teacherWeeklySchedule,
   teacherInstruments,
   currentScheduledLesson,
+  currentRole,
 }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const [instrument, setInstrument] = useState("");
@@ -41,6 +48,17 @@ const BookingScheduleAction = ({
       currentScheduledLesson.currentScheduledLessonDate,
       currentScheduledLesson.currentScheduledLessonHour,
     );
+  const isTeacher = currentRole === "teacher";
+  const isCompletable =
+    isTeacher &&
+    currentScheduledLesson &&
+    currentScheduledLesson.currentScheduledLessonStatus !== "cancelled" &&
+    isLessonFinished(
+      currentScheduledLesson?.currentScheduledLessonDate,
+      currentScheduledLesson?.currentScheduledLessonHour,
+    );
+  const isCompleted =
+    currentScheduledLesson?.currentScheduledLessonStatus === "completed";
 
   const handleSubmit = async (saved: {
     days: { weekday: WeekDayNumber; hours: number[] }[];
@@ -120,13 +138,37 @@ const BookingScheduleAction = ({
     setIsOpen(false);
   };
 
+  const updateLessonStatusAsCompleted = async () => {
+    if (currentScheduledLesson) {
+      await updateLessonScheduleAndStatusAction({
+        lessonId: currentScheduledLesson.currentScheduledLessonLessonId,
+        teacherId,
+        lessonDate: currentScheduledLesson.currentScheduledLessonDate,
+        lessonHour: currentScheduledLesson?.currentScheduledLessonHour,
+        lessonStatus: "completed",
+        statusNote: "completed",
+      });
+    }
+  };
+
   return (
-    <>
+    <div className="flex flex-col gap-1">
+      {isTeacher && isCompletable && (
+        <button
+          onClick={updateLessonStatusAsCompleted}
+          type="button"
+          disabled={isCompleted}
+          className={`rounded border px-3 py-1 w-full mx-auto ${isCompleted ? "bg-green-300 opacity-60" : ""}`}
+        >
+          {isCompleted ? "✓ Completed" : "Mark as completed"}
+        </button>
+      )}
+
       {currentScheduledLesson?.currentScheduledLessonStatus !== "cancelled" && (
         <button
           type="button"
           onClick={() => setIsOpen(true)}
-          className={`rounded border px-3 py-2 w-fit mx-auto ${isDisabled ? "opacity-40" : ""}`}
+          className={`rounded border px-3 py-1 w-full mx-auto ${isDisabled ? "opacity-40" : ""}`}
           disabled={isDisabled}
         >
           {buttonLabel}
@@ -167,7 +209,7 @@ const BookingScheduleAction = ({
           )}
         </Modal>
       )}
-    </>
+    </div>
   );
 };
 

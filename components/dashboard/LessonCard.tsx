@@ -70,6 +70,7 @@ const LessonCard = ({
               currentScheduledLessonHour: lessonHour,
               currentScheduledLessonStatus: lessonStatus,
             }}
+            currentRole={currentRole}
           />
         ) : (
           <span className="text-[10px] text-gray-400">

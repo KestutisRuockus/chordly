@@ -1,7 +1,7 @@
 import { LessonStatus, LessonType } from "@/app/dashboard/types";
 import { db } from ".";
 import { lessons, students, teachers } from "./schema";
-import { eq, desc, and, gte, lte, ne, asc } from "drizzle-orm";
+import { eq, desc, and, gte, lte, asc, inArray } from "drizzle-orm";
 import { RoleType } from "@/types/role";
 import { formatDateKey, getToday } from "@/lib/date";
 
@@ -92,10 +92,17 @@ export const getUpcomingLessonsForTeacherStudent = async ({
 }) => {
   const todayKey = formatDateKey(getToday(new Date()));
 
+  const activeStatuses: LessonStatus[] = ["scheduled", "rescheduled"];
+
   const baseFilter = and(
     eq(lessons.teacherId, teacherId),
     eq(lessons.studentId, studentId),
-    includeCancelled ? undefined : ne(lessons.lessonStatus, "cancelled"),
+    direction === "next"
+      ? inArray(lessons.lessonStatus, activeStatuses)
+      : undefined,
+    direction === "prev" && !includeCancelled
+      ? inArray(lessons.lessonStatus, ["scheduled", "rescheduled", "completed"])
+      : undefined,
   );
 
   if (direction === "next") {

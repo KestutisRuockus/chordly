@@ -102,3 +102,9 @@ export const isLessonInPast = (lessonDate: string, lessonHour: number) => {
 
   return lessonStart.getTime() < now.getTime();
 };
+
+export const isLessonFinished = (lessonDate: string, lessonHour: number) => {
+  const [y, m, d] = lessonDate.split("-").map(Number);
+  const lessonEnd = new Date(y, m - 1, d, lessonHour, LESSON_LENGTH);
+  return new Date().getTime() >= lessonEnd.getTime();
+};
