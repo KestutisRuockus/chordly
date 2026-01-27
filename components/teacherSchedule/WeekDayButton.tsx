@@ -13,7 +13,7 @@ type Props = {
   day: WeekDayItem;
   selectedWeekday: WeekDayNumber;
   scheduleMap: Partial<Record<number, number[]>>;
-  onSelect: (weekday: WeekDayNumber) => void;
+  onSelect: (weekday: WeekDayNumber, dateKey: string) => void;
   hasAvailableHours: boolean;
 };
 
@@ -37,7 +37,7 @@ const WeekDayButton = ({
   return (
     <button
       type="button"
-      onClick={() => onSelect(day.weekday)}
+      onClick={() => onSelect(day.weekday, day.key)}
       className={`${baseClass} ${selectedClass} ${hasHoursClass} ${!hasAvailableHours && disabledClass}`}
       disabled={!hasAvailableHours}
     >

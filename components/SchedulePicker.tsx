@@ -9,7 +9,8 @@ import { toWeekDayNumber } from "./teacherSchedule/types";
 import {
   formatDateKey,
   formatLessonTime,
-  getMonday,
+  getToday,
+  getTodayWeekDay,
   getWeekdayNumberFromDateString,
   WEEK_DAYS,
 } from "@/lib/date";
@@ -18,6 +19,7 @@ import { isSameDay } from "./dashboard/helpers/getPracticeSummary";
 import HourSlotButton from "./teacherSchedule/HourSlotButton";
 import WeekDayButton from "./teacherSchedule/WeekDayButton";
 import { toast } from "sonner";
+import { CALENDAR_RANGE_DAYS } from "@/lib/constants";
 
 type ScheduleMap = Partial<Record<number, number[]>>;
 
@@ -25,6 +27,7 @@ type Props = {
   teacherWeeklySchedule: TeacherWeeklySchedule;
   onSubmit: (saved: {
     days: { weekday: WeekDayNumber; hours: number[] }[];
+    dateKey?: string;
     statusNote?: string;
   }) => void;
   selectionMode: "multi" | "single";
@@ -39,8 +42,6 @@ const SchedulePicker = ({
   currentScheduledLesson,
   handleDeleteStatus,
 }: Props) => {
-  const now = useMemo(() => new Date(), []);
-  const monday = useMemo(() => getMonday(now), [now]);
   const [showCancelValidationWindow, setShowCancelValidationWindow] =
     useState(false);
   const [statusNote, setStatusNote] = useState("");
@@ -49,20 +50,25 @@ const SchedulePicker = ({
     ? `${currentScheduledLesson.currentScheduledLessonDate} • ${formatLessonTime(currentScheduledLesson?.currentScheduledLessonHour)}`
     : null;
 
+  const today = useMemo(() => getToday(new Date()), []);
+
   const weekDays = useMemo(() => {
-    return Array.from({ length: 7 }, (_, i) => {
-      const d = new Date(monday);
-      d.setDate(monday.getDate() + i);
+    return Array.from({ length: CALENDAR_RANGE_DAYS }, (_, i) => {
+      const d = new Date(today);
+      d.setDate(today.getDate() + i);
+
+      const dateKey = formatDateKey(d);
+      const weekday = getWeekdayNumberFromDateString(dateKey);
 
       return {
-        key: formatDateKey(d),
-        weekday: i as WeekDayNumber,
-        label: WEEK_DAYS[i],
+        key: dateKey,
+        weekday,
+        label: getTodayWeekDay(d),
         dayNumber: d.getDate(),
-        isToday: isSameDay(d, now),
+        isToday: isSameDay(d, today),
       };
     });
-  }, [monday, now]);
+  }, [today]);
 
   const availableScheduleMap = useMemo(() => {
     return Object.fromEntries(
@@ -70,17 +76,17 @@ const SchedulePicker = ({
     ) as ScheduleMap;
   }, [teacherWeeklySchedule.days]);
 
-  const activeWeekDay = currentScheduledLesson
-    ? getWeekdayNumberFromDateString(
-        currentScheduledLesson.currentScheduledLessonDate,
-      )
-    : (teacherWeeklySchedule.days[0]?.weekday ?? 0);
+  const activeWeekDay = getWeekdayNumberFromDateString(formatDateKey(today));
 
   const [scheduleMap, setScheduleMap] =
     useState<ScheduleMap>(availableScheduleMap);
 
   const [selectedWeekday, setSelectedWeekday] =
     useState<WeekDayNumber>(activeWeekDay);
+
+  const [selectedDateKey, setSelectedDateKey] = useState<string>(
+    formatDateKey(today),
+  );
 
   const [selectedHours, setSelectedHours] = useState<number[]>(
     selectionMode === "single"
@@ -105,8 +111,9 @@ const SchedulePicker = ({
       currentScheduledLesson.currentScheduledLessonDate,
     );
 
-  const handleSelectDay = (weekday: WeekDayNumber) => {
+  const handleSelectDay = (weekday: WeekDayNumber, dateKey: string) => {
     setSelectedWeekday(weekday);
+    setSelectedDateKey(dateKey);
 
     if (selectionMode === "single" && currentScheduledLesson) {
       setSelectedHours(
@@ -186,6 +193,11 @@ const SchedulePicker = ({
       return;
     }
 
+    if (!selectedDateKey) {
+      toast.error("Select a day first");
+      return;
+    }
+
     const days = [
       {
         weekday: selectedWeekday,
@@ -193,7 +205,7 @@ const SchedulePicker = ({
       },
     ];
 
-    onSubmit({ days, statusNote });
+    onSubmit({ days, dateKey: selectedDateKey, statusNote });
   };
 
   const openCancelValidationWindow = () => {
@@ -251,7 +263,7 @@ const SchedulePicker = ({
               scheduleMap={
                 selectionMode === "multi" ? scheduleMap : availableScheduleMap
               }
-              onSelect={handleSelectDay}
+              onSelect={(weekday) => handleSelectDay(weekday, day.key)}
               hasAvailableHours={isEnabled}
             />
           );

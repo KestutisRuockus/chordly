@@ -4,16 +4,12 @@ import type {
   CurrentScheduledLesson,
   TeacherWeeklySchedule,
   WeekDayNumber,
-} from "../teacherSchedule/types";
+} from "./teacherSchedule/types";
 import { toast } from "sonner";
 import { useState } from "react";
-import Modal from "../ui/Modal";
-import SchedulePicker from "../SchedulePicker";
-import {
-  getLessonDateFromWeekday,
-  isLessonFinished,
-  isLessonInPast,
-} from "@/lib/date";
+import Modal from "./ui/Modal";
+import SchedulePicker from "./SchedulePicker";
+import { isLessonFinished, isLessonInPast } from "@/lib/date";
 import {
   createLessonAction,
   updateLessonScheduleAndStatusAction,
@@ -62,6 +58,7 @@ const BookingScheduleAction = ({
 
   const handleSubmit = async (saved: {
     days: { weekday: WeekDayNumber; hours: number[] }[];
+    dateKey?: string;
     statusNote?: string;
   }) => {
     const selectedDay = saved.days[0];
@@ -72,7 +69,12 @@ const BookingScheduleAction = ({
       return;
     }
 
-    const lessonDate = getLessonDateFromWeekday(selectedDay.weekday);
+    if (!saved.dateKey) {
+      toast.error("Select a day first");
+      return;
+    }
+
+    const lessonDate = saved.dateKey;
 
     if (currentScheduledLesson) {
       const isValidToRescheduleLesson =

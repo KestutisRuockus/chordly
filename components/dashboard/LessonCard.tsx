@@ -1,7 +1,7 @@
 import type { LessonCardProps } from "@/app/dashboard/types";
 import StatusBadge from "./calendar/StatusBadge";
 import { formatLessonTime, formatMonthDayFromKey } from "@/lib/date";
-import BookingScheduleAction from "../find-teacher/BookingScheduleAction";
+import BookingScheduleAction from "../BookingScheduleAction";
 
 const LessonCard = ({
   id,

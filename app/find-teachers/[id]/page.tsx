@@ -1,7 +1,7 @@
 import type { TeacherWeeklySchedule } from "@/components/teacherSchedule/types";
 import type { RoleType } from "@/types/role";
 import type { TeacherFullProfile } from "@/types/teachers";
-import BookingScheduleAction from "@/components/find-teacher/BookingScheduleAction";
+import BookingScheduleAction from "@/components/BookingScheduleAction";
 import BackButton from "@/components/ui/BackButton";
 import { getStudentDbIdByClerkId } from "@/db/students";
 import { getTeacherById } from "@/db/teachers";
