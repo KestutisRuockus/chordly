@@ -1,4 +1,3 @@
-import type { TeacherWeeklySchedule } from "@/components/teacherSchedule/types";
 import type { RoleType } from "@/types/role";
 import type { TeacherFullProfile } from "@/types/teachers";
 import BookingScheduleAction from "@/components/BookingScheduleAction";
@@ -7,6 +6,7 @@ import { getStudentDbIdByClerkId } from "@/db/students";
 import { getTeacherById } from "@/db/teachers";
 import { getTeacherWeeklySchedule } from "@/db/teacherSchedule";
 import { auth, currentUser } from "@clerk/nextjs/server";
+import { getAllLessonsByRoleAndId } from "@/db/lesson";
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -29,8 +29,22 @@ const TeacherFullProfileById = async ({ params }: Props) => {
     return <div>Teacher not found</div>;
   }
 
-  const teacherWeeklySchedule: TeacherWeeklySchedule =
-    await getTeacherWeeklySchedule(teacher.id);
+  const today = new Date();
+  const fromDate = today.toISOString().split("T")[0];
+
+  const to = new Date();
+  to.setDate(to.getDate() + 7);
+  const toDate = to.toISOString().split("T")[0];
+
+  const [teacherWeeklySchedule, teacherBookedSlots] = await Promise.all([
+    getTeacherWeeklySchedule(teacher.id),
+    getAllLessonsByRoleAndId({
+      role: "teacher",
+      id: teacher.id,
+      fromDate,
+      toDate,
+    }),
+  ]);
 
   return (
     <section className="w-4/5 mx-auto my-8">
@@ -83,6 +97,7 @@ const TeacherFullProfileById = async ({ params }: Props) => {
             teacherId={teacher.id}
             teacherWeeklySchedule={teacherWeeklySchedule}
             teacherInstruments={teacher.instruments}
+            teacherBookedSlots={teacherBookedSlots}
           />
         )}
       </div>

@@ -5,6 +5,7 @@ import type {
   TeacherWeeklySchedule,
   WeekDayNumber,
 } from "./teacherSchedule/types";
+import type { LessonRow } from "@/db/types";
 import { toWeekDayNumber } from "./teacherSchedule/types";
 import {
   formatDateKey,
@@ -33,6 +34,7 @@ type Props = {
   selectionMode: "multi" | "single";
   currentScheduledLesson?: CurrentScheduledLesson;
   handleDeleteStatus?: (statusNote: string) => void;
+  teacherBookedSlots?: LessonRow[];
 };
 
 const SchedulePicker = ({
@@ -41,6 +43,7 @@ const SchedulePicker = ({
   selectionMode,
   currentScheduledLesson,
   handleDeleteStatus,
+  teacherBookedSlots,
 }: Props) => {
   const [showCancelValidationWindow, setShowCancelValidationWindow] =
     useState(false);
@@ -111,6 +114,17 @@ const SchedulePicker = ({
       currentScheduledLesson.currentScheduledLessonDate,
     );
 
+  const isSlotBooked = (hour: number) => {
+    if (!teacherBookedSlots) return false;
+
+    return teacherBookedSlots.some(
+      (lesson) =>
+        lesson.lessonDate === selectedDateKey &&
+        lesson.lessonHour === hour &&
+        lesson.lessonStatus !== "cancelled",
+    );
+  };
+
   const handleSelectDay = (weekday: WeekDayNumber, dateKey: string) => {
     setSelectedWeekday(weekday);
     setSelectedDateKey(dateKey);
@@ -138,6 +152,7 @@ const SchedulePicker = ({
   const handleToggleHour = (hour: number) => {
     if (selectionMode === "single") {
       if (!availableHoursForSelectedDay.includes(hour)) return;
+      if (isSlotBooked(hour)) return;
 
       setSelectedHours((prev) => (prev[0] === hour ? [] : [hour]));
       return;
@@ -301,6 +316,7 @@ const SchedulePicker = ({
                 selectedHours={selectedHours}
                 onToggle={handleToggleHour}
                 disabled={disabled}
+                isSlotBooked={isSlotBooked(hour)}
               />
             );
           })}

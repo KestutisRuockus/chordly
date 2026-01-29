@@ -5,6 +5,8 @@ import type {
   TeacherWeeklySchedule,
   WeekDayNumber,
 } from "./teacherSchedule/types";
+import type { RoleType } from "@/types/role";
+import type { LessonRow } from "@/db/types";
 import { toast } from "sonner";
 import { useState } from "react";
 import Modal from "./ui/Modal";
@@ -14,7 +16,7 @@ import {
   createLessonAction,
   updateLessonScheduleAndStatusAction,
 } from "@/app/actions/lesson";
-import { RoleType } from "@/types/role";
+import { useRouter } from "next/navigation";
 
 type Props = {
   buttonLabel: string;
@@ -24,6 +26,7 @@ type Props = {
   teacherInstruments: string[];
   currentScheduledLesson?: CurrentScheduledLesson;
   currentRole?: RoleType;
+  teacherBookedSlots?: LessonRow[];
 };
 
 const BookingScheduleAction = ({
@@ -34,9 +37,12 @@ const BookingScheduleAction = ({
   teacherInstruments,
   currentScheduledLesson,
   currentRole,
+  teacherBookedSlots,
 }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const [instrument, setInstrument] = useState("");
+
+  const router = useRouter();
 
   const isDisabled =
     currentScheduledLesson &&
@@ -112,16 +118,22 @@ const BookingScheduleAction = ({
       return;
     }
 
-    await createLessonAction({
-      studentId,
-      teacherId,
-      lessonDate,
-      lessonHour: selectedHour,
-      instrument,
-    });
+    try {
+      await createLessonAction({
+        studentId,
+        teacherId,
+        lessonDate,
+        lessonHour: selectedHour,
+        instrument,
+      });
 
-    toast.success("Lesson booked successfully!");
-    setIsOpen(false);
+      toast.success("Lesson booked successfully!");
+      setIsOpen(false);
+    } catch (err) {
+      toast.error("That time slot was just taken. Please choose another.");
+      router.refresh();
+      console.log(err);
+    }
   };
 
   const handleCancelStatus = async (statusNote: string) => {
@@ -189,6 +201,7 @@ const BookingScheduleAction = ({
             selectionMode="single"
             currentScheduledLesson={currentScheduledLesson}
             handleDeleteStatus={handleCancelStatus}
+            teacherBookedSlots={teacherBookedSlots}
           />
           {!currentScheduledLesson && (
             <div className="border-t mt-2">

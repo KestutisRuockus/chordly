@@ -154,3 +154,24 @@ export const updateLessonScheduleAndStatus = async ({
 
   return { status: "updated" as const };
 };
+
+export const findLessonByTeacherDateHour = async (input: {
+  teacherId: string;
+  lessonDate: string;
+  lessonHour: number;
+}) => {
+  const row = await db
+    .select()
+    .from(lessons)
+    .where(
+      and(
+        eq(lessons.teacherId, input.teacherId),
+        eq(lessons.lessonDate, input.lessonDate),
+        eq(lessons.lessonHour, input.lessonHour),
+        inArray(lessons.lessonStatus, ["scheduled", "rescheduled"]),
+      ),
+    )
+    .limit(1);
+
+  return row[0] ?? null;
+};

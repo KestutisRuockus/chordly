@@ -1,7 +1,11 @@
 "use server";
 
 import type { LessonStatus, LessonType } from "../dashboard/types";
-import { updateLessonScheduleAndStatus, saveNewLesson } from "@/db/lesson";
+import {
+  updateLessonScheduleAndStatus,
+  saveNewLesson,
+  findLessonByTeacherDateHour,
+} from "@/db/lesson";
 import { revalidatePath } from "next/cache";
 
 type CreateLessonInput = {
@@ -17,6 +21,16 @@ export const createLessonAction = async (input: CreateLessonInput) => {
   const lessonStatus: LessonStatus = "scheduled";
 
   const { lessonDate, lessonHour, studentId, teacherId, instrument } = input;
+
+  const existing = await findLessonByTeacherDateHour({
+    teacherId,
+    lessonDate,
+    lessonHour,
+  });
+
+  if (existing) {
+    throw new Error("SLOT_ALREADY_BOOKED");
+  }
 
   await saveNewLesson({
     studentId,
