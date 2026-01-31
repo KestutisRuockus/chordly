@@ -1,4 +1,6 @@
 import type { RoleType } from "@/types/role";
+import type { TeacherScheduleByTeacherId } from "@/components/teacherSchedule/types";
+import type { LessonRow } from "@/db/types";
 import { teachersDashboard } from "@/content/teachersDashboard";
 import LessonCard from "@/components/dashboard/LessonCard";
 import Main from "@/components/layout/Main";
@@ -10,10 +12,6 @@ import StudentSummaryCard from "@/components/dashboard/StudentSummaryCard";
 import { studentsSummaries } from "@/content/dummyData";
 import TeacherScheduleAction from "@/components/dashboard/TeacherScheduleAction";
 import { getTeacherWeeklySchedule } from "@/db/teacherSchedule";
-import {
-  TeacherScheduleByTeacherId,
-  TeacherWeeklySchedule,
-} from "@/components/teacherSchedule/types";
 import { getTeacherDbIdByClerkId } from "@/db/teachers";
 import { getAllLessonsByRoleAndId } from "@/db/lesson";
 import { getNextUpcomingLesson } from "@/lib/lessons";
@@ -54,11 +52,22 @@ const TeacherDashboardPage = async ({ searchParams }: Props) => {
   });
   const nextLesson = getNextUpcomingLesson(teacherLessons);
 
-  const teacherWeeklySchedule: TeacherWeeklySchedule =
-    await getTeacherWeeklySchedule(teachersDbId);
+  const [teacherWeeklySchedule, teacherBookedSlots] = await Promise.all([
+    getTeacherWeeklySchedule(teachersDbId),
+    getAllLessonsByRoleAndId({
+      role: "teacher",
+      id: teachersDbId,
+      fromDate,
+      toDate,
+    }),
+  ]);
 
   const scheduleByTeacherId: TeacherScheduleByTeacherId = {
     [teachersDbId]: teacherWeeklySchedule,
+  };
+
+  const teacherBookedSlotsByTeacherId: Record<string, LessonRow[]> = {
+    [teachersDbId]: teacherBookedSlots,
   };
 
   return (
@@ -70,6 +79,7 @@ const TeacherDashboardPage = async ({ searchParams }: Props) => {
         scheduleByTeacherId={scheduleByTeacherId}
         fromDate={fromDate}
         offsetWeeks={offsetWeeks}
+        teacherBookedSlots={teacherBookedSlotsByTeacherId}
       />
       <div className="flex justify-center gap-4 w-[85%] mx-auto border py-6">
         {nextLesson && (

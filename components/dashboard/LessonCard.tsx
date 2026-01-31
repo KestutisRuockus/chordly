@@ -17,6 +17,7 @@ const LessonCard = ({
   instrument,
   participantName,
   teacherWeeklySchedule,
+  teacherBookedSlots,
 }: LessonCardProps) => {
   if (isUpcomingCard) {
     return (
@@ -71,6 +72,7 @@ const LessonCard = ({
               currentScheduledLessonStatus: lessonStatus,
             }}
             currentRole={currentRole}
+            teacherBookedSlots={teacherBookedSlots}
           />
         ) : (
           <span className="text-[10px] text-gray-400">

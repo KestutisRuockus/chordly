@@ -20,6 +20,7 @@ export type LessonCardProps = LessonWithParticipant & {
   currentRole: RoleType;
   isUpcomingCard?: boolean;
   teacherWeeklySchedule: TeacherWeeklySchedule;
+  teacherBookedSlots?: LessonRow[];
 };
 
 export type WeekDay = "Mon" | "Tue" | "Wed" | "Thu" | "Fri" | "Sat" | "Sun";

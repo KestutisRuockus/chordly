@@ -16,6 +16,7 @@ type Props = {
   scheduleByTeacherId: TeacherScheduleByTeacherId;
   fromDate: string;
   offsetWeeks: number;
+  teacherBookedSlots: Record<string, LessonRow[]>;
 };
 
 const WeekCalendar = ({
@@ -24,6 +25,7 @@ const WeekCalendar = ({
   scheduleByTeacherId,
   fromDate,
   offsetWeeks,
+  teacherBookedSlots,
 }: Props) => {
   const now = new Date();
 
@@ -88,6 +90,7 @@ const WeekCalendar = ({
             day={day}
             currentRole={currentRole}
             scheduleByTeacherId={scheduleByTeacherId}
+            teacherBookedSlots={teacherBookedSlots}
           />
         ))}
       </div>

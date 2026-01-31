@@ -16,9 +16,15 @@ type Props = {
   day: DayColumn;
   currentRole: RoleType;
   scheduleByTeacherId: TeacherScheduleByTeacherId;
+  teacherBookedSlots: Record<string, LessonRow[]>;
 };
 
-const WeekDayHeader = ({ day, currentRole, scheduleByTeacherId }: Props) => {
+const WeekDayHeader = ({
+  day,
+  currentRole,
+  scheduleByTeacherId,
+  teacherBookedSlots,
+}: Props) => {
   return (
     <div
       className={`rounded-xl border p-3 flex flex-col gap-3 ${
@@ -48,6 +54,7 @@ const WeekDayHeader = ({ day, currentRole, scheduleByTeacherId }: Props) => {
               currentRole={currentRole}
               {...lesson}
               teacherWeeklySchedule={scheduleByTeacherId[lesson.teacherId]}
+              teacherBookedSlots={teacherBookedSlots[lesson.teacherId]}
             />
           ))}
         </div>

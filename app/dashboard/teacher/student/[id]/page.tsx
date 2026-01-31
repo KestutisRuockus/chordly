@@ -61,17 +61,24 @@ const StudentFullProfileById = async ({ params }: Props) => {
     getExercisesByTeacherAndStudent({ teacherId, studentId }),
   ]);
 
-  const upcomingLessons = await getUpcomingLessonsForTeacherStudent({
-    teacherId,
-    studentId,
-    direction: "next",
-  });
-
-  const lastLessons = await getUpcomingLessonsForTeacherStudent({
-    teacherId,
-    studentId,
-    direction: "prev",
-  });
+  const [upcomingLessons, lastLessons, teacherBookedSlots] = await Promise.all([
+    getUpcomingLessonsForTeacherStudent({
+      teacherId,
+      studentId,
+      direction: "next",
+    }),
+    getUpcomingLessonsForTeacherStudent({
+      teacherId,
+      studentId,
+      direction: "prev",
+    }),
+    getAllLessonsByRoleAndId({
+      role: "teacher",
+      id: teacherId,
+      fromDate,
+      toDate,
+    }),
+  ]);
 
   const summary = getPracticeSummary({
     lessons: relatedLessons,
@@ -147,6 +154,7 @@ const StudentFullProfileById = async ({ params }: Props) => {
                       currentRole={role}
                       {...lesson}
                       teacherWeeklySchedule={teacherWeeklySchedule}
+                      teacherBookedSlots={teacherBookedSlots}
                     />
                   ))
                 ) : (

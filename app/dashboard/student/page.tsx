@@ -58,6 +58,20 @@ const StudentDashboardPage = async ({ searchParams }: Props) => {
   const scheduleByTeacherId: TeacherScheduleByTeacherId =
     Object.fromEntries(scheduleEntries);
 
+  const bookedSlotsEntries = await Promise.all(
+    teacherIds.map(async (teacherId) => {
+      const slots = await getAllLessonsByRoleAndId({
+        role: "teacher",
+        id: teacherId,
+        fromDate,
+        toDate,
+      });
+      return [teacherId, slots] as const;
+    }),
+  );
+
+  const teacherBookedSlots = Object.fromEntries(bookedSlotsEntries);
+
   const exercises = await getExercisesByStudentId(studentId);
   const summary = getPracticeSummary({ lessons, exercises });
   return (
@@ -69,6 +83,7 @@ const StudentDashboardPage = async ({ searchParams }: Props) => {
         scheduleByTeacherId={scheduleByTeacherId}
         fromDate={fromDate}
         offsetWeeks={offsetWeeks}
+        teacherBookedSlots={teacherBookedSlots}
       />
       <div className="flex justify-center gap-4 w-[85%] mx-auto border py-6">
         {nextLesson && (
