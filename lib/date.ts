@@ -1,6 +1,6 @@
 import { WeekDay } from "@/app/dashboard/types";
 import { WeekDayNumber } from "@/components/teacherSchedule/types";
-import { LESSON_LENGTH } from "./constants";
+import { LESSON_LENGTH, LOCK_TIME_MS } from "./constants";
 
 export const WEEK_DAYS: WeekDay[] = [
   "Mon",
@@ -94,13 +94,13 @@ export const formatMonthDayFromKey = (dateKey: string) => {
   });
 };
 
-export const isLessonInPast = (lessonDate: string, lessonHour: number) => {
+export const isLessonLocked = (lessonDate: string, lessonHour: number) => {
   const [y, m, d] = lessonDate.split("-").map(Number);
 
   const lessonStart = new Date(y, m - 1, d, lessonHour, 0, 0, 0);
   const now = new Date();
 
-  return lessonStart.getTime() < now.getTime();
+  return lessonStart.getTime() - LOCK_TIME_MS < now.getTime();
 };
 
 export const isLessonFinished = (lessonDate: string, lessonHour: number) => {

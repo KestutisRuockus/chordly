@@ -11,7 +11,7 @@ import { toast } from "sonner";
 import { useState } from "react";
 import Modal from "./ui/Modal";
 import SchedulePicker from "./SchedulePicker";
-import { isLessonFinished, isLessonInPast } from "@/lib/date";
+import { isLessonFinished, isLessonLocked } from "@/lib/date";
 import {
   createLessonAction,
   updateLessonScheduleAndStatusAction,
@@ -44,13 +44,30 @@ const BookingScheduleAction = ({
 
   const router = useRouter();
 
-  const isDisabled =
+  const isFinishedLesson =
     currentScheduledLesson &&
-    isLessonInPast(
+    isLessonFinished(
       currentScheduledLesson.currentScheduledLessonDate,
       currentScheduledLesson.currentScheduledLessonHour,
     );
+
+  const isLockedLesson =
+    currentScheduledLesson &&
+    isLessonLocked(
+      currentScheduledLesson.currentScheduledLessonDate,
+      currentScheduledLesson.currentScheduledLessonHour,
+    );
+
   const isTeacher = currentRole === "teacher";
+
+  const isDisabled =
+    currentScheduledLesson &&
+    ((!isTeacher && (isLockedLesson || isFinishedLesson)) ||
+      (isTeacher && isFinishedLesson));
+
+  const showTooltip =
+    currentScheduledLesson && !isTeacher && isLockedLesson && !isFinishedLesson;
+
   const isCompletable =
     isTeacher &&
     currentScheduledLesson &&
@@ -160,7 +177,7 @@ const BookingScheduleAction = ({
         lessonDate: currentScheduledLesson.currentScheduledLessonDate,
         lessonHour: currentScheduledLesson?.currentScheduledLessonHour,
         lessonStatus: "completed",
-        statusNote: "completed",
+        statusNote: "",
       });
     }
   };
@@ -178,16 +195,27 @@ const BookingScheduleAction = ({
         </button>
       )}
 
-      {currentScheduledLesson?.currentScheduledLessonStatus !== "cancelled" && (
-        <button
-          type="button"
-          onClick={() => setIsOpen(true)}
-          className={`rounded border px-3 py-1 w-full mx-auto ${isDisabled ? "opacity-40" : ""}`}
-          disabled={isDisabled}
-        >
-          {buttonLabel}
-        </button>
-      )}
+      {currentScheduledLesson?.currentScheduledLessonStatus !== "cancelled" &&
+        currentScheduledLesson?.currentScheduledLessonStatus !==
+          "completed" && (
+          <div
+            title={
+              showTooltip
+                ? "Rescheduling is not available less than 2 hours before the lesson."
+                : undefined
+            }
+            className="inline-block"
+          >
+            <button
+              type="button"
+              onClick={() => setIsOpen(true)}
+              className={`rounded border px-3 py-1 w-full mx-auto ${isDisabled ? "opacity-40 cursor-not-allowed" : "cursor-pointer"}`}
+              disabled={isDisabled}
+            >
+              {buttonLabel}
+            </button>
+          </div>
+        )}
 
       {isOpen && (
         <Modal
