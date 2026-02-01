@@ -1,7 +1,7 @@
 import { LessonStatus, LessonType } from "@/app/dashboard/types";
 import { db } from ".";
 import { lessons, students, teachers } from "./schema";
-import { eq, desc, and, gte, lte, asc, inArray } from "drizzle-orm";
+import { eq, desc, and, gte, lte, asc, inArray, gt, or, lt } from "drizzle-orm";
 import { RoleType } from "@/types/role";
 import { formatDateKey, getToday } from "@/lib/date";
 
@@ -90,7 +90,9 @@ export const getUpcomingLessonsForTeacherStudent = async ({
   limit?: number;
   includeCancelled?: boolean;
 }) => {
-  const todayKey = formatDateKey(getToday(new Date()));
+  const now = new Date();
+  const todayKey = formatDateKey(getToday(now));
+  const currentHour = now.getHours();
 
   const activeStatuses: LessonStatus[] = ["scheduled", "rescheduled"];
 
@@ -109,7 +111,18 @@ export const getUpcomingLessonsForTeacherStudent = async ({
     const rows = await db
       .select()
       .from(lessons)
-      .where(and(baseFilter, gte(lessons.lessonDate, todayKey)))
+      .where(
+        and(
+          baseFilter,
+          or(
+            gt(lessons.lessonDate, todayKey),
+            and(
+              eq(lessons.lessonDate, todayKey),
+              gt(lessons.lessonHour, currentHour),
+            ),
+          ),
+        ),
+      )
       .orderBy(asc(lessons.lessonDate), asc(lessons.lessonHour))
       .limit(limit);
 
@@ -119,7 +132,18 @@ export const getUpcomingLessonsForTeacherStudent = async ({
   const rows = await db
     .select()
     .from(lessons)
-    .where(and(baseFilter, lte(lessons.lessonDate, todayKey)))
+    .where(
+      and(
+        baseFilter,
+        or(
+          lt(lessons.lessonDate, todayKey),
+          and(
+            eq(lessons.lessonDate, todayKey),
+            lt(lessons.lessonHour, currentHour),
+          ),
+        ),
+      ),
+    )
     .orderBy(desc(lessons.lessonDate), desc(lessons.lessonHour))
     .limit(limit);
 
