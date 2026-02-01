@@ -79,6 +79,13 @@ export const updateLessonScheduleAndStatusAction = async (input: {
     throw new Error("LESSON_NOT_FOUND");
   }
 
+  if (
+    lesson.lessonStatus !== "scheduled" &&
+    lesson.lessonStatus !== "rescheduled"
+  ) {
+    throw new Error("LESSON_NOT_RESCHEDULABLE");
+  }
+
   const teacherLessonAlreadyExistAtThisTime = await findLessonByTeacherDateHour(
     {
       teacherId,

@@ -36,6 +36,7 @@ type Props = {
   currentScheduledLesson?: CurrentScheduledLesson;
   handleDeleteStatus?: (statusNote: string) => void;
   teacherBookedSlots?: LessonRow[];
+  isSubmitting: boolean;
 };
 
 const SchedulePicker = ({
@@ -45,6 +46,7 @@ const SchedulePicker = ({
   currentScheduledLesson,
   handleDeleteStatus,
   teacherBookedSlots,
+  isSubmitting,
 }: Props) => {
   const [showCancelValidationWindow, setShowCancelValidationWindow] =
     useState(false);
@@ -350,8 +352,12 @@ const SchedulePicker = ({
           </div>
         )}
         <div className="flex gap-2">
-          <button type="submit" className="rounded border px-4 py-2">
-            Save
+          <button
+            type="submit"
+            className="rounded border px-4 py-2"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? "Saving..." : "Save"}
           </button>
           {currentScheduledLesson &&
             currentScheduledLesson.currentScheduledLessonStatus !==

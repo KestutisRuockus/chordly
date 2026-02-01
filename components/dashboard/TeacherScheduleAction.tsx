@@ -22,17 +22,30 @@ const TeacherScheduleAction = ({
   teacherWeeklySchedule,
 }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (payload: {
     days: SaveTeacherWeeklyScheduleInput["days"];
   }) => {
-    await SaveTeacherScheduleAction({
-      teacherId,
-      days: payload.days,
-    });
+    if (isSubmitting) {
+      return;
+    }
+    setIsSubmitting(true);
+    try {
+      await SaveTeacherScheduleAction({
+        teacherId,
+        days: payload.days,
+      });
 
-    toast.success("Schedule saved!");
-    setIsOpen(false);
+      toast.success("Schedule saved!");
+      setIsOpen(false);
+    } catch (err) {
+      if (err) {
+        console.log("ERR: ", err);
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -55,6 +68,7 @@ const TeacherScheduleAction = ({
             teacherWeeklySchedule={teacherWeeklySchedule}
             onSubmit={handleSubmit}
             selectionMode="multi"
+            isSubmitting={isSubmitting}
           />
         </Modal>
       )}

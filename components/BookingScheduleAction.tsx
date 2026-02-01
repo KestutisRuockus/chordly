@@ -41,6 +41,7 @@ const BookingScheduleAction = ({
 }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const [instrument, setInstrument] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const router = useRouter();
 
@@ -84,6 +85,10 @@ const BookingScheduleAction = ({
     dateKey?: string;
     statusNote?: string;
   }) => {
+    if (isSubmitting) {
+      return;
+    }
+
     const selectedDay = saved.days[0];
     const selectedHour = selectedDay?.hours?.[0];
 
@@ -115,6 +120,8 @@ const BookingScheduleAction = ({
         toast.error("Reason field is required");
         return;
       }
+
+      setIsSubmitting(true);
 
       try {
         await updateLessonScheduleAndStatusAction({
@@ -158,6 +165,8 @@ const BookingScheduleAction = ({
 
         router.refresh();
         return;
+      } finally {
+        setIsSubmitting(false);
       }
     }
 
@@ -165,6 +174,8 @@ const BookingScheduleAction = ({
       toast.error("Select an instrument");
       return;
     }
+
+    setIsSubmitting(true);
 
     try {
       await createLessonAction({
@@ -189,35 +200,65 @@ const BookingScheduleAction = ({
       }
       router.refresh();
       return;
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   const handleCancelStatus = async (statusNote: string) => {
-    if (currentScheduledLesson) {
-      await updateLessonScheduleAndStatusAction({
-        lessonId: currentScheduledLesson.currentScheduledLessonLessonId,
-        teacherId,
-        lessonDate: currentScheduledLesson.currentScheduledLessonDate,
-        lessonHour: currentScheduledLesson.currentScheduledLessonHour,
-        lessonStatus: "cancelled",
-        statusNote,
-      });
+    if (isSubmitting) {
+      return;
     }
 
-    toast.success("Lesson cancelled successfully!");
-    setIsOpen(false);
+    if (currentScheduledLesson) {
+      setIsSubmitting(true);
+      try {
+        await updateLessonScheduleAndStatusAction({
+          lessonId: currentScheduledLesson.currentScheduledLessonLessonId,
+          teacherId,
+          lessonDate: currentScheduledLesson.currentScheduledLessonDate,
+          lessonHour: currentScheduledLesson.currentScheduledLessonHour,
+          lessonStatus: "cancelled",
+          statusNote,
+        });
+
+        toast.success("Lesson cancelled successfully!");
+        setIsOpen(false);
+      } catch (err) {
+        if (err) {
+          console.log("ERR: ", err);
+        }
+      } finally {
+        setIsSubmitting(false);
+      }
+    }
   };
 
   const updateLessonStatusAsCompleted = async () => {
+    if (isSubmitting) {
+      return;
+    }
+
     if (currentScheduledLesson) {
-      await updateLessonScheduleAndStatusAction({
-        lessonId: currentScheduledLesson.currentScheduledLessonLessonId,
-        teacherId,
-        lessonDate: currentScheduledLesson.currentScheduledLessonDate,
-        lessonHour: currentScheduledLesson?.currentScheduledLessonHour,
-        lessonStatus: "completed",
-        statusNote: "",
-      });
+      setIsSubmitting(true);
+
+      try {
+        await updateLessonScheduleAndStatusAction({
+          lessonId: currentScheduledLesson.currentScheduledLessonLessonId,
+          teacherId,
+          lessonDate: currentScheduledLesson.currentScheduledLessonDate,
+          lessonHour: currentScheduledLesson?.currentScheduledLessonHour,
+          lessonStatus: "completed",
+          statusNote: "",
+        });
+        toast.success("Lesson status changed successfully!");
+      } catch (err) {
+        if (err) {
+          console.log("ERR: ", err);
+        }
+      } finally {
+        setIsSubmitting(false);
+      }
     }
   };
 
@@ -271,6 +312,7 @@ const BookingScheduleAction = ({
             currentScheduledLesson={currentScheduledLesson}
             handleDeleteStatus={handleCancelStatus}
             teacherBookedSlots={teacherBookedSlots}
+            isSubmitting={isSubmitting}
           />
           {!currentScheduledLesson && (
             <div className="border-t mt-2">
