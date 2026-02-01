@@ -116,18 +116,49 @@ const BookingScheduleAction = ({
         return;
       }
 
-      await updateLessonScheduleAndStatusAction({
-        lessonId: currentScheduledLesson.currentScheduledLessonLessonId,
-        teacherId,
-        lessonDate,
-        lessonHour: selectedHour,
-        statusNote: saved.statusNote,
-      });
+      try {
+        await updateLessonScheduleAndStatusAction({
+          lessonId: currentScheduledLesson.currentScheduledLessonLessonId,
+          teacherId,
+          lessonDate,
+          lessonHour: selectedHour,
+          statusNote: saved.statusNote,
+        });
 
-      toast.success("Lesson rescheduled successfully!");
-      setIsOpen(false);
+        toast.success("Lesson rescheduled successfully!");
+        setIsOpen(false);
 
-      return;
+        return;
+      } catch (err) {
+        if (err instanceof Error) {
+          switch (err.message) {
+            case "STUDENT_SLOT_CONFLICT":
+              toast.error(
+                "The student already has a lesson scheduled at this time.",
+              );
+              break;
+
+            case "TEACHER_SLOT_BOOKED":
+              toast.error(
+                "The teacher already has a lesson scheduled at this time..",
+              );
+              break;
+
+            case "LESSON_NOT_FOUND":
+              toast.error(
+                "Lesson no longer exists. Please refresh and try again.",
+              );
+              break;
+
+            default:
+              toast.error("Something went wrong. Please try again.");
+              break;
+          }
+        }
+
+        router.refresh();
+        return;
+      }
     }
 
     if (!instrument) {
@@ -147,9 +178,17 @@ const BookingScheduleAction = ({
       toast.success("Lesson booked successfully!");
       setIsOpen(false);
     } catch (err) {
-      toast.error("That time slot was just taken. Please choose another.");
+      if (err instanceof Error) {
+        if (err.message === "STUDENT_SLOT_CONFLICT") {
+          toast.error("You already have a lesson scheduled at this time.");
+        } else if (err.message === "TEACHER_SLOT_BOOKED") {
+          toast.error("This time slot is no longer available.");
+        } else {
+          toast.error("Something went wrong. Please try again.");
+        }
+      }
       router.refresh();
-      console.log(err);
+      return;
     }
   };
 

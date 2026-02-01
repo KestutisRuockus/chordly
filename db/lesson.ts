@@ -175,3 +175,34 @@ export const findLessonByTeacherDateHour = async (input: {
 
   return row[0] ?? null;
 };
+
+export const findLessonByStudentDateHour = async (input: {
+  studentId: string;
+  lessonDate: string;
+  lessonHour: number;
+}) => {
+  const row = await db
+    .select()
+    .from(lessons)
+    .where(
+      and(
+        eq(lessons.studentId, input.studentId),
+        eq(lessons.lessonDate, input.lessonDate),
+        eq(lessons.lessonHour, input.lessonHour),
+        inArray(lessons.lessonStatus, ["scheduled", "rescheduled"]),
+      ),
+    )
+    .limit(1);
+
+  return row[0] ?? null;
+};
+
+export const FindLessonByLessonId = async (lessonId: string) => {
+  const row = await db
+    .select()
+    .from(lessons)
+    .where(eq(lessons.id, lessonId))
+    .limit(1);
+
+  return row[0] ?? null;
+};

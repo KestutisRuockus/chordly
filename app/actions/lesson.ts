@@ -5,6 +5,8 @@ import {
   updateLessonScheduleAndStatus,
   saveNewLesson,
   findLessonByTeacherDateHour,
+  findLessonByStudentDateHour,
+  FindLessonByLessonId,
 } from "@/db/lesson";
 import { revalidatePath } from "next/cache";
 
@@ -22,14 +24,28 @@ export const createLessonAction = async (input: CreateLessonInput) => {
 
   const { lessonDate, lessonHour, studentId, teacherId, instrument } = input;
 
-  const existing = await findLessonByTeacherDateHour({
-    teacherId,
-    lessonDate,
-    lessonHour,
-  });
+  const teacherLessonAlreadyExistAtThisTime = await findLessonByTeacherDateHour(
+    {
+      teacherId,
+      lessonDate,
+      lessonHour,
+    },
+  );
 
-  if (existing) {
-    throw new Error("SLOT_ALREADY_BOOKED");
+  if (teacherLessonAlreadyExistAtThisTime) {
+    throw new Error("TEACHER_SLOT_BOOKED");
+  }
+
+  const StudentLessonAlreadyExistAtThisTime = await findLessonByStudentDateHour(
+    {
+      studentId,
+      lessonDate,
+      lessonHour,
+    },
+  );
+
+  if (StudentLessonAlreadyExistAtThisTime) {
+    throw new Error("STUDENT_SLOT_CONFLICT");
   }
 
   await saveNewLesson({
@@ -57,6 +73,41 @@ export const updateLessonScheduleAndStatusAction = async (input: {
 }) => {
   const { lessonId, teacherId, lessonDate, lessonHour, statusNote } = input;
   const newLessonStatus = input.lessonStatus ?? "rescheduled";
+
+  const lesson = await FindLessonByLessonId(lessonId);
+  if (!lesson) {
+    throw new Error("LESSON_NOT_FOUND");
+  }
+
+  const teacherLessonAlreadyExistAtThisTime = await findLessonByTeacherDateHour(
+    {
+      teacherId,
+      lessonDate,
+      lessonHour,
+    },
+  );
+
+  if (
+    teacherLessonAlreadyExistAtThisTime &&
+    teacherLessonAlreadyExistAtThisTime.id !== lessonId
+  ) {
+    throw new Error("TEACHER_SLOT_BOOKED");
+  }
+
+  const studentLessonAlreadyExistAtThisTime = await findLessonByStudentDateHour(
+    {
+      studentId: lesson.studentId,
+      lessonDate,
+      lessonHour,
+    },
+  );
+
+  if (
+    studentLessonAlreadyExistAtThisTime &&
+    studentLessonAlreadyExistAtThisTime.id !== lessonId
+  ) {
+    throw new Error("STUDENT_SLOT_CONFLICT");
+  }
 
   await updateLessonScheduleAndStatus({
     lessonId,
