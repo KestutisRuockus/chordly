@@ -88,8 +88,10 @@ const SchedulePicker = ({
   const [selectedWeekday, setSelectedWeekday] =
     useState<WeekDayNumber>(activeWeekDay);
 
-  const [selectedDateKey, setSelectedDateKey] = useState<string>(
-    formatDateKey(today),
+  const [selectedDateKey, setSelectedDateKey] = useState<string | undefined>(
+    selectionMode === "single" && currentScheduledLesson
+      ? undefined
+      : formatDateKey(today),
   );
 
   const [selectedHours, setSelectedHours] = useState<number[]>(
@@ -309,7 +311,9 @@ const SchedulePicker = ({
             const disabled =
               selectionMode === "single" &&
               (!availableHoursForSelectedDay.includes(hour) ||
-                isLessonLocked(selectedDateKey, hour));
+                (selectedDateKey
+                  ? isLessonLocked(selectedDateKey, hour)
+                  : true));
 
             return (
               <HourSlotButton

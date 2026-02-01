@@ -258,7 +258,9 @@ const BookingScheduleAction = ({
 
       {isOpen && (
         <Modal
-          title="Book a lesson"
+          title={
+            currentScheduledLesson ? "Reschedule a lesson" : "Book a lesson"
+          }
           onClose={() => setIsOpen(false)}
           closeOnOverlayClick={true}
         >
