@@ -13,6 +13,7 @@ import {
   getToday,
   getTodayWeekDay,
   getWeekdayNumberFromDateString,
+  isLessonLocked,
   WEEK_DAYS,
 } from "@/lib/date";
 import { useMemo, useState } from "react";
@@ -307,7 +308,8 @@ const SchedulePicker = ({
           {dayTimeSlots.map((hour) => {
             const disabled =
               selectionMode === "single" &&
-              !availableHoursForSelectedDay.includes(hour);
+              (!availableHoursForSelectedDay.includes(hour) ||
+                isLessonLocked(selectedDateKey, hour));
 
             return (
               <HourSlotButton
