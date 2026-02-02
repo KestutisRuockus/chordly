@@ -27,21 +27,6 @@ export type WeekDay = "Mon" | "Tue" | "Wed" | "Thu" | "Fri" | "Sat" | "Sun";
 
 export type ExerciseDifficulty = "beginner" | "intermediate" | "advanced";
 
-export type StudentSummary = {
-  id: string;
-  name: string;
-  instrument: string;
-  lessonType: LessonType;
-};
-
-export interface StudentProfile extends StudentSummary {
-  email: string;
-  location: string;
-  skillLevel: string;
-  bio: string;
-  age: number;
-}
-
 export type Note = {
   id: string;
   studentId: string;

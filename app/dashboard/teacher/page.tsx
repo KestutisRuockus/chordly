@@ -9,14 +9,14 @@ import HeaderSection from "@/components/sections/HeaderSection";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import WeekCalendar from "@/components/dashboard/calendar/WeekCalendar";
 import StudentSummaryCard from "@/components/dashboard/StudentSummaryCard";
-import { studentsSummaries } from "@/content/dummyData";
 import TeacherScheduleAction from "@/components/dashboard/TeacherScheduleAction";
 import { getTeacherWeeklySchedule } from "@/db/teacherSchedule";
-import { getTeacherDbIdByClerkId } from "@/db/teachers";
+import { getStudentIdsList, getTeacherDbIdByClerkId } from "@/db/teachers";
 import { getAllLessonsByRoleAndId } from "@/db/lesson";
 import { getNextUpcomingLesson } from "@/lib/lessons";
 import { addDays, getDateRange } from "@/lib/date";
 import { CALENDAR_RANGE_DAYS } from "@/lib/constants";
+import { getStudentSummaries } from "@/db/students";
 
 type Props = {
   searchParams?: Promise<{ offset?: string }>;
@@ -70,6 +70,9 @@ const TeacherDashboardPage = async ({ searchParams }: Props) => {
     [teachersDbId]: teacherBookedSlots,
   };
 
+  const studentIds = await getStudentIdsList(teachersDbId);
+  const studentsSummaries = (await getStudentSummaries(studentIds)) ?? [];
+
   return (
     <Main>
       <HeaderSection {...teachersDashboard.header} />
@@ -94,12 +97,18 @@ const TeacherDashboardPage = async ({ searchParams }: Props) => {
           </Section>
         )}
         <Section>
-          <h2 className="font-bold text-xl">Students</h2>
-          <div className="flex flex-wrap gap-4">
-            {studentsSummaries.map((student) => (
-              <StudentSummaryCard key={student.id} student={student} />
-            ))}
-          </div>
+          {studentsSummaries ? (
+            <>
+              <h2 className="font-bold text-xl">Your students</h2>
+              <div className="flex flex-wrap gap-4 mt-2">
+                {studentsSummaries.map((student) => (
+                  <StudentSummaryCard key={student.id} student={student} />
+                ))}
+              </div>
+            </>
+          ) : (
+            <>No students</>
+          )}
         </Section>
         <TeacherScheduleAction
           buttonLabel={teachersDashboard.button.buttonLabel}

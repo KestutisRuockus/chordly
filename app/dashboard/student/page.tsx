@@ -9,7 +9,7 @@ import WeekCalendar from "@/components/dashboard/calendar/WeekCalendar";
 import ExerciseCard from "@/components/dashboard/ExerciseCard";
 import PracticeSummary from "@/components/dashboard/PracticeSummary";
 import { getPracticeSummary } from "@/components/dashboard/helpers/getPracticeSummary";
-import { getStudentDbIdByClerkId } from "@/db/students";
+import { getStudentDbIdByClerkId, getTeacherIdsList } from "@/db/students";
 import { getExercisesByStudentId } from "@/db/exercises";
 import { getAllLessonsByRoleAndId } from "@/db/lesson";
 import { getTeacherWeeklySchedule } from "@/db/teacherSchedule";
@@ -17,6 +17,8 @@ import { TeacherScheduleByTeacherId } from "@/components/teacherSchedule/types";
 import { getNextUpcomingLesson } from "@/lib/lessons";
 import { addDays, getDateRange } from "@/lib/date";
 import { CALENDAR_RANGE_DAYS } from "@/lib/constants";
+import { getTeachersSummaryByIds } from "@/db/teachers";
+import TeacherCard from "@/components/teachers/TeacherSummaryCard";
 
 type Props = {
   searchParams?: Promise<{ offset?: string }>;
@@ -44,9 +46,8 @@ const StudentDashboardPage = async ({ searchParams }: Props) => {
   });
   const nextLesson = getNextUpcomingLesson(lessons);
 
-  const teacherIds = Array.from(
-    new Set(lessons.map((lesson) => lesson.teacherId)),
-  );
+  const teacherIds = await getTeacherIdsList(studentId);
+  const teachersSummaries = await getTeachersSummaryByIds(teacherIds);
 
   const scheduleEntries = await Promise.all(
     teacherIds.map(async (teacherId) => {
@@ -117,6 +118,16 @@ const StudentDashboardPage = async ({ searchParams }: Props) => {
         )}
         <PracticeSummary summary={summary} />
       </div>
+      {teachersSummaries && (
+        <Section>
+          <h2 className="font-bold text-xl">Your Teachers</h2>
+          <div className="flex gap-8 mt-2">
+            {teachersSummaries.map((teacher) => (
+              <TeacherCard key={teacher.id} teacher={teacher} />
+            ))}
+          </div>
+        </Section>
+      )}
     </Main>
   );
 };

@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { eq, inArray } from "drizzle-orm";
 import { db } from ".";
 import { students } from "./schema";
 import { auth } from "@clerk/nextjs/server";
@@ -54,4 +54,29 @@ export const updateTeacherIdsList = async (
     .where(eq(students.id, studentId));
 
   return { status: "updated" as const };
+};
+
+export const getStudentSummaries = async (studentIds: string[]) => {
+  if (studentIds.length === 0) {
+    return [];
+  }
+
+  return await db
+    .select({
+      id: students.id,
+      name: students.fullName,
+      lessonType: students.lessonType,
+    })
+    .from(students)
+    .where(inArray(students.id, studentIds));
+};
+
+export const getStudentById = async (id: string) => {
+  const [student] = await db
+    .select()
+    .from(students)
+    .where(eq(students.id, id))
+    .limit(1);
+
+  return student;
 };

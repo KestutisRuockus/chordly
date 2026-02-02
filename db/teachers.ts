@@ -1,4 +1,4 @@
-import { eq, or, ilike, sql, and } from "drizzle-orm";
+import { eq, or, ilike, sql, and, inArray } from "drizzle-orm";
 import { db } from "./index";
 import { teachers } from "./schema";
 import { auth } from "@clerk/nextjs/server";
@@ -80,6 +80,20 @@ export async function getTeachersSummaryByQuery(
     .from(teachers)
     .where(conditions.length ? and(...conditions) : undefined)
     .limit(limit);
+}
+
+export async function getTeachersSummaryByIds(teacherIds: string[]) {
+  if (teacherIds.length === 0) return [];
+
+  return db
+    .select({
+      id: teachers.id,
+      fullName: teachers.fullName,
+      instruments: teachers.instruments,
+      lessonType: teachers.lessonType,
+    })
+    .from(teachers)
+    .where(inArray(teachers.id, teacherIds));
 }
 
 export const getStudentIdsList = async (teacherId: string) => {

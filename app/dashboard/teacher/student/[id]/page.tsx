@@ -6,7 +6,6 @@ import LessonCard from "@/components/dashboard/LessonCard";
 import ExerciseCard from "@/components/dashboard/ExerciseCard";
 import { getPracticeSummary } from "@/components/dashboard/helpers/getPracticeSummary";
 import PracticeSummary from "@/components/dashboard/PracticeSummary";
-import { students } from "@/content/dummyData";
 import StudentProfileActions from "@/components/dashboard/StudentProfileActions";
 import Note from "@/components/dashboard/Note";
 import { requireTeacherId } from "@/db/teachers";
@@ -21,6 +20,7 @@ import { DEFAULT_OFFSET_DAYS } from "@/lib/constants";
 import { addDays, getDateRange } from "@/lib/date";
 import { TeacherWeeklySchedule } from "@/components/teacherSchedule/types";
 import { getTeacherWeeklySchedule } from "@/db/teacherSchedule";
+import { getStudentById } from "@/db/students";
 
 type Props = {
   params: { id: string };
@@ -28,7 +28,7 @@ type Props = {
 
 const StudentFullProfileById = async ({ params }: Props) => {
   const { id: studentId } = await params;
-  const student = students.find((student) => studentId === student.id);
+  const student = await getStudentById(studentId);
 
   if (!student) {
     return <Main>Student not found</Main>;
@@ -88,13 +88,17 @@ const StudentFullProfileById = async ({ params }: Props) => {
   return (
     <Main>
       <BackButton text="Back to dashboard" />
-      <h1 className="text-3xl font-bold mx-auto">{student?.name} Profile</h1>
+      <h1 className="text-3xl font-bold mx-auto">
+        {student?.fullName} Profile
+      </h1>
       <Section className="w-full grid grid-cols-4 gap-4 border-0">
         <aside className="border rounded-lg bg-slate-300 p-4">
           <div className="flex flex-col gap-1  p-2 col-span-1 mb-4">
             <p>
               Name:{" "}
-              <span className="text-sm italic capitalize">{student.name}</span>
+              <span className="text-sm italic capitalize">
+                {student.fullName}
+              </span>
             </p>
             <p>
               Email: <span className="text-sm italic">{student.email}</span>
@@ -102,12 +106,6 @@ const StudentFullProfileById = async ({ params }: Props) => {
             <p>
               Age:{" "}
               <span className="text-sm italic capitalize">{student.age}</span>
-            </p>
-            <p>
-              Instrument:{" "}
-              <span className="text-sm italic capitalize">
-                {student.instrument}
-              </span>
             </p>
             <p>
               Skill Level:{" "}

@@ -48,7 +48,7 @@ const TeacherFullProfileById = async ({ params }: Props) => {
 
   return (
     <section className="w-4/5 mx-auto my-8">
-      <BackButton text="Back to teachers list" />
+      <BackButton text="Go back" />
       <div className="border p-8 my-4 w-fit mx-auto">
         <h1 className="mb-4">Teacher Profile</h1>
         <p>
