@@ -2,6 +2,7 @@ import { eq, or, ilike, sql, and, inArray } from "drizzle-orm";
 import { db } from "./index";
 import { teachers } from "./schema";
 import { auth } from "@clerk/nextjs/server";
+import { TeacherPlan } from "./types";
 
 export const getTeacherDbIdByClerkId = async (clerkUserId: string) => {
   const rows = await db
@@ -123,4 +124,29 @@ export const updateStudentIdsList = async (
     .where(eq(teachers.id, teacherId));
 
   return { status: "updated" as const };
+};
+
+export const getTeacherPlan = async (id: string) => {
+  const rows = await db
+    .select({
+      plan: teachers.plan,
+    })
+    .from(teachers)
+    .where(eq(teachers.id, id))
+    .limit(1);
+
+  return rows[0]?.plan ?? "none";
+};
+
+export const updateTeacherPlan = async (
+  teacherId: string,
+  plan: TeacherPlan,
+) => {
+  const currentPlan = await getTeacherPlan(teacherId);
+
+  if (currentPlan === plan) {
+    return "no_change" as const;
+  }
+
+  await db.update(teachers).set({ plan }).where(eq(teachers.id, teacherId));
 };

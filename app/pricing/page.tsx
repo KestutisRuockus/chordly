@@ -1,11 +1,20 @@
+import type { RoleType } from "@/types/role";
 import HeaderSection from "@/components/sections/HeaderSection";
 import Main from "@/components/layout/Main";
 import Section from "@/components/layout/Section";
 import { pricing } from "../../content/pricing";
 import CallToActionCard from "@/components/ui/CallToActionCard";
 import Accordion from "@/components/ui/Accordion";
+import { auth, currentUser } from "@clerk/nextjs/server";
+import PlanUpdate from "@/components/PlanUpdate";
+import { getTeacherDbIdByClerkId, getTeacherPlan } from "@/db/teachers";
 
-const PricingPage = () => {
+const PricingPage = async () => {
+  const user = await currentUser();
+  const role = user?.publicMetadata?.role as RoleType;
+  const { userId } = await auth();
+  const teacherId = userId ? await getTeacherDbIdByClerkId(userId) : null;
+  const currentPlan = teacherId ? await getTeacherPlan(teacherId) : "none";
   return (
     <Main>
       <HeaderSection {...pricing.header} />
@@ -26,7 +35,14 @@ const PricingPage = () => {
                   <li key={item}>• {item}</li>
                 ))}
               </ul>
-              <CallToActionCard {...card.buttonCta} headingLevel="h3" />
+              {role === "teacher" && teacherId && (
+                <PlanUpdate
+                  label={card.label}
+                  plan={card.plan}
+                  teacherId={teacherId}
+                  disabled={currentPlan === card.plan}
+                />
+              )}
             </div>
           ))}
         </div>
@@ -35,7 +51,7 @@ const PricingPage = () => {
         <h2 className="font-bold">{pricing.faq.sectionLabel}</h2>
         <Accordion items={pricing.faq.items} />
       </Section>
-      <CallToActionCard {...pricing.buttonCta} />
+      {!role && <CallToActionCard {...pricing.buttonCta} />}
     </Main>
   );
 };

@@ -12,3 +12,5 @@ export type StudentSummary = Awaited<
   ReturnType<typeof getStudentSummaries>
 >[number];
 export type StudentRow = InferSelectModel<typeof students>;
+
+export type TeacherPlan = "none" | "basic" | "medium" | "pro";

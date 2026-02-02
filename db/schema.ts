@@ -9,6 +9,7 @@ import {
   integer,
   jsonb,
 } from "drizzle-orm/pg-core";
+import { TeacherPlan } from "./types";
 
 export const users = pgTable("users", {
   id: uuid("id").defaultRandom().primaryKey(),
@@ -30,6 +31,7 @@ export const teachers = pgTable("teachers", {
   experience: text("experience"),
   hourlyRate: numeric("hourly_rate", { mode: "number" }).notNull(),
   studentIds: json("student_ids").$type<string[]>().notNull().default([]),
+  plan: text("plan").$type<TeacherPlan>().notNull().default("none"),
   createdAt: timestamp("created_at").defaultNow(),
 });
 

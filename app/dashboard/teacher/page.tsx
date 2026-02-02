@@ -11,12 +11,17 @@ import WeekCalendar from "@/components/dashboard/calendar/WeekCalendar";
 import StudentSummaryCard from "@/components/dashboard/StudentSummaryCard";
 import TeacherScheduleAction from "@/components/dashboard/TeacherScheduleAction";
 import { getTeacherWeeklySchedule } from "@/db/teacherSchedule";
-import { getStudentIdsList, getTeacherDbIdByClerkId } from "@/db/teachers";
+import {
+  getStudentIdsList,
+  getTeacherDbIdByClerkId,
+  getTeacherPlan,
+} from "@/db/teachers";
 import { getAllLessonsByRoleAndId } from "@/db/lesson";
 import { getNextUpcomingLesson } from "@/lib/lessons";
 import { addDays, getDateRange } from "@/lib/date";
 import { CALENDAR_RANGE_DAYS } from "@/lib/constants";
 import { getStudentSummaries } from "@/db/students";
+import CallToActionCard from "@/components/ui/CallToActionCard";
 
 type Props = {
   searchParams?: Promise<{ offset?: string }>;
@@ -34,6 +39,18 @@ const TeacherDashboardPage = async ({ searchParams }: Props) => {
       <div className="p-6">
         Teacher profile not found in DB (no teacher record for this Clerk user).
       </div>
+    );
+  }
+
+  const plan = await getTeacherPlan(teachersDbId);
+  if (plan === "none") {
+    return (
+      <Main>
+        <h2 className="text-center text-2xl mt-20">
+          Choose a plan to start teaching
+        </h2>
+        <CallToActionCard buttonLabel={"See plans"} href={"/pricing"} />
+      </Main>
     );
   }
 

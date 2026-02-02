@@ -1,3 +1,5 @@
+import type { TeacherPlan } from "@/db/types";
+
 export const pricing = {
   header: {
     title: "Choose the Plan That Fits Your Teaching",
@@ -9,6 +11,7 @@ export const pricing = {
       {
         studentsLimit: "Up to 5 students",
         label: "Basic",
+        plan: "basic" as TeacherPlan,
         price: "19€",
         items: [
           "Unlimited lessons",
@@ -24,6 +27,7 @@ export const pricing = {
       {
         studentsLimit: "Up to 14 students",
         label: "Medium",
+        plan: "medium" as TeacherPlan,
         price: "39€",
         items: [
           "Unlimited lessons",
@@ -39,6 +43,7 @@ export const pricing = {
       {
         studentsLimit: "Unlimited students",
         label: "Pro",
+        plan: "pro" as TeacherPlan,
         price: "79€",
         items: [
           "All featuress",
