@@ -27,3 +27,31 @@ export const requireStudentId = async () => {
 
   return studentId;
 };
+
+export const getTeacherIdsList = async (studentId: string) => {
+  const rows = await db
+    .select({ teacherIds: students.teacherIds })
+    .from(students)
+    .where(eq(students.id, studentId))
+    .limit(1);
+
+  return rows[0]?.teacherIds ?? [];
+};
+
+export const updateTeacherIdsList = async (
+  studentId: string,
+  teacherId: string,
+) => {
+  const teacherIdsList = await getTeacherIdsList(studentId);
+
+  if (teacherIdsList.includes(teacherId)) {
+    return { status: "already-exist" as const };
+  }
+
+  await db
+    .update(students)
+    .set({ teacherIds: [...teacherIdsList, teacherId] })
+    .where(eq(students.id, studentId));
+
+  return { status: "updated" as const };
+};

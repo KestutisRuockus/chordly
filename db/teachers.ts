@@ -81,3 +81,32 @@ export async function getTeachersSummaryByQuery(
     .where(conditions.length ? and(...conditions) : undefined)
     .limit(limit);
 }
+
+export const getStudentIdsList = async (teacherId: string) => {
+  const rows = await db
+    .select({ studentsIds: teachers.studentIds })
+    .from(teachers)
+    .where(eq(teachers.id, teacherId))
+    .limit(1);
+  return rows[0]?.studentsIds ?? [];
+};
+
+export const updateStudentIdsList = async (
+  teacherId: string,
+  studentId: string,
+) => {
+  const studentIdsList = await getStudentIdsList(teacherId);
+
+  if (studentIdsList.includes(studentId)) {
+    return { status: "already-exists" as const };
+  }
+
+  await db
+    .update(teachers)
+    .set({
+      studentIds: [...studentIdsList, studentId],
+    })
+    .where(eq(teachers.id, teacherId));
+
+  return { status: "updated" as const };
+};

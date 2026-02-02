@@ -8,6 +8,8 @@ import {
   findLessonByStudentDateHour,
   FindLessonByLessonId,
 } from "@/db/lesson";
+import { updateTeacherIdsList } from "@/db/students";
+import { updateStudentIdsList } from "@/db/teachers";
 import { revalidatePath } from "next/cache";
 
 type CreateLessonInput = {
@@ -57,6 +59,9 @@ export const createLessonAction = async (input: CreateLessonInput) => {
     lessonStatus,
     instrument,
   });
+
+  await updateStudentIdsList(teacherId, studentId);
+  await updateTeacherIdsList(studentId, teacherId);
 
   revalidatePath(`/find-teacher/${input.teacherId}`);
 

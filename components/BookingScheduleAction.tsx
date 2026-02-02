@@ -15,7 +15,7 @@ import { isLessonFinished, isLessonLocked } from "@/lib/date";
 import {
   createLessonAction,
   updateLessonScheduleAndStatusAction,
-} from "@/app/actions/lesson";
+} from "@/app/actions/lessonActions";
 import { useRouter } from "next/navigation";
 
 type Props = {
