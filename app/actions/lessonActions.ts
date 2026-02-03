@@ -9,7 +9,12 @@ import {
   FindLessonByLessonId,
 } from "@/db/lesson";
 import { updateTeacherIdsList } from "@/db/students";
-import { updateStudentIdsList } from "@/db/teachers";
+import {
+  getStudentIdsList,
+  getTeacherPlan,
+  updateStudentIdsList,
+} from "@/db/teachers";
+import { TEACHER_PLAN_LIMITS } from "@/lib/constants";
 import { revalidatePath } from "next/cache";
 
 type CreateLessonInput = {
@@ -50,6 +55,24 @@ export const createLessonAction = async (input: CreateLessonInput) => {
     throw new Error("STUDENT_SLOT_CONFLICT");
   }
 
+  const [teacherPlan, studentIds] = await Promise.all([
+    getTeacherPlan(teacherId),
+    getStudentIdsList(teacherId),
+  ]);
+
+  if (teacherPlan === "none") {
+    throw new Error("TEACHER_PLAN_REQUIRED");
+  }
+
+  const alreadyStudent = studentIds.includes(studentId);
+
+  if (!alreadyStudent) {
+    const planLimit = TEACHER_PLAN_LIMITS[teacherPlan];
+    if (planLimit !== null && studentIds.length >= planLimit) {
+      throw new Error("TEACHER_STUDENT_LIMIT_REACHED");
+    }
+  }
+
   await saveNewLesson({
     studentId,
     teacherId,
@@ -60,8 +83,10 @@ export const createLessonAction = async (input: CreateLessonInput) => {
     instrument,
   });
 
-  await updateStudentIdsList(teacherId, studentId);
-  await updateTeacherIdsList(studentId, teacherId);
+  await Promise.all([
+    updateStudentIdsList(teacherId, studentId),
+    updateTeacherIdsList(studentId, teacherId),
+  ]);
 
   revalidatePath(`/find-teacher/${input.teacherId}`);
 

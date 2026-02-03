@@ -17,6 +17,7 @@ import {
   updateLessonScheduleAndStatusAction,
 } from "@/app/actions/lessonActions";
 import { useRouter } from "next/navigation";
+import TeacherLimitReachedNotice from "./ui/TeacherLimitReachedNotice";
 
 type Props = {
   buttonLabel: string;
@@ -42,6 +43,8 @@ const BookingScheduleAction = ({
   const [isOpen, setIsOpen] = useState(false);
   const [instrument, setInstrument] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isTeacherPlanLimitReached, setIsTeacherPlanLimitReached] =
+    useState(false);
 
   const router = useRouter();
 
@@ -194,6 +197,11 @@ const BookingScheduleAction = ({
           toast.error("You already have a lesson scheduled at this time.");
         } else if (err.message === "TEACHER_SLOT_BOOKED") {
           toast.error("This time slot is no longer available.");
+        } else if (
+          err.message === "TEACHER_PLAN_REQUIRED" ||
+          err.message === "TEACHER_STUDENT_LIMIT_REACHED"
+        ) {
+          setIsTeacherPlanLimitReached(true);
         } else {
           toast.error("Something went wrong. Please try again.");
         }
@@ -300,39 +308,51 @@ const BookingScheduleAction = ({
       {isOpen && (
         <Modal
           title={
-            currentScheduledLesson ? "Reschedule a lesson" : "Book a lesson"
+            !isTeacherPlanLimitReached
+              ? currentScheduledLesson
+                ? "Reschedule a lesson"
+                : "Book a lesson"
+              : "Booking not available"
           }
-          onClose={() => setIsOpen(false)}
+          onClose={() => {
+            setIsTeacherPlanLimitReached(false);
+            setIsOpen(false);
+          }}
           closeOnOverlayClick={true}
         >
-          <SchedulePicker
-            teacherWeeklySchedule={teacherWeeklySchedule}
-            onSubmit={handleSubmit}
-            selectionMode="single"
-            currentScheduledLesson={currentScheduledLesson}
-            handleDeleteStatus={handleCancelStatus}
-            teacherBookedSlots={teacherBookedSlots}
-            isSubmitting={isSubmitting}
-          />
-          {!currentScheduledLesson && (
-            <div className="border-t mt-2">
-              <h3 className="my-2">Selecet instrument</h3>
-              <select
-                value={instrument}
-                onChange={(e) => setInstrument(e.target.value)}
-                className="border rounded px-2 py-1"
-              >
-                <option value="" disabled>
-                  Select an instrument
-                </option>
-                {teacherInstruments.map((item) => (
-                  <option key={item} value={item}>
-                    {item}
-                  </option>
-                ))}
-              </select>
-            </div>
+          {!isTeacherPlanLimitReached && (
+            <>
+              <SchedulePicker
+                teacherWeeklySchedule={teacherWeeklySchedule}
+                onSubmit={handleSubmit}
+                selectionMode="single"
+                currentScheduledLesson={currentScheduledLesson}
+                handleDeleteStatus={handleCancelStatus}
+                teacherBookedSlots={teacherBookedSlots}
+                isSubmitting={isSubmitting}
+              />
+              {!currentScheduledLesson && (
+                <div className="border-t mt-2">
+                  <h3 className="my-2">Selecet instrument</h3>
+                  <select
+                    value={instrument}
+                    onChange={(e) => setInstrument(e.target.value)}
+                    className="border rounded px-2 py-1"
+                  >
+                    <option value="" disabled>
+                      Select an instrument
+                    </option>
+                    {teacherInstruments.map((item) => (
+                      <option key={item} value={item}>
+                        {item}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
+            </>
           )}
+          {isTeacherPlanLimitReached && <TeacherLimitReachedNotice />}
         </Modal>
       )}
     </div>
