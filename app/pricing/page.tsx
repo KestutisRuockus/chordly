@@ -13,7 +13,8 @@ const PricingPage = async () => {
   const user = await currentUser();
   const role = user?.publicMetadata?.role as RoleType;
   const { userId } = await auth();
-  const teacherId = userId ? await getTeacherDbIdByClerkId(userId) : null;
+  const teacherId =
+    role === "teacher" && userId ? await getTeacherDbIdByClerkId(userId) : null;
   const currentPlan = teacherId ? await getTeacherPlan(teacherId) : "none";
   return (
     <Main>
