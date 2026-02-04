@@ -40,7 +40,7 @@ export const createLessonAction = async (input: CreateLessonInput) => {
   );
 
   if (teacherLessonAlreadyExistAtThisTime) {
-    throw new Error("TEACHER_SLOT_BOOKED");
+    return { ok: false, error: "TEACHER_SLOT_BOOKED" as const };
   }
 
   const StudentLessonAlreadyExistAtThisTime = await findLessonByStudentDateHour(
@@ -52,7 +52,7 @@ export const createLessonAction = async (input: CreateLessonInput) => {
   );
 
   if (StudentLessonAlreadyExistAtThisTime) {
-    throw new Error("STUDENT_SLOT_CONFLICT");
+    return { ok: false, error: "STUDENT_SLOT_CONFLICT" as const };
   }
 
   const [teacherPlan, studentIds] = await Promise.all([
@@ -61,7 +61,7 @@ export const createLessonAction = async (input: CreateLessonInput) => {
   ]);
 
   if (teacherPlan === "none") {
-    throw new Error("TEACHER_PLAN_REQUIRED");
+    return { ok: false, error: "TEACHER_PLAN_REQUIRED" as const };
   }
 
   const alreadyStudent = studentIds.includes(studentId);
@@ -69,7 +69,10 @@ export const createLessonAction = async (input: CreateLessonInput) => {
   if (!alreadyStudent) {
     const planLimit = TEACHER_PLAN_LIMITS[teacherPlan];
     if (planLimit !== null && studentIds.length >= planLimit) {
-      throw new Error("TEACHER_STUDENT_LIMIT_REACHED");
+      return {
+        ok: false,
+        error: "TEACHER_STUDENT_LIMIT_REACHED" as const,
+      };
     }
   }
 
@@ -90,7 +93,7 @@ export const createLessonAction = async (input: CreateLessonInput) => {
 
   revalidatePath(`/find-teacher/${input.teacherId}`);
 
-  return { status: "ok" as const };
+  return { ok: true };
 };
 
 export const updateLessonScheduleAndStatusAction = async (input: {

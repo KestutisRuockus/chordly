@@ -181,7 +181,7 @@ const BookingScheduleAction = ({
     setIsSubmitting(true);
 
     try {
-      await createLessonAction({
+      const result = await createLessonAction({
         studentId,
         teacherId,
         lessonDate,
@@ -189,23 +189,33 @@ const BookingScheduleAction = ({
         instrument,
       });
 
-      toast.success("Lesson booked successfully!");
-      setIsOpen(false);
-    } catch (err) {
-      if (err instanceof Error) {
-        if (err.message === "STUDENT_SLOT_CONFLICT") {
+      if (!result.ok) {
+        if (result.error === "STUDENT_SLOT_CONFLICT") {
           toast.error("You already have a lesson scheduled at this time.");
-        } else if (err.message === "TEACHER_SLOT_BOOKED") {
+          return;
+        }
+
+        if (result.error === "TEACHER_SLOT_BOOKED") {
           toast.error("This time slot is no longer available.");
-        } else if (
-          err.message === "TEACHER_PLAN_REQUIRED" ||
-          err.message === "TEACHER_STUDENT_LIMIT_REACHED"
+          return;
+        }
+
+        if (
+          result.error === "TEACHER_PLAN_REQUIRED" ||
+          result.error === "TEACHER_STUDENT_LIMIT_REACHED"
         ) {
           setIsTeacherPlanLimitReached(true);
-        } else {
-          toast.error("Something went wrong. Please try again.");
+          return;
         }
+
+        toast.error("Something went wrong. Please try again.");
+        return;
       }
+
+      toast.success("Lesson booked successfully!");
+      setIsOpen(false);
+    } catch {
+      toast.error("Something went wrong. Please try again.");
       router.refresh();
       return;
     } finally {
