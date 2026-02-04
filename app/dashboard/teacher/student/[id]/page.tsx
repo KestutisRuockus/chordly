@@ -1,4 +1,5 @@
 import type { RoleType } from "@/types/role";
+import type { TeacherWeeklySchedule } from "@/components/teacherSchedule/types";
 import Main from "@/components/layout/Main";
 import Section from "@/components/layout/Section";
 import BackButton from "@/components/ui/BackButton";
@@ -18,9 +19,9 @@ import {
 import { currentUser } from "@clerk/nextjs/server";
 import { DEFAULT_OFFSET_DAYS } from "@/lib/constants";
 import { addDays, getDateRange } from "@/lib/date";
-import { TeacherWeeklySchedule } from "@/components/teacherSchedule/types";
 import { getTeacherWeeklySchedule } from "@/db/teacherSchedule";
 import { getStudentById } from "@/db/students";
+import DeactivateStudent from "@/components/deactiveStudent/DeactivateStudent";
 
 type Props = {
   params: { id: string };
@@ -134,6 +135,7 @@ const StudentFullProfileById = async ({ params }: Props) => {
           <div className="w-full flex justify-between items-center">
             <StudentProfileActions studentId={studentId} />
           </div>
+          <DeactivateStudent teacherId={teacherId} studentId={studentId} />
         </aside>
         <div className="flex flex-col gap-4 col-span-3 bg-slate-300 p-4 rounded-lg">
           <div className="flex gap-2">

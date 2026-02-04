@@ -1,8 +1,10 @@
+import type { TeacherPlan } from "./types";
 import { eq, or, ilike, sql, and, inArray } from "drizzle-orm";
 import { db } from "./index";
 import { teachers } from "./schema";
 import { auth } from "@clerk/nextjs/server";
-import { TeacherPlan } from "./types";
+import { cancelAllUpcomingLessons } from "./lesson";
+import { removeTeacherFromStudent } from "./students";
 
 export const getTeacherDbIdByClerkId = async (clerkUserId: string) => {
   const rows = await db
@@ -106,7 +108,7 @@ export const getStudentIdsList = async (teacherId: string) => {
   return rows[0]?.studentsIds ?? [];
 };
 
-export const updateStudentIdsList = async (
+export const addStudentToTeacher = async (
   teacherId: string,
   studentId: string,
 ) => {
@@ -124,6 +126,25 @@ export const updateStudentIdsList = async (
     .where(eq(teachers.id, teacherId));
 
   return { status: "updated" as const };
+};
+
+export const removeStudentFromTeacher = async (
+  teacherId: string,
+  studentId: string,
+) => {
+  const studentIdsList = await getStudentIdsList(teacherId);
+  if (!studentIdsList.includes(studentId)) {
+    return { status: "student-does-not-exist" as const };
+  }
+
+  await db
+    .update(teachers)
+    .set({
+      studentIds: studentIdsList.filter((id) => id !== studentId),
+    })
+    .where(eq(teachers.id, teacherId));
+
+  return { status: "removed" as const };
 };
 
 export const getTeacherPlan = async (id: string) => {
@@ -149,4 +170,23 @@ export const updateTeacherPlan = async (
   }
 
   await db.update(teachers).set({ plan }).where(eq(teachers.id, teacherId));
+};
+
+export const deactivateStudent = async (
+  teacherId: string,
+  studentId: string,
+) => {
+  const studentIds = await getStudentIdsList(teacherId);
+
+  if (!studentIds.includes(studentId)) {
+    throw new Error("STUDENT_NOT_FOUND_FOR_TEACHER");
+  }
+
+  await cancelAllUpcomingLessons(teacherId, studentId);
+  await Promise.all([
+    removeStudentFromTeacher(teacherId, studentId),
+    removeTeacherFromStudent(studentId, teacherId),
+  ]);
+
+  return { status: "student_deactivated" as const };
 };

@@ -230,3 +230,30 @@ export const FindLessonByLessonId = async (lessonId: string) => {
 
   return row[0] ?? null;
 };
+
+export const cancelAllUpcomingLessons = async (
+  teacherId: string,
+  studentId: string,
+) => {
+  const today = new Date().toISOString().slice(0, 10);
+
+  const cancellableStatuses: LessonStatus[] = ["scheduled", "rescheduled"];
+
+  await db
+    .update(lessons)
+    .set({
+      lessonStatus: "cancelled",
+      statusNote: "Student removed by teacher",
+      updatedAt: new Date(),
+    })
+    .where(
+      and(
+        eq(lessons.teacherId, teacherId),
+        eq(lessons.studentId, studentId),
+        gte(lessons.lessonDate, today),
+        inArray(lessons.lessonStatus, cancellableStatuses),
+      ),
+    );
+
+  return { status: "cancelled_future_lessons" as const };
+};

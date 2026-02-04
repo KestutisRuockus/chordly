@@ -38,7 +38,7 @@ export const getTeacherIdsList = async (studentId: string) => {
   return rows[0]?.teacherIds ?? [];
 };
 
-export const updateTeacherIdsList = async (
+export const addTeacherToStudent = async (
   studentId: string,
   teacherId: string,
 ) => {
@@ -54,6 +54,25 @@ export const updateTeacherIdsList = async (
     .where(eq(students.id, studentId));
 
   return { status: "updated" as const };
+};
+
+export const removeTeacherFromStudent = async (
+  studentId: string,
+  teacherId: string,
+) => {
+  const teacherIdsList = await getTeacherIdsList(studentId);
+  if (!teacherIdsList.includes(teacherId)) {
+    return { status: "teacher-does-not-exist" as const };
+  }
+
+  await db
+    .update(students)
+    .set({
+      teacherIds: teacherIdsList.filter((id) => id !== teacherId),
+    })
+    .where(eq(students.id, studentId));
+
+  return { status: "removed" as const };
 };
 
 export const getStudentSummaries = async (studentIds: string[]) => {
