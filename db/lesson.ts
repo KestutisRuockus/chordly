@@ -1,7 +1,19 @@
 import { LessonStatus, LessonType } from "@/app/dashboard/types";
 import { db } from ".";
 import { lessons, students, teachers } from "./schema";
-import { eq, desc, and, gte, lte, asc, inArray, gt, or, lt } from "drizzle-orm";
+import {
+  eq,
+  desc,
+  and,
+  gte,
+  lte,
+  asc,
+  inArray,
+  gt,
+  or,
+  lt,
+  sql,
+} from "drizzle-orm";
 import { RoleType } from "@/types/role";
 import { formatDateKey, getToday } from "@/lib/date";
 
@@ -256,4 +268,42 @@ export const cancelAllUpcomingLessons = async (
     );
 
   return { status: "cancelled_future_lessons" as const };
+};
+
+export const getLastLessonsByStudentsIds = async (studentsIds: string[]) => {
+  if (studentsIds.length === 0) {
+    return {};
+  }
+
+  const rows = await db
+    .select({
+      studentId: lessons.studentId,
+      lastLessonDate: sql<Date>`max(${lessons.lessonDate})`,
+    })
+    .from(lessons)
+    .where(inArray(lessons.studentId, studentsIds))
+    .groupBy(lessons.studentId);
+
+  return Object.fromEntries(
+    rows.map((row) => [row.studentId, row.lastLessonDate]),
+  );
+};
+
+export const getLastLessonsByTeachersIds = async (teacherIds: string[]) => {
+  if (teacherIds.length === 0) {
+    return {};
+  }
+
+  const rows = await db
+    .select({
+      teacherId: lessons.teacherId,
+      lastLessonDate: sql<Date>`max(${lessons.lessonDate})`,
+    })
+    .from(lessons)
+    .where(inArray(lessons.teacherId, teacherIds))
+    .groupBy(lessons.teacherId);
+
+  return Object.fromEntries(
+    rows.map((row) => [row.teacherId, row.lastLessonDate]),
+  );
 };

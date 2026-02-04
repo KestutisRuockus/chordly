@@ -56,6 +56,35 @@ export const addTeacherToStudent = async (
   return { status: "updated" as const };
 };
 
+export const getFormerTeachersIdsList = async (studentId: string) => {
+  const rows = await db
+    .select({ formerTeachersIds: students.formerTeachersIds })
+    .from(students)
+    .where(eq(students.id, studentId))
+    .limit(1);
+  return rows[0]?.formerTeachersIds ?? [];
+};
+
+export const addToFormerTeachersIds = async (
+  studentId: string,
+  teacherId: string,
+) => {
+  const formerTeachersIdsList = await getFormerTeachersIdsList(studentId);
+
+  if (formerTeachersIdsList.includes(teacherId)) {
+    return { status: "already-exists" as const };
+  }
+
+  await db
+    .update(students)
+    .set({
+      formerTeachersIds: [...formerTeachersIdsList, teacherId],
+    })
+    .where(eq(students.id, studentId));
+
+  return { status: "updated" as const };
+};
+
 export const removeTeacherFromStudent = async (
   studentId: string,
   teacherId: string,

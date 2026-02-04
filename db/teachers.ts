@@ -4,7 +4,7 @@ import { db } from "./index";
 import { teachers } from "./schema";
 import { auth } from "@clerk/nextjs/server";
 import { cancelAllUpcomingLessons } from "./lesson";
-import { removeTeacherFromStudent } from "./students";
+import { addToFormerTeachersIds, removeTeacherFromStudent } from "./students";
 
 export const getTeacherDbIdByClerkId = async (clerkUserId: string) => {
   const rows = await db
@@ -147,6 +147,35 @@ export const removeStudentFromTeacher = async (
   return { status: "removed" as const };
 };
 
+export const getFormerStudentsIdsList = async (teacherId: string) => {
+  const rows = await db
+    .select({ formerStudentsIds: teachers.formerStudentsIds })
+    .from(teachers)
+    .where(eq(teachers.id, teacherId))
+    .limit(1);
+  return rows[0]?.formerStudentsIds ?? [];
+};
+
+export const addToFormerStudentsIds = async (
+  teacherId: string,
+  studentId: string,
+) => {
+  const formerStudentIdsList = await getFormerStudentsIdsList(teacherId);
+
+  if (formerStudentIdsList.includes(studentId)) {
+    return { status: "already-exists" as const };
+  }
+
+  await db
+    .update(teachers)
+    .set({
+      formerStudentsIds: [...formerStudentIdsList, studentId],
+    })
+    .where(eq(teachers.id, teacherId));
+
+  return { status: "updated" as const };
+};
+
 export const getTeacherPlan = async (id: string) => {
   const rows = await db
     .select({
@@ -186,6 +215,8 @@ export const deactivateStudent = async (
   await Promise.all([
     removeStudentFromTeacher(teacherId, studentId),
     removeTeacherFromStudent(studentId, teacherId),
+    addToFormerStudentsIds(teacherId, studentId),
+    addToFormerTeachersIds(studentId, teacherId),
   ]);
 
   return { status: "student_deactivated" as const };

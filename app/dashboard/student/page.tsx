@@ -1,24 +1,32 @@
+import type { TeacherScheduleByTeacherId } from "@/components/teacherSchedule/types";
+import type { RoleType } from "@/types/role";
 import { studentsDashboard } from "@/content/studentsDashboard";
 import LessonCard from "@/components/dashboard/LessonCard";
 import Main from "@/components/layout/Main";
 import Section from "@/components/layout/Section";
 import HeaderSection from "@/components/sections/HeaderSection";
 import { auth, currentUser } from "@clerk/nextjs/server";
-import { RoleType } from "@/types/role";
 import WeekCalendar from "@/components/dashboard/calendar/WeekCalendar";
 import ExerciseCard from "@/components/dashboard/ExerciseCard";
 import PracticeSummary from "@/components/dashboard/PracticeSummary";
 import { getPracticeSummary } from "@/components/dashboard/helpers/getPracticeSummary";
-import { getStudentDbIdByClerkId, getTeacherIdsList } from "@/db/students";
+import {
+  getFormerTeachersIdsList,
+  getStudentDbIdByClerkId,
+  getTeacherIdsList,
+} from "@/db/students";
 import { getExercisesByStudentId } from "@/db/exercises";
-import { getAllLessonsByRoleAndId } from "@/db/lesson";
+import {
+  getAllLessonsByRoleAndId,
+  getLastLessonsByTeachersIds,
+} from "@/db/lesson";
 import { getTeacherWeeklySchedule } from "@/db/teacherSchedule";
-import { TeacherScheduleByTeacherId } from "@/components/teacherSchedule/types";
 import { getNextUpcomingLesson } from "@/lib/lessons";
 import { addDays, getDateRange } from "@/lib/date";
 import { CALENDAR_RANGE_DAYS } from "@/lib/constants";
 import { getTeachersSummaryByIds } from "@/db/teachers";
 import TeacherCard from "@/components/teachers/TeacherSummaryCard";
+import FormerRelationCard from "@/components/FormerRelationCard";
 
 type Props = {
   searchParams?: Promise<{ offset?: string }>;
@@ -46,11 +54,22 @@ const StudentDashboardPage = async ({ searchParams }: Props) => {
   });
   const nextLesson = getNextUpcomingLesson(lessons);
 
-  const teacherIds = await getTeacherIdsList(studentId);
-  const teachersSummaries = await getTeachersSummaryByIds(teacherIds);
+  const [currentTeachersIds, formerTeachersIds] = await Promise.all([
+    getTeacherIdsList(studentId),
+    getFormerTeachersIdsList(studentId),
+  ]);
+  const [
+    currentTeachersSummaries,
+    formerTeachersSummaries,
+    formerTeachersLastLessonsDates,
+  ] = await Promise.all([
+    getTeachersSummaryByIds(currentTeachersIds),
+    getTeachersSummaryByIds(formerTeachersIds),
+    getLastLessonsByTeachersIds(formerTeachersIds),
+  ]);
 
   const scheduleEntries = await Promise.all(
-    teacherIds.map(async (teacherId) => {
+    currentTeachersIds.map(async (teacherId) => {
       const schedule = await getTeacherWeeklySchedule(teacherId);
       return [teacherId, schedule] as const;
     }),
@@ -60,7 +79,7 @@ const StudentDashboardPage = async ({ searchParams }: Props) => {
     Object.fromEntries(scheduleEntries);
 
   const bookedSlotsEntries = await Promise.all(
-    teacherIds.map(async (teacherId) => {
+    currentTeachersIds.map(async (teacherId) => {
       const slots = await getAllLessonsByRoleAndId({
         role: "teacher",
         id: teacherId,
@@ -118,12 +137,30 @@ const StudentDashboardPage = async ({ searchParams }: Props) => {
         )}
         <PracticeSummary summary={summary} />
       </div>
-      {teachersSummaries && (
+      {currentTeachersSummaries && (
         <Section>
           <h2 className="font-bold text-xl">Your Teachers</h2>
           <div className="flex gap-8 mt-2">
-            {teachersSummaries.map((teacher) => (
+            {currentTeachersSummaries.map((teacher) => (
               <TeacherCard key={teacher.id} teacher={teacher} />
+            ))}
+          </div>
+        </Section>
+      )}
+      {formerTeachersSummaries && (
+        <Section>
+          <h2 className="mb-2">Your former teachers</h2>
+          <div className="flex gap-8">
+            {formerTeachersSummaries.map((teacher) => (
+              <FormerRelationCard
+                key={teacher.id}
+                id={teacher.id}
+                name={teacher.fullName}
+                lastLessonDate={String(
+                  formerTeachersLastLessonsDates[teacher.id],
+                )}
+                role={role}
+              />
             ))}
           </div>
         </Section>

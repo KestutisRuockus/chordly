@@ -31,6 +31,10 @@ export const teachers = pgTable("teachers", {
   experience: text("experience"),
   hourlyRate: numeric("hourly_rate", { mode: "number" }).notNull(),
   studentIds: json("student_ids").$type<string[]>().notNull().default([]),
+  formerStudentsIds: json("former_students_ids")
+    .$type<string[]>()
+    .notNull()
+    .default([]),
   plan: text("plan").$type<TeacherPlan>().notNull().default("none"),
   createdAt: timestamp("created_at").defaultNow(),
 });
@@ -46,6 +50,10 @@ export const students = pgTable("students", {
   bio: text("bio"),
   age: integer("age"),
   teacherIds: json("teacher_ids").$type<string[]>().notNull().default([]),
+  formerTeachersIds: json("former_teachers_ids")
+    .$type<string[]>()
+    .notNull()
+    .default([]),
   createdAt: timestamp("created_at").defaultNow(),
 });
 

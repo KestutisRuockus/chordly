@@ -12,16 +12,21 @@ import StudentSummaryCard from "@/components/dashboard/StudentSummaryCard";
 import TeacherScheduleAction from "@/components/dashboard/TeacherScheduleAction";
 import { getTeacherWeeklySchedule } from "@/db/teacherSchedule";
 import {
+  getFormerStudentsIdsList,
   getStudentIdsList,
   getTeacherDbIdByClerkId,
   getTeacherPlan,
 } from "@/db/teachers";
-import { getAllLessonsByRoleAndId } from "@/db/lesson";
+import {
+  getAllLessonsByRoleAndId,
+  getLastLessonsByStudentsIds,
+} from "@/db/lesson";
 import { getNextUpcomingLesson } from "@/lib/lessons";
 import { addDays, getDateRange } from "@/lib/date";
 import { CALENDAR_RANGE_DAYS } from "@/lib/constants";
 import { getStudentSummaries } from "@/db/students";
 import CallToActionCard from "@/components/ui/CallToActionCard";
+import FormerRelationCard from "@/components/FormerRelationCard";
 
 type Props = {
   searchParams?: Promise<{ offset?: string }>;
@@ -87,8 +92,19 @@ const TeacherDashboardPage = async ({ searchParams }: Props) => {
     [teachersDbId]: teacherBookedSlots,
   };
 
-  const studentIds = await getStudentIdsList(teachersDbId);
-  const studentsSummaries = (await getStudentSummaries(studentIds)) ?? [];
+  const [currentStudentIds, formerStudentIds] = await Promise.all([
+    getStudentIdsList(teachersDbId),
+    getFormerStudentsIdsList(teachersDbId),
+  ]);
+  const [
+    currentStudentsSummaries,
+    formerStudentsSummaries,
+    formerStudentsLastLessonsDates,
+  ] = await Promise.all([
+    getStudentSummaries(currentStudentIds),
+    getStudentSummaries(formerStudentIds),
+    getLastLessonsByStudentsIds(formerStudentIds),
+  ]);
 
   return (
     <Main>
@@ -114,11 +130,11 @@ const TeacherDashboardPage = async ({ searchParams }: Props) => {
           </Section>
         )}
         <Section>
-          {studentsSummaries ? (
+          {currentStudentsSummaries ? (
             <>
               <h2 className="font-bold text-xl">Your students</h2>
               <div className="flex flex-wrap gap-4 mt-2">
-                {studentsSummaries.map((student) => (
+                {currentStudentsSummaries.map((student) => (
                   <StudentSummaryCard key={student.id} student={student} />
                 ))}
               </div>
@@ -133,6 +149,23 @@ const TeacherDashboardPage = async ({ searchParams }: Props) => {
           teacherWeeklySchedule={teacherWeeklySchedule}
         />
       </div>
+      {formerStudentsSummaries && (
+        <Section>
+          <h2 className="mb-2">Your former students</h2>
+          <div className="flex gap-8">
+            {formerStudentsSummaries.map((student) => (
+              <FormerRelationCard
+                key={student.id}
+                {...student}
+                lastLessonDate={String(
+                  formerStudentsLastLessonsDates[student.id],
+                )}
+                role={role}
+              />
+            ))}
+          </div>
+        </Section>
+      )}
     </Main>
   );
 };
