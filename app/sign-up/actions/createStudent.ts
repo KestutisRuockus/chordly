@@ -31,6 +31,7 @@ export async function createStudent({
       skillLevel: fields.skillLevel,
       bio: fields.bio,
       age: fields.age,
+      avatarUrl: fields.avatarUrl ?? null,
     })
     .onConflictDoUpdate({
       target: students.email,
@@ -42,6 +43,7 @@ export async function createStudent({
         skillLevel: fields.skillLevel,
         bio: fields.bio,
         age: fields.age,
+        avatarUrl: fields.avatarUrl ?? null,
       },
     });
 }

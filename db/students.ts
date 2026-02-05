@@ -128,3 +128,13 @@ export const getStudentById = async (id: string) => {
 
   return student;
 };
+
+export const updateStudentAvatarUrl = async (
+  studentId: string,
+  avatarUrl: string | null,
+) => {
+  await db
+    .update(students)
+    .set({ avatarUrl })
+    .where(eq(students.id, studentId));
+};

@@ -221,3 +221,13 @@ export const deactivateStudent = async (
 
   return { status: "student_deactivated" as const };
 };
+
+export const updateTeacherAvatarUrl = async (
+  teacherId: string,
+  avatarUrl: string | null,
+) => {
+  await db
+    .update(teachers)
+    .set({ avatarUrl })
+    .where(eq(teachers.id, teacherId));
+};

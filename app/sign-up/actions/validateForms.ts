@@ -14,7 +14,7 @@ export type TeacherFormFields = {
   bio: string;
   experience?: string;
   hourlyRate: string;
-  profilePhoto?: null;
+  avatarUrl?: string | null;
 };
 export type StudentFormFields = {
   fullName: string;
@@ -24,7 +24,7 @@ export type StudentFormFields = {
   lessonType: LessonType;
   location?: string;
   bio?: string;
-  profilePhoto?: null;
+  avatarUrl?: string | null;
   age?: number;
   skillLevel: string;
 };
@@ -43,7 +43,7 @@ export type StudentFormState = {
 
 export const validateTeacherAction = async (
   _: TeacherFormState,
-  formData: FormData
+  formData: FormData,
 ): Promise<TeacherFormState> => {
   const instruments = formData.getAll("instruments") as string[];
 
@@ -58,7 +58,7 @@ export const validateTeacherAction = async (
     bio: (formData.get("bio") as string) || "",
     experience: (formData.get("experience") as string) || "",
     hourlyRate: (formData.get("hourlyRate") as string) || "",
-    profilePhoto: null,
+    avatarUrl: null,
   };
 
   if (!fields.fullName || fields.fullName.trim().length < 2) {
@@ -116,7 +116,7 @@ export const validateTeacherAction = async (
 
 export const validateStudentAction = async (
   _: StudentFormState,
-  formData: FormData
+  formData: FormData,
 ): Promise<StudentFormState> => {
   const fields: StudentFormFields = {
     fullName: formData.get("fullName") as string,
@@ -126,7 +126,7 @@ export const validateStudentAction = async (
     lessonType: formData.get("lessonType") as LessonType,
     location: (formData.get("location") as string) || "",
     bio: (formData.get("bio") as string) || "",
-    profilePhoto: null,
+    avatarUrl: null,
     skillLevel: formData.get("skillLevel") as string,
   };
 

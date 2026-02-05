@@ -147,7 +147,7 @@ const StudentDashboardPage = async ({ searchParams }: Props) => {
           </div>
         </Section>
       )}
-      {formerTeachersSummaries && (
+      {formerTeachersSummaries.length !== 0 && (
         <Section>
           <h2 className="mb-2">Your former teachers</h2>
           <div className="flex gap-8">

@@ -1,7 +1,7 @@
 "use client";
 
 import { useSignUp } from "@clerk/nextjs";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   LessonType,
   StudentFormFields,
@@ -9,6 +9,8 @@ import {
 } from "../../actions/validateForms";
 import Link from "next/link";
 import type { ClerkAPIResponseError } from "@clerk/shared";
+import ProfileImagePicker from "@/components/ProfileImagePicker";
+import { useUploadThing } from "@/utils/uploadthing";
 
 type Props = {
   role: "student";
@@ -30,9 +32,24 @@ const StudentForm = ({
   const { signUp, isLoaded } = useSignUp();
   const [lessonType, setLessonType] = useState<LessonType>("hybrid");
   const [clerkError, setClerkError] = useState<string | null>(null);
+  const [profileImage, setProfileImage] = useState<File | null>(null);
+  const hasCreatedRef = useRef(false);
+
+  const { startUpload } = useUploadThing("profileImage");
+
+  const uploadProfileAvatar = useCallback(async () => {
+    if (!profileImage) return null;
+
+    const res = await startUpload([profileImage]);
+    if (!res || !res[0]) return null;
+
+    return res[0].serverData.url;
+  }, [profileImage, startUpload]);
 
   useEffect(() => {
     if (!state.success || !state.fields || !isLoaded) return;
+    if (hasCreatedRef.current) return;
+    hasCreatedRef.current = true;
 
     const createClerkUser = async () => {
       if (!state.success || !state.fields || !isLoaded) return;
@@ -49,7 +66,9 @@ const StudentForm = ({
           strategy: "email_code",
         });
 
-        setPendingFields(state.fields);
+        const avatarUrl = await uploadProfileAvatar();
+
+        setPendingFields({ ...state.fields, avatarUrl });
         setVerifying(true);
       } catch (err) {
         const clerkErr = err as ClerkAPIResponseError;
@@ -69,6 +88,7 @@ const StudentForm = ({
     setVerifying,
     role,
     setPendingFields,
+    uploadProfileAvatar,
   ]);
 
   return (
@@ -153,8 +173,7 @@ const StudentForm = ({
         className="border"
         defaultValue={state.fields?.age ?? ""}
       />
-      {/* Profile photo placeholder */}
-      <input type="file" disabled className="border" />
+      <ProfileImagePicker value={profileImage} onChange={setProfileImage} />
       {clerkError && <p className="text-red-500">{clerkError}</p>}
       <button disabled={isPending} className="border">
         {isPending ? "Creating..." : "Create Account"}

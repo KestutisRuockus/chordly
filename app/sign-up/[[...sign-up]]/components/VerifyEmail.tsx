@@ -11,15 +11,13 @@ import {
 } from "../../actions/validateForms";
 import { createStudent } from "../../actions/createStudent";
 
-const VerifyEmail = ({
-  onVerified,
-  fields,
-  role,
-}: {
+type Props = {
+  fields: StudentFormFields | TeacherFormFields;
+  role: "student" | "teacher";
   onVerified: () => void;
-  fields: TeacherFormFields | StudentFormFields | null;
-  role: "teacher" | "student" | undefined;
-}) => {
+};
+
+const VerifyEmail = ({ onVerified, fields, role }: Props) => {
   const { signUp, setActive, isLoaded } = useSignUp();
   const router = useRouter();
 
@@ -73,7 +71,7 @@ const VerifyEmail = ({
       setError(
         (err as ClerkAPIResponseError).errors?.[0]?.message ??
           (err as Error).message ??
-          "Verification failed"
+          "Verification failed",
       );
     } finally {
       setIsVerifying(false);

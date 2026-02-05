@@ -32,6 +32,7 @@ export async function createTeacherAction({
       bio: fields.bio,
       experience: fields.experience || null,
       hourlyRate: Number(fields.hourlyRate),
+      avatarUrl: fields.avatarUrl ?? null,
     })
     .onConflictDoUpdate({
       target: teachers.email,
@@ -44,6 +45,7 @@ export async function createTeacherAction({
         experience: fields.experience || null,
         hourlyRate: Number(fields.hourlyRate),
         clerkUserId,
+        avatarUrl: fields.avatarUrl ?? null,
       },
     });
 }

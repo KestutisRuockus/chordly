@@ -37,11 +37,11 @@ const SingUpPage = () => {
     <Main>
       <HeaderSection {...auth.registration} />
       <Section>
-        {verifying ? (
+        {verifying && pendingFields ? (
           <VerifyEmail
             onVerified={() => setVerifying(false)}
             fields={pendingFields}
-            role={role}
+            role={role!}
           />
         ) : role === "teacher" ? (
           <TeacherForm

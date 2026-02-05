@@ -36,6 +36,7 @@ export const teachers = pgTable("teachers", {
     .notNull()
     .default([]),
   plan: text("plan").$type<TeacherPlan>().notNull().default("none"),
+  avatarUrl: text("avatar_url"),
   createdAt: timestamp("created_at").defaultNow(),
 });
 
@@ -54,6 +55,7 @@ export const students = pgTable("students", {
     .$type<string[]>()
     .notNull()
     .default([]),
+  avatarUrl: text("avatar_url"),
   createdAt: timestamp("created_at").defaultNow(),
 });
 

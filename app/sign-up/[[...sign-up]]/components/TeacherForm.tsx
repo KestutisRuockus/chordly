@@ -1,7 +1,7 @@
 "use client";
 
 import { useSignUp } from "@clerk/nextjs";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   LessonType,
   TeacherFormFields,
@@ -9,6 +9,8 @@ import {
 } from "../../actions/validateForms";
 import Link from "next/link";
 import type { ClerkAPIResponseError } from "@clerk/shared";
+import ProfileImagePicker from "@/components/ProfileImagePicker";
+import { useUploadThing } from "@/utils/uploadthing";
 
 type Props = {
   role: "teacher";
@@ -32,10 +34,26 @@ const TeacherForm = ({
   const { signUp, isLoaded } = useSignUp();
   const [lessonType, setLessonType] = useState<LessonType>("hybrid");
   const [clerkError, setClerkError] = useState<string | null>(null);
+  const [profileImage, setProfileImage] = useState<File | null>(null);
+  const hasCreatedRef = useRef(false);
+
+  const { startUpload } = useUploadThing("profileImage");
+
+  const uploadProfileAvatar = useCallback(async () => {
+    if (!profileImage) return null;
+
+    const res = await startUpload([profileImage]);
+    if (!res || !res[0]) return null;
+
+    return res[0].serverData.url;
+  }, [profileImage, startUpload]);
 
   useEffect(() => {
     const createClerkUser = async () => {
       if (!state.fields || !isLoaded) return;
+      if (hasCreatedRef.current) return;
+      hasCreatedRef.current = true;
+
       try {
         await signUp.create({
           emailAddress: state.fields.email,
@@ -48,7 +66,12 @@ const TeacherForm = ({
           strategy: "email_code",
         });
 
-        setPendingFields(state.fields);
+        const avatarUrl = await uploadProfileAvatar();
+
+        setPendingFields({
+          ...state.fields,
+          avatarUrl,
+        });
         setVerifying(true);
       } catch (err) {
         const clerkErr = err as ClerkAPIResponseError;
@@ -68,6 +91,7 @@ const TeacherForm = ({
     signUp,
     state.fields,
     state.success,
+    uploadProfileAvatar,
   ]);
 
   return (
@@ -176,8 +200,7 @@ const TeacherForm = ({
         defaultValue={state.fields?.hourlyRate ?? ""}
       />
 
-      {/* Profile photo placeholder */}
-      <input type="file" disabled className="border" />
+      <ProfileImagePicker value={profileImage} onChange={setProfileImage} />
 
       {clerkError && <p className="text-red-500">{clerkError}</p>}
 
