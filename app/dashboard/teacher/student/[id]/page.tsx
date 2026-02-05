@@ -22,6 +22,7 @@ import { addDays, getDateRange } from "@/lib/date";
 import { getTeacherWeeklySchedule } from "@/db/teacherSchedule";
 import { getStudentById } from "@/db/students";
 import DeactivateStudent from "@/components/deactiveStudent/DeactivateStudent";
+import ProfileAvatar from "@/components/ui/ProfileAvatar";
 
 type Props = {
   params: { id: string };
@@ -89,47 +90,50 @@ const StudentFullProfileById = async ({ params }: Props) => {
   return (
     <Main>
       <BackButton text="Back to dashboard" />
-      <h1 className="text-3xl font-bold mx-auto">
-        {student?.fullName} Profile
-      </h1>
-      <Section className="w-full grid grid-cols-4 gap-4 border-0">
-        <aside className="border rounded-lg bg-slate-300 p-4">
-          <div className="flex flex-col gap-1  p-2 col-span-1 mb-4">
-            <p>
-              Name:{" "}
-              <span className="text-sm italic capitalize">
-                {student.fullName}
-              </span>
-            </p>
-            <p>
-              Email: <span className="text-sm italic">{student.email}</span>
-            </p>
-            <p>
-              Age:{" "}
-              <span className="text-sm italic capitalize">{student.age}</span>
-            </p>
-            <p>
-              Skill Level:{" "}
-              <span className="text-sm italic capitalize">
-                {student.skillLevel}
-              </span>
-            </p>
-            <p>
-              Lesson Type:{" "}
-              <span className="text-sm italic capitalize">
-                {student.lessonType}
-              </span>
-            </p>
-            <p>
-              Bio:{" "}
-              <span className="text-sm italic capitalize">{student.bio}</span>
-            </p>
-            <p>
-              Location:{" "}
-              <span className="text-sm italic capitalize">
-                {student.location}
-              </span>
-            </p>
+      <Section className="w-full grid grid-cols-5 gap-4 border-0">
+        <aside className="border rounded-lg bg-slate-300 p-4 col-span-2">
+          <div className="flex items-start justify-between gap-1 p-2 mb-4">
+            <div className="flex flex-col gap-1 max-w-2/3">
+              <p>
+                Name:{" "}
+                <span className="text-sm italic capitalize">
+                  {student.fullName}
+                </span>
+              </p>
+              <p>
+                Email: <span className="text-sm italic">{student.email}</span>
+              </p>
+              <p>
+                Age:{" "}
+                <span className="text-sm italic capitalize">{student.age}</span>
+              </p>
+              <p>
+                Skill Level:{" "}
+                <span className="text-sm italic capitalize">
+                  {student.skillLevel}
+                </span>
+              </p>
+              <p>
+                Lesson Type:{" "}
+                <span className="text-sm italic capitalize">
+                  {student.lessonType}
+                </span>
+              </p>
+              <p>
+                Bio:{" "}
+                <span className="text-sm italic capitalize">{student.bio}</span>
+              </p>
+              <p>
+                Location:{" "}
+                <span className="text-sm italic capitalize">
+                  {student.location}
+                </span>
+              </p>
+            </div>
+            <ProfileAvatar
+              avatarUrl={student.avatarUrl}
+              fullName={student.fullName}
+            />
           </div>
           <PracticeSummary summary={summary} showFullSummary={false} />
           <div className="w-full flex justify-between items-center">
