@@ -17,6 +17,7 @@ type Props = {
   currentRole: RoleType;
   scheduleByTeacherId: TeacherScheduleByTeacherId;
   teacherBookedSlots: Record<string, LessonRow[]>;
+  showCancelledLessons: boolean;
 };
 
 const WeekDayHeader = ({
@@ -24,7 +25,11 @@ const WeekDayHeader = ({
   currentRole,
   scheduleByTeacherId,
   teacherBookedSlots,
+  showCancelledLessons,
 }: Props) => {
+  const visibleLessons = day.lessons.filter(
+    (lesson) => showCancelledLessons || lesson.lessonStatus !== "cancelled",
+  );
   return (
     <div
       className={`rounded-xl border p-3 flex flex-col gap-3 ${
@@ -48,7 +53,7 @@ const WeekDayHeader = ({
 
       {day.lessons.length > 0 ? (
         <div className="flex flex-col gap-2">
-          {day.lessons.map((lesson) => (
+          {visibleLessons.map((lesson) => (
             <LessonCard
               key={lesson.id}
               currentRole={currentRole}

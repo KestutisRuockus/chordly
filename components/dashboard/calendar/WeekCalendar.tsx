@@ -9,6 +9,7 @@ import { addDays, formatDateKey, getTodayWeekDay } from "@/lib/date";
 import { isSameDay } from "../helpers/getPracticeSummary";
 import { CALENDAR_RANGE_DAYS } from "@/lib/constants";
 import Link from "next/link";
+import { useState } from "react";
 
 type Props = {
   lessons: LessonRow[];
@@ -27,6 +28,7 @@ const WeekCalendar = ({
   offsetWeeks,
   teacherBookedSlots,
 }: Props) => {
+  const [showCancelled, setShowCancelled] = useState(true);
   const now = new Date();
 
   const [y, m, d] = fromDate.split("-").map(Number);
@@ -63,7 +65,27 @@ const WeekCalendar = ({
 
   return (
     <Section>
-      <h2 className="text-xl font-bold">Your schedule</h2>
+      <div className="flex justify-between items-center">
+        <h2 className="text-xl font-bold">Your schedule</h2>
+        <label className="inline-flex items-center cursor-pointer bg-gray-300 py-1 px-2 rounded-md">
+          <span className="mr-3 text-sm font-medium text-gray-900">
+            Cancelled lessons
+          </span>
+          <input
+            type="checkbox"
+            className="sr-only peer"
+            checked={showCancelled}
+            onChange={(e) => setShowCancelled(e.target.checked)}
+          />
+          <div className="relative w-9 h-5 bg-red-400 peer-checked:bg-green-500 rounded-full transition-colors duration-300">
+            <div
+              className={`w-4 h-4 rounded-full bg-white absolute top-0.5 left-0.5
+      transition-transform duration-300 ease-in-out
+      ${showCancelled ? "translate-x-0" : "translate-x-3.5"}`}
+            />
+          </div>
+        </label>
+      </div>
       <div className="flex gap-4 mt-2 mb-1">
         <Link
           href={`/dashboard/${currentRole}?offset=${prevOffsetWeeks}`}
@@ -91,6 +113,7 @@ const WeekCalendar = ({
             currentRole={currentRole}
             scheduleByTeacherId={scheduleByTeacherId}
             teacherBookedSlots={teacherBookedSlots}
+            showCancelledLessons={showCancelled}
           />
         ))}
       </div>
