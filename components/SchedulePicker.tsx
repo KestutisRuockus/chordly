@@ -10,6 +10,7 @@ import { toWeekDayNumber } from "./teacherSchedule/types";
 import {
   formatDateKey,
   formatLessonTime,
+  getMonday,
   getToday,
   getTodayWeekDay,
   getWeekdayNumberFromDateString,
@@ -59,9 +60,10 @@ const SchedulePicker = ({
   const today = useMemo(() => getToday(new Date()), []);
 
   const weekDays = useMemo(() => {
+    const startDate = selectionMode === "multi" ? getMonday(today) : today;
     return Array.from({ length: CALENDAR_RANGE_DAYS }, (_, i) => {
-      const d = new Date(today);
-      d.setDate(today.getDate() + i);
+      const d = new Date(startDate);
+      d.setDate(startDate.getDate() + i);
 
       const dateKey = formatDateKey(d);
       const weekday = getWeekdayNumberFromDateString(dateKey);
@@ -74,7 +76,7 @@ const SchedulePicker = ({
         isToday: isSameDay(d, today),
       };
     });
-  }, [today]);
+  }, [today, selectionMode]);
 
   const availableScheduleMap = useMemo(() => {
     return Object.fromEntries(
