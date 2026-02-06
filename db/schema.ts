@@ -24,19 +24,21 @@ export const teachers = pgTable("teachers", {
   clerkUserId: text("clerk_user_id").notNull().unique(),
   email: text("email").notNull().unique(),
   fullName: text("full_name").notNull(),
-  instruments: json("instruments").$type<string[]>().notNull(),
-  lessonType: text("lesson_type").$type<LessonType>().notNull(),
+  instruments: json("instruments").$type<string[]>().notNull().default([]),
+  lessonType: text("lesson_type").$type<LessonType>(),
   location: text("location"),
-  bio: text("bio").notNull(),
+  bio: text("bio"),
   experience: text("experience"),
-  hourlyRate: numeric("hourly_rate", { mode: "number" }).notNull(),
+  hourlyRate: numeric("hourly_rate", { mode: "number" }),
+  avatarUrl: text("avatar_url"),
+  meetingUrl: text("meeting_url"),
+  lessonLocation: text("lesson_location"),
   studentIds: json("student_ids").$type<string[]>().notNull().default([]),
   formerStudentsIds: json("former_students_ids")
     .$type<string[]>()
     .notNull()
     .default([]),
   plan: text("plan").$type<TeacherPlan>().notNull().default("none"),
-  avatarUrl: text("avatar_url"),
   createdAt: timestamp("created_at").defaultNow(),
 });
 
@@ -45,17 +47,16 @@ export const students = pgTable("students", {
   clerkUserId: text("clerk_user_id").notNull().unique(),
   fullName: text("full_name").notNull(),
   email: text("email").notNull().unique(),
-  lessonType: text("lesson_type").$type<LessonType>().notNull(),
-  location: text("location"),
-  skillLevel: text("skill_level").notNull(),
+  skillLevel: text("skill_level"),
   bio: text("bio"),
   age: integer("age"),
+  location: text("location"),
+  avatarUrl: text("avatar_url"),
   teacherIds: json("teacher_ids").$type<string[]>().notNull().default([]),
   formerTeachersIds: json("former_teachers_ids")
     .$type<string[]>()
     .notNull()
     .default([]),
-  avatarUrl: text("avatar_url"),
   createdAt: timestamp("created_at").defaultNow(),
 });
 

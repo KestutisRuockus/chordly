@@ -114,12 +114,6 @@ const StudentFullProfileById = async ({ params }: Props) => {
                 </span>
               </p>
               <p>
-                Lesson Type:{" "}
-                <span className="text-sm italic capitalize">
-                  {student.lessonType}
-                </span>
-              </p>
-              <p>
                 Bio:{" "}
                 <span className="text-sm italic capitalize">{student.bio}</span>
               </p>

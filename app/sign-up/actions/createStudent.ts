@@ -26,7 +26,6 @@ export async function createStudent({
       clerkUserId,
       fullName: fields.fullName,
       email: fields.email,
-      lessonType: fields.lessonType,
       location: fields.location,
       skillLevel: fields.skillLevel,
       bio: fields.bio,
@@ -38,7 +37,6 @@ export async function createStudent({
       set: {
         clerkUserId,
         fullName: fields.fullName,
-        lessonType: fields.lessonType,
         location: fields.location,
         skillLevel: fields.skillLevel,
         bio: fields.bio,
