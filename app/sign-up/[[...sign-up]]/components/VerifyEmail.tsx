@@ -4,12 +4,11 @@ import { useSignUp } from "@clerk/nextjs";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import type { ClerkAPIResponseError } from "@clerk/shared";
-import { createTeacherAction } from "../../actions/createTeacher";
+import { createTeacherAction } from "../../../actions/createTeacherAction";
 import {
   StudentFormFields,
   TeacherFormFields,
 } from "../../actions/validateForms";
-import { createStudent } from "../../actions/createStudent";
 
 type Props = {
   fields: StudentFormFields | TeacherFormFields;
@@ -53,17 +52,17 @@ const VerifyEmail = ({ onVerified, fields, role }: Props) => {
         throw new Error("User ID missing after verification");
       }
 
-      if (role === "teacher") {
-        await createTeacherAction({
-          clerkUserId,
-          fields: fields as TeacherFormFields,
-        });
-      } else {
-        await createStudent({
-          clerkUserId,
-          fields: fields as StudentFormFields,
-        });
-      }
+      // if (role === "teacher") {
+      //   await createTeacherAction({
+      //     clerkUserId,
+      //     fields: fields as TeacherFormFields,
+      //   });
+      // } else {
+      //   await createStudent({
+      //     clerkUserId,
+      //     fields: fields as StudentFormFields,
+      //   });
+      // }
 
       onVerified();
       router.push("/");

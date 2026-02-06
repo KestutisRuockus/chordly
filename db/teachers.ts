@@ -1,10 +1,31 @@
 import type { TeacherPlan } from "./types";
+import type { TeacherFormFields } from "@/app/sign-up/actions/validateForms";
 import { eq, or, ilike, sql, and, inArray } from "drizzle-orm";
 import { db } from "./index";
 import { teachers } from "./schema";
 import { auth } from "@clerk/nextjs/server";
 import { cancelAllUpcomingLessons } from "./lesson";
 import { addToFormerTeachersIds, removeTeacherFromStudent } from "./students";
+
+export const createTeacher = async (
+  clerkUserId: string,
+  fields: TeacherFormFields,
+) => {
+  await db
+    .insert(teachers)
+    .values({
+      clerkUserId,
+      email: fields.email,
+      fullName: fields.fullName,
+    })
+    .onConflictDoUpdate({
+      target: teachers.clerkUserId,
+      set: {
+        fullName: fields.fullName,
+        email: fields.email,
+      },
+    });
+};
 
 export const getTeacherDbIdByClerkId = async (clerkUserId: string) => {
   const rows = await db
@@ -31,7 +52,7 @@ export const requireTeacherId = async () => {
   return teacherId;
 };
 
-export async function getTeachersSummary(limit: number) {
+export const getTeachersSummary = async (limit: number) => {
   return await db
     .select({
       id: teachers.id,
@@ -41,19 +62,19 @@ export async function getTeachersSummary(limit: number) {
     })
     .from(teachers)
     .limit(limit);
-}
+};
 
-export async function getTeacherById(id: string) {
+export const getTeacherById = async (id: string) => {
   const [teacher] = await db.select().from(teachers).where(eq(teachers.id, id));
 
   return teacher;
-}
+};
 
-export async function getTeachersSummaryByQuery(
+export const getTeachersSummaryByQuery = async (
   query?: string,
   instruments?: string[],
   limit: number = 5,
-) {
+) => {
   const conditions = [];
 
   if (query && query.trim()) {
@@ -83,9 +104,9 @@ export async function getTeachersSummaryByQuery(
     .from(teachers)
     .where(conditions.length ? and(...conditions) : undefined)
     .limit(limit);
-}
+};
 
-export async function getTeachersSummaryByIds(teacherIds: string[]) {
+export const getTeachersSummaryByIds = async (teacherIds: string[]) => {
   if (teacherIds.length === 0) return [];
 
   return db
@@ -97,7 +118,7 @@ export async function getTeachersSummaryByIds(teacherIds: string[]) {
     })
     .from(teachers)
     .where(inArray(teachers.id, teacherIds));
-}
+};
 
 export const getStudentIdsList = async (teacherId: string) => {
   const rows = await db

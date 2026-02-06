@@ -1,8 +1,29 @@
+import type { StudentFormFields } from "@/app/sign-up/actions/validateForms";
 import { eq, inArray } from "drizzle-orm";
 import { db } from ".";
 import { students } from "./schema";
 import { auth } from "@clerk/nextjs/server";
 import { getStudentIdsList } from "./teachers";
+
+export const createStudent = async (
+  clerkUserId: string,
+  fields: StudentFormFields,
+) => {
+  await db
+    .insert(students)
+    .values({
+      clerkUserId,
+      fullName: fields.fullName,
+      email: fields.email,
+    })
+    .onConflictDoUpdate({
+      target: students.clerkUserId,
+      set: {
+        fullName: fields.fullName,
+        email: fields.email,
+      },
+    });
+};
 
 export const getStudentDbIdByClerkId = async (clerkUserId: string) => {
   const rows = await db
