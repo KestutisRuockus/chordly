@@ -129,27 +129,23 @@ const TeacherDashboardPage = async ({ searchParams }: Props) => {
             />
           </Section>
         )}
-        <Section>
-          {currentStudentsSummaries ? (
-            <>
-              <h2 className="font-bold text-xl">Your students</h2>
-              <div className="flex flex-wrap gap-4 mt-2">
-                {currentStudentsSummaries.map((student) => (
-                  <StudentSummaryCard key={student.id} student={student} />
-                ))}
-              </div>
-            </>
-          ) : (
-            <>No students</>
-          )}
-        </Section>
+        {currentStudentsSummaries.length > 0 && (
+          <Section>
+            <h2 className="font-bold text-xl">Your students</h2>
+            <div className="flex flex-wrap gap-4 mt-2">
+              {currentStudentsSummaries.map((student) => (
+                <StudentSummaryCard key={student.id} student={student} />
+              ))}
+            </div>
+          </Section>
+        )}
         <TeacherScheduleAction
           buttonLabel={teachersDashboard.button.buttonLabel}
           teacherId={teachersDbId}
           teacherWeeklySchedule={teacherWeeklySchedule}
         />
       </div>
-      {formerStudentsSummaries && (
+      {formerStudentsSummaries.length > 0 && (
         <Section>
           <h2 className="mb-2">Your former students</h2>
           <div className="flex gap-8">

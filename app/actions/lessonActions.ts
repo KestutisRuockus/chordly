@@ -8,11 +8,15 @@ import {
   findLessonByStudentDateHour,
   FindLessonByLessonId,
 } from "@/db/lesson";
-import { addTeacherToStudent } from "@/db/students";
+import {
+  addTeacherToStudent,
+  removeFormerteacherFromStudent,
+} from "@/db/students";
 import {
   getStudentIdsList,
   getTeacherPlan,
   addStudentToTeacher,
+  removeFormerStudentFromTeacher,
 } from "@/db/teachers";
 import { TEACHER_PLAN_LIMITS } from "@/lib/constants";
 import { revalidatePath } from "next/cache";
@@ -89,6 +93,8 @@ export const createLessonAction = async (input: CreateLessonInput) => {
   await Promise.all([
     addStudentToTeacher(teacherId, studentId),
     addTeacherToStudent(studentId, teacherId),
+    removeFormerStudentFromTeacher(teacherId, studentId),
+    removeFormerteacherFromStudent(studentId, teacherId),
   ]);
 
   revalidatePath(`/find-teacher/${input.teacherId}`);

@@ -147,6 +147,24 @@ export const removeStudentFromTeacher = async (
   return { status: "removed" as const };
 };
 
+export const removeFormerStudentFromTeacher = async (
+  teacherId: string,
+  studentId: string,
+) => {
+  const formerStudenstIdsList = await getStudentIdsList(teacherId);
+  if (formerStudenstIdsList.includes(studentId)) {
+    return { status: "student-already-exist" as const };
+  }
+
+  await db
+    .update(teachers)
+    .set({
+      formerStudentsIds: formerStudenstIdsList.filter((id) => id !== studentId),
+    })
+    .where(eq(teachers.id, teacherId));
+  return { status: "removed" as const };
+};
+
 export const getFormerStudentsIdsList = async (teacherId: string) => {
   const rows = await db
     .select({ formerStudentsIds: teachers.formerStudentsIds })

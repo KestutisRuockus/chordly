@@ -2,6 +2,7 @@ import { eq, inArray } from "drizzle-orm";
 import { db } from ".";
 import { students } from "./schema";
 import { auth } from "@clerk/nextjs/server";
+import { getStudentIdsList } from "./teachers";
 
 export const getStudentDbIdByClerkId = async (clerkUserId: string) => {
   const rows = await db
@@ -100,6 +101,23 @@ export const removeTeacherFromStudent = async (
       teacherIds: teacherIdsList.filter((id) => id !== teacherId),
     })
     .where(eq(students.id, studentId));
+
+  return { status: "removed" as const };
+};
+
+export const removeFormerteacherFromStudent = async (
+  studentId: string,
+  teacherId: string,
+) => {
+  const formerteacherIdsList = await getStudentIdsList(studentId);
+  if (formerteacherIdsList.includes(teacherId)) {
+    return { status: "teacher-already-exist" as const };
+  }
+  await db
+    .update(students)
+    .set({
+      formerTeachersIds: formerteacherIdsList.filter((id) => id !== teacherId),
+    });
 
   return { status: "removed" as const };
 };
