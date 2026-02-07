@@ -7,7 +7,7 @@ import type {
 import { useState } from "react";
 import Modal from "@/components/ui/Modal";
 import { toast } from "sonner";
-import { SaveTeacherScheduleAction } from "@/app/actions/teacherSchedule";
+import { SaveTeacherScheduleAction } from "@/app/actions/teacher/teacherSchedule";
 import SchedulePicker from "../SchedulePicker";
 
 type Props = {

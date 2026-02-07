@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { updateTeacherPlanAction } from "@/app/actions/teacherPlanActions";
+import { updateTeacherPlanAction } from "@/app/actions/teacher/teacherPlanActions";
 import { TeacherPlan } from "@/db/types";
 import Modal from "./ui/Modal";
 import { toast } from "sonner";

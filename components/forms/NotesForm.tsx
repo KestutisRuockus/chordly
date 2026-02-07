@@ -1,6 +1,6 @@
 "use client";
 
-import { addTeacherNoteAction } from "@/app/actions/teacherNotes";
+import { addTeacherNoteAction } from "@/app/actions/teacher/teacherNotes";
 import { Dispatch, SetStateAction, useState } from "react";
 import { toast } from "sonner";
 

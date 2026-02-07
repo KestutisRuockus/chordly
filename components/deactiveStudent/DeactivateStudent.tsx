@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Modal from "../ui/Modal";
 import DeactivateConfirmWindow from "./DeactivateConfirmWindow";
-import { deactivateStudentAction } from "@/app/actions/DeactivateStudentAction";
+import { deactivateStudentAction } from "@/app/actions/teacher/DeactivateStudentAction";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 

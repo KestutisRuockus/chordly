@@ -1,18 +1,17 @@
 "use client";
 
+import type { ClerkAPIResponseError } from "@clerk/shared";
+import type { ValidateCreateUserFields } from "@/app/actions/validateCreateUser";
+import type { RoleType } from "@/types/role";
 import { useSignUp } from "@clerk/nextjs";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import type { ClerkAPIResponseError } from "@clerk/shared";
-import { createTeacherAction } from "../../../actions/createTeacherAction";
-import {
-  StudentFormFields,
-  TeacherFormFields,
-} from "../../actions/validateForms";
+import { createStudentAction } from "@/app/actions/student/createStudentAction";
+import { createTeacherAction } from "@/app/actions/teacher/createTeacherAction";
 
 type Props = {
-  fields: StudentFormFields | TeacherFormFields;
-  role: "student" | "teacher";
+  fields: ValidateCreateUserFields;
+  role: RoleType;
   onVerified: () => void;
 };
 
@@ -43,26 +42,20 @@ const VerifyEmail = ({ onVerified, fields, role }: Props) => {
         throw new Error("Verification failed");
       }
 
-      await setActive({
-        session: result.createdSessionId,
-      });
-
       const clerkUserId = result.createdUserId;
       if (!clerkUserId) {
         throw new Error("User ID missing after verification");
       }
 
-      // if (role === "teacher") {
-      //   await createTeacherAction({
-      //     clerkUserId,
-      //     fields: fields as TeacherFormFields,
-      //   });
-      // } else {
-      //   await createStudent({
-      //     clerkUserId,
-      //     fields: fields as StudentFormFields,
-      //   });
-      // }
+      if (role === "teacher") {
+        await createTeacherAction(clerkUserId, fields);
+      } else {
+        await createStudentAction(clerkUserId, fields);
+      }
+
+      await setActive({
+        session: result.createdSessionId,
+      });
 
       onVerified();
       router.push("/");

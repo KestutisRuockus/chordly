@@ -1,6 +1,6 @@
 "use client";
 
-import { deleteTeacherNoteAction } from "@/app/actions/teacherNotes";
+import { deleteTeacherNoteAction } from "@/app/actions/teacher/teacherNotes";
 import type { Note } from "@/app/dashboard/types";
 import { Trash2 } from "lucide-react";
 

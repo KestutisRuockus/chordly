@@ -1,6 +1,10 @@
 "use server";
 
-import { ExerciseDifficulty, TargetPerWeek, WeekDay } from "../dashboard/types";
+import type {
+  ExerciseDifficulty,
+  TargetPerWeek,
+  WeekDay,
+} from "@/app/dashboard/types";
 import {
   createExercise,
   deleteExercise,

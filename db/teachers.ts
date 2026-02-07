@@ -1,5 +1,5 @@
 import type { TeacherPlan } from "./types";
-import type { TeacherFormFields } from "@/app/sign-up/actions/validateForms";
+import type { ValidateCreateUserFields } from "@/app/actions/validateCreateUser";
 import { eq, or, ilike, sql, and, inArray } from "drizzle-orm";
 import { db } from "./index";
 import { teachers } from "./schema";
@@ -9,7 +9,7 @@ import { addToFormerTeachersIds, removeTeacherFromStudent } from "./students";
 
 export const createTeacher = async (
   clerkUserId: string,
-  fields: TeacherFormFields,
+  fields: ValidateCreateUserFields,
 ) => {
   await db
     .insert(teachers)

@@ -4,11 +4,11 @@ import type { ExerciseRow } from "@/db/types";
 import { Check, X } from "lucide-react";
 import { getTodayWeekDay } from "@/lib/date";
 import { Trash2 } from "lucide-react";
+import { toast } from "sonner";
 import {
   deleteExerciseAction,
   markExercisePracticedTodayAction,
-} from "@/app/actions/exercisesActions";
-import { toast } from "sonner";
+} from "@/app/actions/teacher/exercisesActions";
 
 type Props = {
   exercise: ExerciseRow;

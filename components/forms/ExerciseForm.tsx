@@ -1,7 +1,7 @@
 "use client";
 
+import { createExerciseAction } from "@/app/actions/teacher/exercisesActions";
 import type { ExerciseDifficulty, TargetPerWeek } from "@/app/dashboard/types";
-import { createExerciseAction } from "@/app/actions/exercisesActions";
 import React, { Dispatch, SetStateAction, useState } from "react";
 import { toast } from "sonner";
 

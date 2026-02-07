@@ -1,4 +1,4 @@
-import type { StudentFormFields } from "@/app/sign-up/actions/validateForms";
+import type { ValidateCreateUserFields } from "@/app/actions/validateCreateUser";
 import { eq, inArray } from "drizzle-orm";
 import { db } from ".";
 import { students } from "./schema";
@@ -7,7 +7,7 @@ import { getStudentIdsList } from "./teachers";
 
 export const createStudent = async (
   clerkUserId: string,
-  fields: StudentFormFields,
+  fields: ValidateCreateUserFields,
 ) => {
   await db
     .insert(students)
