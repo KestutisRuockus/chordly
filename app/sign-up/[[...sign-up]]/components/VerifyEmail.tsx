@@ -58,7 +58,7 @@ const VerifyEmail = ({ onVerified, fields, role }: Props) => {
       });
 
       onVerified();
-      router.push("/");
+      router.push("/profile/edit");
     } catch (err) {
       setError(
         (err as ClerkAPIResponseError).errors?.[0]?.message ??

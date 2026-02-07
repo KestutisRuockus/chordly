@@ -1,5 +1,5 @@
 import type { InferSelectModel, InferInsertModel } from "drizzle-orm";
-import { exercises, students } from "./schema";
+import { exercises, students, teachers } from "./schema";
 import { lessons } from "@/db/schema";
 import { getStudentSummaries } from "./students";
 
@@ -11,6 +11,9 @@ export type LessonRow = InferSelectModel<typeof lessons>;
 export type StudentSummary = Awaited<
   ReturnType<typeof getStudentSummaries>
 >[number];
+
 export type StudentRow = InferSelectModel<typeof students>;
+
+export type TeacherRow = InferSelectModel<typeof teachers>;
 
 export type TeacherPlan = "none" | "basic" | "medium" | "pro";

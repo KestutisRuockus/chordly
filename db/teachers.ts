@@ -6,6 +6,7 @@ import { teachers } from "./schema";
 import { auth } from "@clerk/nextjs/server";
 import { cancelAllUpcomingLessons } from "./lesson";
 import { addToFormerTeachersIds, removeTeacherFromStudent } from "./students";
+import { TeacherEditProfileFields } from "@/app/actions/teacher/validateTeacherProfileAction";
 
 export const createTeacher = async (
   clerkUserId: string,
@@ -269,4 +270,21 @@ export const updateTeacherAvatarUrl = async (
     .update(teachers)
     .set({ avatarUrl })
     .where(eq(teachers.id, teacherId));
+};
+
+export const updateTeacherProfile = async (
+  teacherId: string,
+  data: TeacherEditProfileFields,
+) => {
+  await db
+    .update(teachers)
+    .set({
+      ...data,
+      meetingUrl: data.meetingUrl ?? null,
+      lessonLocation: data.lessonLocation ?? null,
+      avatarUrl: data.avatarUrl ?? null,
+    })
+    .where(eq(teachers.id, teacherId));
+
+  return { status: "updated" as const };
 };

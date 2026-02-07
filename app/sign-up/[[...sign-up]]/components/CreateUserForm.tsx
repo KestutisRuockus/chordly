@@ -39,7 +39,6 @@ const CreateUserForm = ({
     formData.set("confirmPassword", confirmPassword);
 
     const result = await formAction({}, formData);
-    console.log("asd", result);
     if (result.success && result.fields) {
       onSuccess({ ...result.fields, role });
     }

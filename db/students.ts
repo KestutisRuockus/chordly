@@ -1,4 +1,5 @@
 import type { ValidateCreateUserFields } from "@/app/actions/validateCreateUser";
+import type { StudentEditProfileFields } from "@/app/actions/student/validateStudentProfileAction ";
 import { eq, inArray } from "drizzle-orm";
 import { db } from ".";
 import { students } from "./schema";
@@ -173,4 +174,16 @@ export const updateStudentAvatarUrl = async (
     .update(students)
     .set({ avatarUrl })
     .where(eq(students.id, studentId));
+};
+
+export const updateStudentProfile = async (
+  studentId: string,
+  data: StudentEditProfileFields,
+) => {
+  await db
+    .update(students)
+    .set({ ...data, age: data.age ?? null, avatarUrl: data.avatarUrl ?? null })
+    .where(eq(students.id, studentId));
+
+  return { status: "updated" as const };
 };
