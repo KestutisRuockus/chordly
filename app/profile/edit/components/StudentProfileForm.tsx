@@ -2,8 +2,7 @@
 
 import type { StudentRow } from "@/db/types";
 import ProfileImagePicker from "@/components/ProfileImagePicker";
-import { useCallback, useState } from "react";
-import { useUploadThing } from "@/utils/uploadthing";
+import { useProfileAvatarUpload } from "@/hooks/useProfileAvatarUpload/useProfileAvatarUpload";
 
 type Props = {
   initialData: StudentRow;
@@ -18,17 +17,8 @@ const StudentProfileForm = ({
   isPending,
   error,
 }: Props) => {
-  const [profileImage, setProfileImage] = useState<File | null>(null);
-  const { startUpload } = useUploadThing("profileImage");
-
-  const uploadProfileAvatar = useCallback(async () => {
-    if (!profileImage) return null;
-
-    const res = await startUpload([profileImage]);
-    if (!res || !res[0]) return null;
-
-    return res[0].serverData.url;
-  }, [profileImage, startUpload]);
+  const { profileImage, setProfileImage, uploadProfileAvatar } =
+    useProfileAvatarUpload();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
