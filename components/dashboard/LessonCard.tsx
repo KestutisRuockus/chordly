@@ -1,7 +1,21 @@
-import type { LessonCardProps } from "@/app/dashboard/types";
+"use client";
+
+import type { LessonCardProps, LessonType } from "@/app/dashboard/types";
 import StatusBadge from "./calendar/StatusBadge";
-import { formatLessonTime, formatMonthDayFromKey } from "@/lib/date";
+import {
+  formatLessonTime,
+  formatMonthDayFromKey,
+  isLessonFinished,
+  isLessonLocked,
+} from "@/lib/date";
 import BookingScheduleAction from "../BookingScheduleAction";
+import { Pencil } from "lucide-react";
+import { useState } from "react";
+import Modal from "../ui/Modal";
+import LessonTypeSelector from "../ui/LessonTypeSelector";
+import { updateLessonTypeAction } from "@/app/actions/lessonActions";
+import { toast } from "sonner";
+import { getTeacherLessonTypeAction } from "@/app/actions/teacher/getTeacherLessonTypeAction";
 
 const LessonCard = ({
   id,
@@ -19,6 +33,77 @@ const LessonCard = ({
   teacherWeeklySchedule,
   teacherBookedSlots,
 }: LessonCardProps) => {
+  const [isEditLessonTypeOpen, setIsEditLessonTypeOpen] = useState(false);
+  const [selectedLessonType, setSelectedLessonType] =
+    useState<LessonType>(lessonType);
+  const [teacherLessonType, setTeacherLessonType] = useState<LessonType | null>(
+    null,
+  );
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const isEditIconDisabbled =
+    lessonStatus === "cancelled" ||
+    isLessonFinished(lessonDate, lessonHour) ||
+    isLessonLocked(lessonDate, lessonHour) ||
+    selectedLessonType === teacherLessonType;
+
+  const handleOpenEdit = async () => {
+    if (isSubmitting) {
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const fetchedType = await getTeacherLessonTypeAction(teacherId);
+      setTeacherLessonType(fetchedType);
+      if (fetchedType !== "hybrid") {
+        toast.warning("You caanot change lesson type for this teacher");
+        setIsSubmitting(false);
+        return;
+      }
+      setIsEditLessonTypeOpen(true);
+    } catch {
+      toast.error("Something went wrong. Please try again later");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleLessonTypeUpdate = async () => {
+    if (isSubmitting) {
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      await updateLessonTypeAction({
+        lessonId: id,
+        studentId,
+        teacherId,
+        lessonType: selectedLessonType,
+      });
+
+      toast.success("Lesson type updated successfully");
+    } catch (err) {
+      if (err instanceof Error) {
+        switch (err.message) {
+          case "LESSON_NOT_FOUND":
+            toast.error("Lesson not found. Please refresh and try again.");
+            break;
+          case "LESSON_TYPE_NOT_CHANGED":
+            toast.error("You selected the same lesson type. Nothing changed.");
+            break;
+          default:
+            toast.error("Something went wrong. Please try again later.");
+        }
+      }
+    } finally {
+      setIsSubmitting(false);
+      setIsEditLessonTypeOpen(false);
+    }
+  };
+
   if (isUpcomingCard) {
     return (
       <article className="list-none flex flex-col gap-2 my-3">
@@ -53,10 +138,19 @@ const LessonCard = ({
         <p>{formatLessonTime(lessonHour)}</p>
         {!participantName && <p>{`, ${formatMonthDayFromKey(lessonDate)}`}</p>}
       </div>
-      <p className="w-fit">{participantName}</p>
-      <p className="mb-1">
-        {instrument} • {lessonType}
-      </p>
+      <div className="flex gap-1" title="Change lesson type">
+        <p>
+          {instrument} • {lessonType}
+        </p>
+        <button onClick={handleOpenEdit} disabled={isEditIconDisabbled}>
+          <Pencil
+            size={12}
+            className={`mt-0.5 bg-gray-300 p-0.5 rounded-sm ${isEditIconDisabbled ? "opacity-50 cursor-not-allowed" : "hover:opacity-70 cursor-pointer"}`}
+          />
+        </button>
+      </div>
+      <p className="w-fit mb-1">{participantName}</p>
+
       <div className="flex justify-center">
         {teacherWeeklySchedule ? (
           <BookingScheduleAction
@@ -81,6 +175,27 @@ const LessonCard = ({
         )}
       </div>
       <StatusBadge status={lessonStatus} statusNote={statusNote} />
+      {isEditLessonTypeOpen && (
+        <Modal
+          title={""}
+          onClose={() => {
+            setIsEditLessonTypeOpen(false);
+          }}
+          closeOnOverlayClick={true}
+        >
+          <LessonTypeSelector
+            lessonType={teacherLessonType}
+            selectedLessonType={selectedLessonType}
+            onChange={setSelectedLessonType}
+          />
+          <button
+            onClick={handleLessonTypeUpdate}
+            className="border rounded-md py- px-2 cursor-pointer mt-2"
+          >
+            {isSubmitting ? "Updating..." : "Update Lesson Type"}
+          </button>
+        </Modal>
+      )}
     </article>
   );
 };

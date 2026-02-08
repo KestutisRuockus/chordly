@@ -307,3 +307,23 @@ export const getLastLessonsByTeachersIds = async (teacherIds: string[]) => {
     rows.map((row) => [row.teacherId, row.lastLessonDate]),
   );
 };
+
+export const updateLessonType = async (input: {
+  lessonId: string;
+  studentId: string;
+  teacherId: string;
+  lessonType: LessonType;
+}) => {
+  await db
+    .update(lessons)
+    .set({ lessonType: input.lessonType, updatedAt: new Date() })
+    .where(
+      and(
+        eq(lessons.id, input.lessonId),
+        eq(lessons.studentId, input.studentId),
+        eq(lessons.teacherId, input.teacherId),
+      ),
+    );
+
+  return { status: "updated" as const };
+};

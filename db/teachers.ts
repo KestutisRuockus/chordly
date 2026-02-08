@@ -288,3 +288,13 @@ export const updateTeacherProfile = async (
 
   return { status: "updated" as const };
 };
+
+export const getTeacherLessonType = async (teacherId: string) => {
+  const rows = await db
+    .select({ lessonType: teachers.lessonType })
+    .from(teachers)
+    .where(eq(teachers.id, teacherId))
+    .limit(1);
+
+  return rows[0]?.lessonType ?? "hybrid";
+};

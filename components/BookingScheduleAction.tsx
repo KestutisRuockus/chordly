@@ -7,6 +7,7 @@ import type {
 } from "./teacherSchedule/types";
 import type { RoleType } from "@/types/role";
 import type { LessonRow } from "@/db/types";
+import type { LessonType } from "@/app/dashboard/types";
 import { toast } from "sonner";
 import { useState } from "react";
 import Modal from "./ui/Modal";
@@ -18,6 +19,7 @@ import {
 } from "@/app/actions/lessonActions";
 import { useRouter } from "next/navigation";
 import TeacherLimitReachedNotice from "./ui/TeacherLimitReachedNotice";
+import LessonTypeSelector from "./ui/LessonTypeSelector";
 
 type Props = {
   buttonLabel: string;
@@ -28,6 +30,7 @@ type Props = {
   currentScheduledLesson?: CurrentScheduledLesson;
   currentRole?: RoleType;
   teacherBookedSlots?: LessonRow[];
+  lessonType?: LessonType | null;
 };
 
 const BookingScheduleAction = ({
@@ -39,9 +42,16 @@ const BookingScheduleAction = ({
   currentScheduledLesson,
   currentRole,
   teacherBookedSlots,
+  lessonType,
 }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const [instrument, setInstrument] = useState("");
+  const [selectedLessonType, setSelectedLessonType] =
+    useState<LessonType | null>(
+      lessonType != null && lessonType === "hybrid"
+        ? null
+        : (lessonType ?? null),
+    );
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isTeacherPlanLimitReached, setIsTeacherPlanLimitReached] =
     useState(false);
@@ -173,6 +183,11 @@ const BookingScheduleAction = ({
       }
     }
 
+    if (!selectedLessonType) {
+      toast.error("Select lesson type");
+      return;
+    }
+
     if (!instrument) {
       toast.error("Select an instrument");
       return;
@@ -187,6 +202,7 @@ const BookingScheduleAction = ({
         lessonDate,
         lessonHour: selectedHour,
         instrument,
+        lessonType: selectedLessonType,
       });
 
       if (!result.ok) {
@@ -342,22 +358,32 @@ const BookingScheduleAction = ({
                 isSubmitting={isSubmitting}
               />
               {!currentScheduledLesson && (
-                <div className="border-t mt-2">
-                  <h3 className="my-2">Selecet instrument</h3>
-                  <select
-                    value={instrument}
-                    onChange={(e) => setInstrument(e.target.value)}
-                    className="border rounded px-2 py-1"
-                  >
-                    <option value="" disabled>
-                      Select an instrument
-                    </option>
-                    {teacherInstruments.map((item) => (
-                      <option key={item} value={item}>
-                        {item}
+                <div className="flex gap-4 w-ful border-t mt-2">
+                  <div className="w-1/2">
+                    <h3 className="my-2">Selecet lesson type</h3>
+                    <LessonTypeSelector
+                      lessonType={lessonType}
+                      selectedLessonType={selectedLessonType}
+                      onChange={setSelectedLessonType}
+                    />
+                  </div>
+                  <div className="w-1/2">
+                    <h3 className="my-2">Selecet instrument</h3>
+                    <select
+                      value={instrument}
+                      onChange={(e) => setInstrument(e.target.value)}
+                      className="border rounded px-2 py-1"
+                    >
+                      <option value="" disabled>
+                        Select an instrument
                       </option>
-                    ))}
-                  </select>
+                      {teacherInstruments.map((item) => (
+                        <option key={item} value={item}>
+                          {item}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                 </div>
               )}
             </>

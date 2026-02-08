@@ -1,5 +1,5 @@
 import type { RoleType } from "@/types/role";
-import type { TeacherFullProfile } from "@/types/teachers";
+import type { TeacherRow } from "@/db/types";
 import BookingScheduleAction from "@/components/BookingScheduleAction";
 import BackButton from "@/components/ui/BackButton";
 import { getStudentDbIdByClerkId } from "@/db/students";
@@ -24,7 +24,7 @@ const TeacherFullProfileById = async ({ params }: Props) => {
       ? await getStudentDbIdByClerkId(userId)
       : null;
 
-  const teacher: TeacherFullProfile | undefined = await getTeacherById(id);
+  const teacher: TeacherRow | undefined = await getTeacherById(id);
 
   if (!teacher) {
     return <div>Teacher not found</div>;
@@ -106,6 +106,7 @@ const TeacherFullProfileById = async ({ params }: Props) => {
               teacherWeeklySchedule={teacherWeeklySchedule}
               teacherInstruments={teacher.instruments}
               teacherBookedSlots={teacherBookedSlots}
+              lessonType={teacher.lessonType}
             />
           )}
         </div>

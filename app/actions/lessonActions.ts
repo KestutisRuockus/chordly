@@ -7,6 +7,7 @@ import {
   findLessonByTeacherDateHour,
   findLessonByStudentDateHour,
   FindLessonByLessonId,
+  updateLessonType,
 } from "@/db/lesson";
 import {
   addTeacherToStudent,
@@ -27,10 +28,11 @@ type CreateLessonInput = {
   lessonDate: string;
   lessonHour: number;
   instrument: string;
+  lessonType: LessonType;
 };
 
 export const createLessonAction = async (input: CreateLessonInput) => {
-  const lessonType: LessonType = "hybrid";
+  const lessonType = input.lessonType ?? "hybrid";
   const lessonStatus: LessonStatus = "scheduled";
 
   const { lessonDate, lessonHour, studentId, teacherId, instrument } = input;
@@ -167,4 +169,24 @@ export const updateLessonScheduleAndStatusAction = async (input: {
   revalidatePath(`/find-teacher/${input.teacherId}`);
 
   return { status: "updated" as const };
+};
+
+export const updateLessonTypeAction = async (input: {
+  lessonId: string;
+  studentId: string;
+  teacherId: string;
+  lessonType: LessonType;
+}) => {
+  const lesson = await FindLessonByLessonId(input.lessonId);
+  if (!lesson) {
+    throw new Error("LESSON_NOT_FOUND");
+  }
+
+  if (lesson.lessonType === input.lessonType) {
+    throw new Error("LESSON_TYPE_NOT_CHANGED");
+  }
+
+  revalidatePath(`/dashboar/student`);
+
+  await updateLessonType({ ...input });
 };
