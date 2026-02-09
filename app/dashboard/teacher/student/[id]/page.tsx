@@ -9,7 +9,7 @@ import { getPracticeSummary } from "@/components/dashboard/helpers/getPracticeSu
 import PracticeSummary from "@/components/dashboard/PracticeSummary";
 import StudentProfileActions from "@/components/dashboard/StudentProfileActions";
 import Note from "@/components/dashboard/Note";
-import { requireTeacherId } from "@/db/teachers";
+import { getFormerStudentsIdsList, requireTeacherId } from "@/db/teachers";
 import { getTeacherNotes } from "@/db/teacherNotes";
 import { getExercisesByTeacherAndStudent } from "@/db/exercises";
 import {
@@ -58,10 +58,13 @@ const StudentFullProfileById = async ({ params }: Props) => {
       lesson.teacherId === teacherId && lesson.studentId === studentId,
   );
 
-  const [relatedNotes, relatedExercises] = await Promise.all([
-    getTeacherNotes({ teacherId, studentId }),
-    getExercisesByTeacherAndStudent({ teacherId, studentId }),
-  ]);
+  const [relatedNotes, relatedExercises, formerStudentIdsList] =
+    await Promise.all([
+      getTeacherNotes({ teacherId, studentId }),
+      getExercisesByTeacherAndStudent({ teacherId, studentId }),
+      getFormerStudentsIdsList(teacherId),
+    ]);
+  const isFormerStudent = formerStudentIdsList.includes(studentId);
 
   const [upcomingLessons, lastLessons, teacherBookedSlots] = await Promise.all([
     getUpcomingLessonsForTeacherStudent({
@@ -133,7 +136,11 @@ const StudentFullProfileById = async ({ params }: Props) => {
           <div className="w-full flex justify-between items-center">
             <StudentProfileActions studentId={studentId} />
           </div>
-          <DeactivateStudent teacherId={teacherId} studentId={studentId} />
+          <DeactivateStudent
+            teacherId={teacherId}
+            studentId={studentId}
+            disabled={isFormerStudent}
+          />
         </aside>
         <div className="flex flex-col gap-4 col-span-3 bg-slate-300 p-4 rounded-lg">
           <div className="flex gap-2">

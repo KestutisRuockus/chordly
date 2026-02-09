@@ -10,9 +10,10 @@ import { useRouter } from "next/navigation";
 type Props = {
   teacherId: string;
   studentId: string;
+  disabled: boolean;
 };
 
-const DeactivateStudent = ({ teacherId, studentId }: Props) => {
+const DeactivateStudent = ({ teacherId, studentId, disabled }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -46,7 +47,8 @@ const DeactivateStudent = ({ teacherId, studentId }: Props) => {
     <>
       <button
         onClick={() => setIsOpen(true)}
-        className="w-full text-sm rounded-md bg-red-300 cursor-pointer"
+        className={`w-full text-sm rounded-md bg-red-300 ${disabled ? "cursor-not-allowed" : "cursor-pointer"}`}
+        disabled={disabled}
       >
         Deactivate student
       </button>
