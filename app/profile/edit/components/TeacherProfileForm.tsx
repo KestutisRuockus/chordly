@@ -1,6 +1,7 @@
 import type { TeacherRow } from "@/db/types";
 import ProfileImagePicker from "@/components/ProfileImagePicker";
 import { useProfileAvatarUpload } from "@/hooks/useProfileAvatarUpload/useProfileAvatarUpload";
+import InstrumentsSelection from "./InstrumentsSelection";
 
 type Props = {
   initialData: TeacherRow;
@@ -9,7 +10,6 @@ type Props = {
   error?: string;
 };
 
-const instrumentsList = ["Piano", "Guitar", "Violin", "Other"];
 const lessonTypeList = ["online", "in-person", "hybrid"];
 
 const TeacherProfileForm = ({
@@ -40,23 +40,7 @@ const TeacherProfileForm = ({
     <form onSubmit={handleSubmit} className="flex flex-col gap-2 w-96">
       <h3 className="text-3xl my-4 text-center">Edit Teacher Profile</h3>
 
-      <div>
-        <p>Instruments you teach:</p>
-        <div className="flex gap-4">
-          {instrumentsList.map((i) => (
-            <label key={i} className="flex gap-2">
-              <input
-                type="checkbox"
-                name="instruments"
-                value={i}
-                defaultChecked={initialData.instruments?.includes(i)}
-              />
-              {i}
-            </label>
-          ))}
-        </div>
-      </div>
-
+      <InstrumentsSelection defaultSelected={initialData.instruments ?? []} />
       <label>
         Experience<span className="text-red-500">*</span>
       </label>

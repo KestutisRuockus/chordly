@@ -11,3 +11,48 @@ export const TEACHER_PLAN_LIMITS: Record<TeacherPlan, number | null> = {
   medium: 3,
   pro: null,
 };
+export const INSTRUMENTS_LIST = {
+  sectionLabel: "Instruments type: ",
+  items: [
+    {
+      instrumentType: "string",
+      instruments: [
+        "Guitar",
+        "Acoustic Guitar",
+        "Electric Guitar",
+        "Bass Guitar",
+        "Violin",
+        "Viola",
+        "Cello",
+        "Double Bass",
+      ],
+    },
+    {
+      instrumentType: "Keyboard",
+      instruments: ["Piano", "Keyboard", "Synthesizer"],
+    },
+    {
+      instrumentType: "Wind",
+      instruments: [
+        "Flute",
+        "Clarnet",
+        "Saxophone",
+        "Trumpet",
+        "Trombone",
+        "French Horn",
+      ],
+    },
+    {
+      instrumentType: "Percussion",
+      instruments: ["Drums", "Percussion"],
+    },
+    {
+      instrumentType: "Voice",
+      instruments: ["Singing", "Vocal Coaching"],
+    },
+    {
+      instrumentType: "Did not find your instrument?",
+      instruments: ["Other"],
+    },
+  ],
+};
