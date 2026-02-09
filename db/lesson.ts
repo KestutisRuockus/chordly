@@ -26,8 +26,8 @@ export const saveNewLesson = async (input: {
   lessonStatus: LessonStatus;
   instrument: string;
   statusNote?: string | null;
-  meetingUrl?: string | null;
-  location?: string | null;
+  meetingUrl: string | null;
+  location: string | null;
 }) => {
   await db.insert(lessons).values({
     studentId: input.studentId,
@@ -38,8 +38,8 @@ export const saveNewLesson = async (input: {
     lessonStatus: input.lessonStatus,
     instrument: input.instrument,
     statusNote: input.statusNote ?? null,
-    meetingUrl: input.meetingUrl ?? null,
-    location: input.location ?? null,
+    meetingUrl: input.meetingUrl,
+    location: input.location,
   });
 
   return { status: "inserted" as const };

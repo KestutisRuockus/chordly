@@ -31,6 +31,8 @@ type Props = {
   currentRole?: RoleType;
   teacherBookedSlots?: LessonRow[];
   lessonType?: LessonType | null;
+  lessonLocation?: string | null;
+  meetingUrl?: string | null;
 };
 
 const BookingScheduleAction = ({
@@ -43,6 +45,8 @@ const BookingScheduleAction = ({
   currentRole,
   teacherBookedSlots,
   lessonType,
+  lessonLocation,
+  meetingUrl,
 }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const [instrument, setInstrument] = useState("");
@@ -203,6 +207,8 @@ const BookingScheduleAction = ({
         lessonHour: selectedHour,
         instrument,
         lessonType: selectedLessonType,
+        lessonLocation,
+        meetingUrl,
       });
 
       if (!result.ok) {

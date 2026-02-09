@@ -30,6 +30,8 @@ const TeacherFullProfileById = async ({ params }: Props) => {
     return <div>Teacher not found</div>;
   }
 
+  console.log("ads", teacher);
+
   const today = new Date();
   const fromDate = today.toISOString().split("T")[0];
 
@@ -107,6 +109,8 @@ const TeacherFullProfileById = async ({ params }: Props) => {
               teacherInstruments={teacher.instruments}
               teacherBookedSlots={teacherBookedSlots}
               lessonType={teacher.lessonType}
+              lessonLocation={teacher.lessonLocation}
+              meetingUrl={teacher.meetingUrl}
             />
           )}
         </div>

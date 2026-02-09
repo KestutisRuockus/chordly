@@ -9,13 +9,15 @@ import {
   isLessonLocked,
 } from "@/lib/date";
 import BookingScheduleAction from "../BookingScheduleAction";
-import { Pencil } from "lucide-react";
+import { Headset, MapPin, Pencil } from "lucide-react";
 import { useState } from "react";
 import Modal from "../ui/Modal";
 import LessonTypeSelector from "../ui/LessonTypeSelector";
 import { updateLessonTypeAction } from "@/app/actions/lessonActions";
 import { toast } from "sonner";
 import { getTeacherLessonTypeAction } from "@/app/actions/teacher/getTeacherLessonTypeAction";
+import NoMeetingUrlProvided from "./calendar/NoMeetingUrlProvided";
+import NoLessonAddressProvided from "./calendar/NoLessonAddressProvided";
 
 const LessonCard = ({
   id,
@@ -32,6 +34,8 @@ const LessonCard = ({
   participantName,
   teacherWeeklySchedule,
   teacherBookedSlots,
+  location,
+  meetingUrl,
 }: LessonCardProps) => {
   const [isEditLessonTypeOpen, setIsEditLessonTypeOpen] = useState(false);
   const [selectedLessonType, setSelectedLessonType] =
@@ -149,7 +153,20 @@ const LessonCard = ({
           />
         </button>
       </div>
-      <p className="w-fit mb-1">{participantName}</p>
+      <p className="w-fit">{participantName}</p>
+      <div className="flex gap-1 items-center mb-1">
+        {lessonType === "online" ? (
+          <>
+            <Headset size={12} />
+            <p>{meetingUrl ? <p>{meetingUrl}</p> : <NoMeetingUrlProvided />}</p>
+          </>
+        ) : (
+          <>
+            <MapPin size={12} />
+            <p>{location ? <p>{location}</p> : <NoLessonAddressProvided />}</p>
+          </>
+        )}
+      </div>
 
       <div className="flex justify-center">
         {teacherWeeklySchedule ? (

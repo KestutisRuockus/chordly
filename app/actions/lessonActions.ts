@@ -29,13 +29,23 @@ type CreateLessonInput = {
   lessonHour: number;
   instrument: string;
   lessonType: LessonType;
+  lessonLocation?: string | null;
+  meetingUrl?: string | null;
 };
 
 export const createLessonAction = async (input: CreateLessonInput) => {
   const lessonType = input.lessonType ?? "hybrid";
   const lessonStatus: LessonStatus = "scheduled";
 
-  const { lessonDate, lessonHour, studentId, teacherId, instrument } = input;
+  const {
+    lessonDate,
+    lessonHour,
+    studentId,
+    teacherId,
+    instrument,
+    lessonLocation,
+    meetingUrl,
+  } = input;
 
   const teacherLessonAlreadyExistAtThisTime = await findLessonByTeacherDateHour(
     {
@@ -90,6 +100,8 @@ export const createLessonAction = async (input: CreateLessonInput) => {
     lessonType,
     lessonStatus,
     instrument,
+    location: lessonLocation ?? null,
+    meetingUrl: meetingUrl ?? null,
   });
 
   await Promise.all([
