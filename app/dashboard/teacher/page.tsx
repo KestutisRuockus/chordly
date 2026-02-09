@@ -66,30 +66,23 @@ const TeacherDashboardPage = async ({ searchParams }: Props) => {
   const anchor = addDays(new Date(), offsetWeeks * CALENDAR_RANGE_DAYS);
   const { fromDate, toDate } = getDateRange(anchor, CALENDAR_RANGE_DAYS);
 
-  const teacherLessons = await getAllLessonsByRoleAndId({
-    role,
-    id: teachersDbId,
-    fromDate,
-    toDate,
-  });
-  const nextLesson = getNextUpcomingLesson(teacherLessons);
-
-  const [teacherWeeklySchedule, teacherBookedSlots] = await Promise.all([
+  const [teacherWeeklySchedule, teacherLessons] = await Promise.all([
     getTeacherWeeklySchedule(teachersDbId),
     getAllLessonsByRoleAndId({
-      role: "teacher",
+      role: role,
       id: teachersDbId,
       fromDate,
       toDate,
     }),
   ]);
+  const nextLesson = getNextUpcomingLesson(teacherLessons);
 
   const scheduleByTeacherId: TeacherScheduleByTeacherId = {
     [teachersDbId]: teacherWeeklySchedule,
   };
 
   const teacherBookedSlotsByTeacherId: Record<string, LessonRow[]> = {
-    [teachersDbId]: teacherBookedSlots,
+    [teachersDbId]: teacherLessons,
   };
 
   const [currentStudentIds, formerStudentIds] = await Promise.all([

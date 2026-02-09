@@ -61,6 +61,8 @@ export const getAllLessonsByRoleAndId = async (input: {
       .select({
         lesson: lessons,
         participantName: teachers.fullName,
+        teacherLocation: teachers.lessonLocation,
+        teacherMeetingUrl: teachers.meetingUrl,
       })
       .from(lessons)
       .innerJoin(teachers, eq(teachers.id, lessons.teacherId))
@@ -70,6 +72,8 @@ export const getAllLessonsByRoleAndId = async (input: {
     return rows.map((row) => ({
       ...row.lesson,
       participantName: row.participantName,
+      location: row.teacherLocation,
+      meetingUrl: row.teacherMeetingUrl,
     }));
   }
 
@@ -77,15 +81,20 @@ export const getAllLessonsByRoleAndId = async (input: {
     .select({
       lesson: lessons,
       participantName: students.fullName,
+      lessonLocation: teachers.lessonLocation,
+      meetingUrl: teachers.meetingUrl,
     })
     .from(lessons)
     .innerJoin(students, eq(students.id, lessons.studentId))
+    .innerJoin(teachers, eq(teachers.id, lessons.teacherId))
     .where(and(eq(lessons.teacherId, input.id), dateRangeFilter))
     .orderBy(desc(lessons.lessonDate));
 
   return rows.map((row) => ({
     ...row.lesson,
     participantName: row.participantName,
+    location: row.lessonLocation,
+    meetingUrl: row.meetingUrl,
   }));
 };
 
