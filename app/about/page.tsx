@@ -3,8 +3,10 @@ import HeaderSection from "@/components/sections/HeaderSection";
 import { aboutContent } from "../../content/about";
 import Section from "@/components/layout/Section";
 import CallToActionCard from "@/components/ui/CallToActionCard";
+import { auth } from "@clerk/nextjs/server";
 
-const AboutPage = () => {
+const AboutPage = async () => {
+  const { userId } = await auth();
   return (
     <Main>
       <HeaderSection {...aboutContent.header} />
@@ -44,7 +46,7 @@ const AboutPage = () => {
           ))}
         </ul>
       </Section>
-      <CallToActionCard {...aboutContent.buttonCta} />
+      {!userId && <CallToActionCard {...aboutContent.buttonCta} />}
     </Main>
   );
 };

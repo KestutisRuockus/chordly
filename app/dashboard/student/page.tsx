@@ -22,7 +22,7 @@ import {
 } from "@/db/lesson";
 import { getTeacherWeeklySchedule } from "@/db/teacherSchedule";
 import { getNextUpcomingLesson } from "@/lib/lessons";
-import { addDays, getDateRange } from "@/lib/date";
+import { addDays, getDateRange, getMonday } from "@/lib/date";
 import { CALENDAR_RANGE_DAYS } from "@/lib/constants";
 import { getTeachersSummaryByIds } from "@/db/teachers";
 import TeacherCard from "@/components/teachers/TeacherSummaryCard";
@@ -54,10 +54,14 @@ const StudentDashboardPage = async ({ searchParams }: Props) => {
   });
   const nextLesson = getNextUpcomingLesson(lessons);
 
-  const [currentTeachersIds, formerTeachersIds] = await Promise.all([
+  const monday = await getMonday(new Date());
+
+  const [currentTeachersIds, formerTeachersIds, dateRange] = await Promise.all([
     getTeacherIdsList(studentId),
     getFormerTeachersIdsList(studentId),
+    getDateRange(monday, 7),
   ]);
+
   const [
     currentTeachersSummaries,
     formerTeachersSummaries,
@@ -91,6 +95,8 @@ const StudentDashboardPage = async ({ searchParams }: Props) => {
   );
 
   const teacherBookedSlots = Object.fromEntries(bookedSlotsEntries);
+
+  const dateRangeString = `${dateRange.fromDate} - ${dateRange.toDate}`;
 
   const exercises = await getExercisesByStudentId(studentId);
   const summary = getPracticeSummary({ lessons, exercises });
@@ -135,7 +141,7 @@ const StudentDashboardPage = async ({ searchParams }: Props) => {
             <h2 className="font-bold text-xl">There is no exercises</h2>
           </Section>
         )}
-        <PracticeSummary summary={summary} />
+        <PracticeSummary summary={summary} dateRange={dateRangeString} />
       </div>
       {currentTeachersSummaries && (
         <Section>

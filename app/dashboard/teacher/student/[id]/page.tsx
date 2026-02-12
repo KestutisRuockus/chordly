@@ -9,7 +9,11 @@ import { getPracticeSummary } from "@/components/dashboard/helpers/getPracticeSu
 import PracticeSummary from "@/components/dashboard/PracticeSummary";
 import StudentProfileActions from "@/components/dashboard/StudentProfileActions";
 import Note from "@/components/dashboard/Note";
-import { getFormerStudentsIdsList, requireTeacherId } from "@/db/teachers";
+import {
+  getFormerStudentsIdsList,
+  getTeacherInstrumentsList,
+  requireTeacherId,
+} from "@/db/teachers";
 import { getTeacherNotes } from "@/db/teacherNotes";
 import { getExercisesByTeacherAndStudent } from "@/db/exercises";
 import {
@@ -58,12 +62,17 @@ const StudentFullProfileById = async ({ params }: Props) => {
       lesson.teacherId === teacherId && lesson.studentId === studentId,
   );
 
-  const [relatedNotes, relatedExercises, formerStudentIdsList] =
-    await Promise.all([
-      getTeacherNotes({ teacherId, studentId }),
-      getExercisesByTeacherAndStudent({ teacherId, studentId }),
-      getFormerStudentsIdsList(teacherId),
-    ]);
+  const [
+    relatedNotes,
+    relatedExercises,
+    formerStudentIdsList,
+    teacherInstrumentsList,
+  ] = await Promise.all([
+    getTeacherNotes({ teacherId, studentId }),
+    getExercisesByTeacherAndStudent({ teacherId, studentId }),
+    getFormerStudentsIdsList(teacherId),
+    getTeacherInstrumentsList(teacherId),
+  ]);
   const isFormerStudent = formerStudentIdsList.includes(studentId);
 
   const [upcomingLessons, lastLessons, teacherBookedSlots] = await Promise.all([
@@ -134,7 +143,10 @@ const StudentFullProfileById = async ({ params }: Props) => {
           </div>
           <PracticeSummary summary={summary} showFullSummary={false} />
           <div className="w-full flex justify-between items-center">
-            <StudentProfileActions studentId={studentId} />
+            <StudentProfileActions
+              studentId={studentId}
+              teacherInstrumentsList={teacherInstrumentsList}
+            />
           </div>
           <DeactivateStudent
             teacherId={teacherId}
@@ -143,7 +155,7 @@ const StudentFullProfileById = async ({ params }: Props) => {
           />
         </aside>
         <div className="flex flex-col gap-4 col-span-3 bg-slate-300 p-4 rounded-lg">
-          <div className="flex gap-2">
+          <div className="flex gap-2 overflow-x-auto">
             {relatedNotes.map((note) => (
               <Note key={note.id} note={note} studentId={studentId} />
             ))}
@@ -185,7 +197,7 @@ const StudentFullProfileById = async ({ params }: Props) => {
               </div>
             </div>
           </div>
-          <div className="flex gap-2">
+          <div className="flex gap-2 overflow-x-auto">
             {relatedExercises.map((exercise) => (
               <ExerciseCard
                 key={exercise.id}

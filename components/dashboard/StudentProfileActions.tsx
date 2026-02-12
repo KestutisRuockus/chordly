@@ -7,9 +7,13 @@ export type ModalMode = "notes" | "new-exercise" | null;
 
 type Props = {
   studentId: string;
+  teacherInstrumentsList: string[];
 };
 
-const StudentProfileActions = ({ studentId }: Props) => {
+const StudentProfileActions = ({
+  studentId,
+  teacherInstrumentsList,
+}: Props) => {
   const [mode, setMode] = useState<ModalMode>(null);
   return (
     <>
@@ -36,6 +40,7 @@ const StudentProfileActions = ({ studentId }: Props) => {
           mode={mode}
           onClose={() => setMode(null)}
           studentId={studentId}
+          teacherInstrumentsList={teacherInstrumentsList}
         />
       )}
     </>

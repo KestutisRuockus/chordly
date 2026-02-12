@@ -81,7 +81,7 @@ export const homeContent = {
   },
   forStudentsCta2: {
     headline: "Start Learning Music Today",
-    buttonLabel: "Studnet Dashboard",
+    buttonLabel: "Student Dashboard",
     href: "/dashboard/student",
   },
   forTeachersCta: {

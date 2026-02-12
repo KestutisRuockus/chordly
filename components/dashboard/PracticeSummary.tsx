@@ -6,9 +6,14 @@ import { WEEK_DAYS } from "@/lib/date";
 type Props = {
   summary: PracticeSummaryData;
   showFullSummary?: boolean;
+  dateRange: string;
 };
 
-const PracticeSummary = ({ summary, showFullSummary = true }: Props) => {
+const PracticeSummary = ({
+  summary,
+  showFullSummary = true,
+  dateRange,
+}: Props) => {
   const practicedSet = new Set<WeekDay>(summary.practicedDays);
 
   const lessonsLabel = showFullSummary
@@ -20,9 +25,12 @@ const PracticeSummary = ({ summary, showFullSummary = true }: Props) => {
 
   return (
     <Section>
-      <h2 className="font-bold text-xl mb-4 text-center">
-        Current Week Practice Summary
-      </h2>
+      <div className="flex flex-col mb-4">
+        <h2 className="font-bold text-xl text-center">
+          Current Week Practice Summary
+        </h2>
+        <span className="text-center text-xs font-semibold">{dateRange}</span>
+      </div>
 
       <div className="flex flex-col items-center gap-3">
         <div className="flex gap-6 text-sm">

@@ -9,7 +9,7 @@ export const pricing = {
     sectionLabel: "Pricing Plans ( For teachers only )",
     cards: [
       {
-        studentsLimit: "Up to 5 students",
+        studentsLimit: "Up to 1 student",
         label: "Basic",
         plan: "basic" as TeacherPlan,
         price: "19€",
@@ -25,7 +25,7 @@ export const pricing = {
         },
       },
       {
-        studentsLimit: "Up to 14 students",
+        studentsLimit: "Up to 3 students",
         label: "Medium",
         plan: "medium" as TeacherPlan,
         price: "39€",

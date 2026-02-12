@@ -25,6 +25,16 @@ const SearchInput = () => {
     setQuery("");
   };
 
+  const clearAllFilters = () => {
+    const params = new URLSearchParams(searchParams.toString());
+
+    params.delete("q");
+    params.delete("instruments");
+    params.delete("limit");
+
+    router.replace(`${pathName}?${params.toString()}`);
+  };
+
   return (
     <Section className="flex">
       <input
@@ -34,8 +44,11 @@ const SearchInput = () => {
         className="border px-2"
         placeholder="Enter name..."
       />
-      <button onClick={handleSearch} className="border px-2">
+      <button onClick={handleSearch} className="border px-4">
         Search
+      </button>
+      <button onClick={clearAllFilters} className="border px-4 ml-4">
+        Clear all filters
       </button>
     </Section>
   );

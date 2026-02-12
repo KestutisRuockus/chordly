@@ -10,9 +10,15 @@ type Props = {
   mode: ModalMode;
   onClose: () => void;
   studentId: string;
+  teacherInstrumentsList: string[];
 };
 
-const StudentProfileModal = ({ mode, onClose, studentId }: Props) => {
+const StudentProfileModal = ({
+  mode,
+  onClose,
+  studentId,
+  teacherInstrumentsList,
+}: Props) => {
   const [formIsEmpty, setFormIsEmpty] = useState(true);
 
   const title = mode === "notes" ? "Note" : "New Exercise";
@@ -30,6 +36,7 @@ const StudentProfileModal = ({ mode, onClose, studentId }: Props) => {
           onClose={onClose}
           setFormIsEmpty={setFormIsEmpty}
           studentId={studentId}
+          teacherInstrumentsList={teacherInstrumentsList}
         />
       )}
     </Modal>

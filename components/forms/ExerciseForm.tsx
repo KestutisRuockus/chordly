@@ -9,6 +9,7 @@ type Props = {
   onClose: () => void;
   setFormIsEmpty: Dispatch<SetStateAction<boolean>>;
   studentId: string;
+  teacherInstrumentsList: string[];
 };
 
 type FormState = {
@@ -21,7 +22,12 @@ type FormState = {
 
 type FormErrors = Partial<Record<keyof FormState, string>>;
 
-const ExerciseForm = ({ onClose, setFormIsEmpty, studentId }: Props) => {
+const ExerciseForm = ({
+  onClose,
+  setFormIsEmpty,
+  studentId,
+  teacherInstrumentsList,
+}: Props) => {
   const [form, setForm] = useState<FormState>({
     title: "",
     instrument: "",
@@ -54,7 +60,7 @@ const ExerciseForm = ({ onClose, setFormIsEmpty, studentId }: Props) => {
     setErrors((prev) => ({ ...prev, [name]: undefined }));
   };
 
-  const handleTarget = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleTargetChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const formVal: FormState = {
       ...form,
       targetPerWeek: Number(e.target.value) as TargetPerWeek,
@@ -65,7 +71,7 @@ const ExerciseForm = ({ onClose, setFormIsEmpty, studentId }: Props) => {
     setErrors((prev) => ({ ...prev, targetPerWeek: undefined }));
   };
 
-  const handleDifficulty = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleDifficultyChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const formVal: FormState = {
       ...form,
       difficulty: e.target.value as ExerciseDifficulty,
@@ -74,6 +80,17 @@ const ExerciseForm = ({ onClose, setFormIsEmpty, studentId }: Props) => {
     setForm(formVal);
     checkOrFormIsEmpty(formVal);
     setErrors((prev) => ({ ...prev, difficulty: undefined }));
+  };
+
+  const handleInstrumentChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const formVal: FormState = {
+      ...form,
+      instrument: e.target.value,
+    };
+
+    setForm(formVal);
+    checkOrFormIsEmpty(formVal);
+    setErrors((prev) => ({ ...prev, instrument: undefined }));
   };
 
   const validate = (data: FormState): FormErrors => {
@@ -125,7 +142,7 @@ const ExerciseForm = ({ onClose, setFormIsEmpty, studentId }: Props) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-3 mt-2">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-5 mt-2">
       <div className="flex flex-col gap-1">
         <input
           name="title"
@@ -137,23 +154,33 @@ const ExerciseForm = ({ onClose, setFormIsEmpty, studentId }: Props) => {
         {errors.title && <p className="text-sm text-red-500">{errors.title}</p>}
       </div>
 
-      <div className="flex flex-col gap-1">
-        <input
-          name="instrument"
-          value={form.instrument}
-          onChange={handleText}
+      <div className="flex flex-col gap-1 relative">
+        <label className="absolute -top-2 left-2 px-1 text-xs bg-white">
+          Select instrument
+        </label>
+        <select
+          value={form.difficulty}
+          onChange={handleInstrumentChange}
           className="border rounded-lg p-2"
-          placeholder="Instrument"
-        />
-        {errors.instrument && (
-          <p className="text-sm text-red-500">{errors.instrument}</p>
+        >
+          {teacherInstrumentsList.map((instrument) => (
+            <option key={instrument} value={instrument} className="capitalize">
+              {instrument}
+            </option>
+          ))}
+        </select>
+        {errors.difficulty && (
+          <p className="text-sm text-red-500">{errors.difficulty}</p>
         )}
       </div>
 
-      <div className="flex flex-col gap-1">
+      <div className="flex flex-col gap-1 relative">
+        <label className="absolute -top-2 left-2 px-1 text-xs bg-white">
+          Select exercise difficulty
+        </label>
         <select
           value={form.difficulty}
-          onChange={handleDifficulty}
+          onChange={handleDifficultyChange}
           className="border rounded-lg p-2"
         >
           <option value="beginner">Beginner</option>
@@ -177,10 +204,13 @@ const ExerciseForm = ({ onClose, setFormIsEmpty, studentId }: Props) => {
         {errors.goal && <p className="text-sm text-red-500">{errors.goal}</p>}
       </div>
 
-      <div className="flex flex-col gap-1">
+      <div className="flex flex-col gap-1 relative">
+        <label className="absolute -top-2 left-2 px-1 text-xs bg-white">
+          Exercise times per week
+        </label>
         <select
           value={form.targetPerWeek}
-          onChange={handleTarget}
+          onChange={handleTargetChange}
           className="border rounded-lg p-2"
         >
           <option value={1}>1</option>

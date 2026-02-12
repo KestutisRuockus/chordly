@@ -298,3 +298,13 @@ export const getTeacherLessonType = async (teacherId: string) => {
 
   return rows[0]?.lessonType ?? "hybrid";
 };
+
+export const getTeacherInstrumentsList = async (teacherId: string) => {
+  const rows = await db
+    .select({ instruments: teachers.instruments })
+    .from(teachers)
+    .where(eq(teachers.id, teacherId))
+    .limit(1);
+
+  return rows[0]?.instruments ?? [];
+};

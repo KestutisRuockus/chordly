@@ -31,7 +31,6 @@ const Header = async () => {
           <div className="flex gap-8">
             <Link href="/">Home</Link>
             <Link href="/find-teachers">Find Teachers</Link>
-            <Link href="/pricing">Pricing</Link>
             <Link href="/for-students">For Students</Link>
             <Link href="/for-teachers">For Teachers</Link>
             <Link href="/pricing">Pricing</Link>

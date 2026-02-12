@@ -13,9 +13,7 @@ const TeacherPlan = ({ plan, activeStudentsCount }: Props) => {
   return (
     <div className="flex items-center gap-2">
       {plan !== "none" && (
-        <p>
-          {activeStudentsCount} / {limit}
-        </p>
+        <p>{plan === "pro" ? limit : `${activeStudentsCount} / ${limit}`}</p>
       )}
       <PlanBadge plan={plan} />
     </div>

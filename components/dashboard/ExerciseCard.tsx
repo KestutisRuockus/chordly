@@ -47,7 +47,7 @@ const ExerciseCard = ({ exercise, isStudent = true, studentId }: Props) => {
   };
 
   return (
-    <div className="flex flex-col justify-between gap-2 max-w-72 p-2 border rounded-lg relative">
+    <div className="flex flex-col justify-between gap-2 min-w-52 max-w-96 p-2 border rounded-lg relative">
       {!isStudent && (
         <div className="absolute right-0.5 top-0.5 flex gap-1">
           <Trash2 onClick={handleDelete} className="w-4 h-4 cursor-pointer" />

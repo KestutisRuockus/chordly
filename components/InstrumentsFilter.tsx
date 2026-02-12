@@ -14,7 +14,7 @@ const InstrumentsFilter = ({ items }: Props) => {
   const searchParams = useSearchParams();
 
   const selected = new Set(
-    (searchParams.get("instruments") ?? "").split(",").filter(Boolean)
+    (searchParams.get("instruments") ?? "").split(",").filter(Boolean),
   );
 
   const toggleInstrument = (instrument: string) => {
@@ -35,16 +35,6 @@ const InstrumentsFilter = ({ items }: Props) => {
     }
 
     params.delete("limit");
-    router.replace(`${pathName}?${params.toString()}`);
-  };
-
-  const clearAllFilters = () => {
-    const params = new URLSearchParams(searchParams.toString());
-
-    params.delete("q");
-    params.delete("instruments");
-    params.delete("limit");
-
     router.replace(`${pathName}?${params.toString()}`);
   };
 
@@ -72,10 +62,6 @@ const InstrumentsFilter = ({ items }: Props) => {
           </div>
         ))}
       </div>
-
-      <button onClick={clearAllFilters} className="border px-4 mt-4">
-        Clear all filters
-      </button>
     </Section>
   );
 };
