@@ -1,19 +1,14 @@
 import Section from "@/components/layout/Section";
 import type { PracticeSummaryData } from "./helpers/getPracticeSummary";
 import type { WeekDay } from "@/app/dashboard/types";
-import { WEEK_DAYS } from "@/lib/date";
+import { getDateRange, getMonday, WEEK_DAYS } from "@/lib/date";
 
 type Props = {
   summary: PracticeSummaryData;
   showFullSummary?: boolean;
-  dateRange: string;
 };
 
-const PracticeSummary = ({
-  summary,
-  showFullSummary = true,
-  dateRange,
-}: Props) => {
+const PracticeSummary = ({ summary, showFullSummary = true }: Props) => {
   const practicedSet = new Set<WeekDay>(summary.practicedDays);
 
   const lessonsLabel = showFullSummary
@@ -23,13 +18,19 @@ const PracticeSummary = ({
     ? "Weekly goals completed: "
     : "Goals completed (assigned by you): ";
 
+  const monday = getMonday(new Date());
+  const dateRange = getDateRange(monday, 7);
+  const dateRangeString = `${dateRange.fromDate} - ${dateRange.toDate}`;
+
   return (
     <Section>
       <div className="flex flex-col mb-4">
         <h2 className="font-bold text-xl text-center">
           Current Week Practice Summary
         </h2>
-        <span className="text-center text-xs font-semibold">{dateRange}</span>
+        <span className="text-center text-xs font-semibold">
+          {dateRangeString}
+        </span>
       </div>
 
       <div className="flex flex-col items-center gap-3">
