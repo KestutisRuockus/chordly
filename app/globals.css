@@ -1,26 +1,53 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #ededed;
-    --foreground: #0a0a0a;
-  }
-}
+    --background: 142 40% 96%;
+    --card: 142 40% 90%;
+    --foreground: 142 20% 18%;
+    --muted-foreground: 142 10% 60%;
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+    --primary: 160 55% 55%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 150 60% 78%;
+    --secondary-foreground: 142 20% 18%;
+
+    --success: 142 55% 45%;
+    --success-foreground: 0 0% 100%;
+    --destructive: 0 68% 58%;
+    --destructive-foreground: 0 0% 100%;
+    --scheduled: 200 25% 70%;
+    --scheduled-foreground: 142 20% 18%;
+    --rescheduled: 240 5% 70%;
+    --rescheduled-foreground: 142 20% 18%;
+
+    --plan-none: 15 50% 85%;
+    --plan-basic: 45 60% 88%;
+    --plan-medium: 240 5% 92%;
+    --plan-pro: 200 70% 85%;
+
+    --shadow-sm: 0 1px 3px rgba(46, 93, 71, 0.08);
+    --shadow-md: 0 4px 6px rgba(46, 93, 71, 0.1);
+    --shadow-lg: 0 10px 15px rgba(46, 93, 71, 0.12);
+
+    --ring: 160 55% 55%;
+    --ring-offset: 0 0% 100%;
+
+    --border: 142 15% 88%;
+    --input: 142 15% 85%;
+
+    --radius: 0.5rem;
+  }
+
+  body {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+  }
+
+  * {
+    border-color: hsl(var(--border));
+  }
 }
