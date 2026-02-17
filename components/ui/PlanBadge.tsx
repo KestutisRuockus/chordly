@@ -1,24 +1,23 @@
 import { TeacherPlan } from "@/db/types";
+import { Badge } from "@/components/ui/badge";
 
 type Props = {
   plan: TeacherPlan;
 };
 
 const badgeColor: Record<TeacherPlan, string> = {
-  none: "bg-red-300 border-red-400",
-  basic: "bg-yellow-300 border-yellow-400",
-  medium: "bg-orange-300 border-orange-400",
-  pro: "bg-green-300 border-green-400",
+  none: "bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-300",
+  basic: "bg-sky-50 text-sky-700 dark:bg-sky-950 dark:text-sky-300",
+  medium: "bg-blue-50 text-blue-700 dark:bg-blue-950 dark:text-blue-300",
+  pro: "bg-purple-50 text-purple-700 dark:bg-purple-950 dark:text-purple-300",
 };
 
 const PlanBadge = ({ plan }: Props) => {
   const content = plan === "none" ? "No active plan" : plan;
   return (
-    <span
-      className={`inline-flex items-center px-2 py-0.5 border rounded-full text-xs ${badgeColor[plan]}`}
-    >
+    <Badge title="Subscription plan" className={badgeColor[plan]}>
       {content}
-    </span>
+    </Badge>
   );
 };
 

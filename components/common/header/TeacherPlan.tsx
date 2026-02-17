@@ -11,9 +11,14 @@ const TeacherPlan = ({ plan, activeStudentsCount }: Props) => {
   const limit = plan === "pro" ? "Unlimited" : TEACHER_PLAN_LIMITS[plan];
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-2 text-secondary-foreground border border-primary p-2 rounded-md relative">
+      <label className="absolute -top-2 right-0.5 text-[10px] text-foreground px-1 bg-secondary">
+        Subscription
+      </label>
       {plan !== "none" && (
-        <p>{plan === "pro" ? limit : `${activeStudentsCount} / ${limit}`}</p>
+        <p title="Current students / Plan limit">
+          {plan === "pro" ? limit : `${activeStudentsCount} / ${limit}`}
+        </p>
       )}
       <PlanBadge plan={plan} />
     </div>
