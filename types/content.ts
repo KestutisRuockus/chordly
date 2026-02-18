@@ -1,3 +1,5 @@
+import { LucideIcon } from "lucide-react";
+
 export type HeroContent = {
   headline: string;
   subHeadline: string;
@@ -9,7 +11,7 @@ export type HeroContent = {
 };
 
 export type FeatureWithIconContent = {
-  icon: string;
+  icon: LucideIcon;
   title: string;
   description: string;
 };

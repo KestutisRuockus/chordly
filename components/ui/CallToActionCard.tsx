@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils";
 import { CallToActionCardType } from "@/types/content";
 import Link from "next/link";
 
@@ -10,9 +11,18 @@ const CallToActionCard = ({
   const Heading = headingLevel;
 
   return (
-    <div className="border p-2 flex flex-col gap-2 items-center w-fit mx-auto">
-      {headline && <Heading className="font-medium">{headline}</Heading>}
-      <Link className="border px-2" href={href}>
+    <div
+      className={cn(
+        "bg-primary rounded-md text-primary-foreground py-2 px-4 flex flex-col items-center gap-1 w-full sm:w-fit",
+      )}
+    >
+      <p className="text-foreground">
+        {headline && <Heading className="font-medium">{headline}</Heading>}
+      </p>
+      <Link
+        className="w-full text-center bg-muted-foreground rounded-md hover:bg-muted-foreground/80 transition-colors duration-300"
+        href={href}
+      >
         {buttonLabel}
       </Link>
     </div>

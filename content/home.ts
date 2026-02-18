@@ -1,3 +1,11 @@
+import {
+  CalendarDays,
+  Logs,
+  ClipboardClock,
+  LayoutDashboard,
+  UserPen,
+} from "lucide-react";
+
 export const homeContent = {
   hero: {
     headline: "Find the Right Music Teacher for Your Goals",
@@ -47,29 +55,29 @@ export const homeContent = {
   },
   features: [
     {
-      icon: "",
+      icon: CalendarDays,
       title: "Booking Lessons",
       description:
         "Schedule online, in-person, or hybrid lessons that fit your routine.",
     },
     {
-      icon: "",
+      icon: Logs,
       title: "Exercise Assignments",
       description:
         "Receive exercises assigned by your teacher after each lesson.",
     },
     {
-      icon: "",
+      icon: ClipboardClock,
       title: "Practice Tracking",
       description: "Mark when you practice and build healthy learning habits.",
     },
     {
-      icon: "",
+      icon: LayoutDashboard,
       title: "Progress Dashboard",
       description: "Stay on top of your learning or teaching performance.",
     },
     {
-      icon: "",
+      icon: UserPen,
       title: "Teacher Profiles",
       description: "Compare profiles to choose the best match for your goals.",
     },
@@ -90,7 +98,7 @@ export const homeContent = {
     href: "/dashboard/teacher",
   },
   noRoleSignInCta: {
-    headline: "SIgn In and book a lesson",
+    headline: "Sign In and book a lesson",
     buttonLabel: "Sign In",
     href: "/sign-in",
   },
@@ -106,13 +114,13 @@ export const homeContent = {
         quote:
           "Finding a teacher that matched my schedule was always difficult. With Chordly, I booked my first lesson in minutes and I’m finally practicing consistently.",
         name: "Emma R.",
-        rating: 5,
+        rating: 3,
       },
       {
         quote:
           "My teacher assigns exercises after every lesson, and tracking my practice keeps me motivated. I can actually see my progress now",
         name: "Lucas M.",
-        rating: 4,
+        rating: 3.5,
       },
       {
         quote:

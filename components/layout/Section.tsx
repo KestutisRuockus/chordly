@@ -5,7 +5,9 @@ type SectionProps = {
 
 const Section = ({ children, className }: SectionProps) => {
   return (
-    <section className={`border mx-auto w-fit p-6 ${className}`}>
+    <section
+      className={`bg-surface border rounded-md shadow-sm mx-auto w-full p-4 sm:p-6 ${className}`}
+    >
       {children}
     </section>
   );

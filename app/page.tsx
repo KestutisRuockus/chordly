@@ -6,6 +6,9 @@ import Section from "@/components/layout/Section";
 import Main from "@/components/layout/Main";
 import { RoleType } from "@/types/role";
 import { currentUser } from "@clerk/nextjs/server";
+import SectionTitle from "@/components/sections/SectionTitle";
+import HowItWorksFlow from "@/components/HowItWorksFlow";
+import Testimonials from "@/components/Testimonials";
 
 export default async function Home() {
   const user = await currentUser();
@@ -14,83 +17,52 @@ export default async function Home() {
     <Main>
       <HeroSection {...homeContent.hero} />
       <Section>
-        <h2 className="text-xl font-bold">
-          {homeContent.howItWorks.sectionLabel}
-        </h2>
-        <p className="text-md">{homeContent.howItWorks.title}</p>
-        <div className="flex flex-col gap-4 my-4 border-b pb-4">
-          <h3 className="font-medium italic">
-            {homeContent.howItWorks.studentFlow.label}
-          </h3>
-          {homeContent.howItWorks.studentFlow.items.map((item, index) => (
-            <div key={`${homeContent.howItWorks.studentFlow.label}-${index}`}>
-              <h4 className="font-medium">{item.title}</h4>
-              <p className="text-sm">{item.description}</p>
-            </div>
-          ))}
-        </div>
-        <div className="flex flex-col gap-4 my-4">
-          <h3 className="font-medium italic">
-            {homeContent.howItWorks.teacherFlow.label}
-          </h3>
-          {homeContent.howItWorks.teacherFlow.items.map((item, index) => (
-            <div key={`${homeContent.howItWorks.teacherFlow.label}-${index}`}>
-              <h4 className="font-medium">{item.title}</h4>
-              <p className="text-sm">{item.description}</p>
-            </div>
-          ))}
+        <SectionTitle
+          title={homeContent.howItWorks.sectionLabel}
+          description={homeContent.howItWorks.title}
+        />
+        <div className="flex flex-col md:flex-row justify-center gap-12 xl:gap-24 my-8">
+          <HowItWorksFlow
+            label={homeContent.howItWorks.studentFlow.label}
+            items={homeContent.howItWorks.studentFlow.items}
+          />
+          <HowItWorksFlow
+            label={homeContent.howItWorks.teacherFlow.label}
+            items={homeContent.howItWorks.teacherFlow.items}
+          />
         </div>
       </Section>
       <FeaturesWithIconsSection features={homeContent.features} />
       {role === "student" && (
-        <Section className="flex justify-center gap-4">
-          <>
-            <CallToActionCard
-              {...homeContent.forStudentsCta}
-              headingLevel="h3"
-            />
-            <CallToActionCard
-              {...homeContent.forStudentsCta2}
-              headingLevel="h3"
-            />
-          </>
+        <Section className="flex justify-center items-center flex-col sm:flex-row gap-4 sm:gap-8">
+          <CallToActionCard {...homeContent.forStudentsCta} headingLevel="h3" />
+          <CallToActionCard
+            {...homeContent.forStudentsCta2}
+            headingLevel="h3"
+          />
         </Section>
       )}
       {role === "teacher" && (
-        <Section className="flex justify-center gap-4">
+        <Section className="flex justify-center items-center flex-col sm:flex-row gap-4 sm:gap-8">
           <CallToActionCard {...homeContent.forTeachersCta} headingLevel="h3" />
         </Section>
       )}
       {!role && (
-        <Section className="flex justify-center gap-4">
-          <CallToActionCard
-            {...homeContent.noRoleSignInCta}
-            headingLevel="h3"
-          />
-          <CallToActionCard
-            {...homeContent.noRoleSignUpCta}
-            headingLevel="h3"
-          />
+        <Section>
+          <div className="w-full justify-center items-center flex flex-col sm:flex-row gap-4 sm:gap-8">
+            <CallToActionCard
+              {...homeContent.noRoleSignInCta}
+              headingLevel="h3"
+            />
+            <CallToActionCard
+              {...homeContent.noRoleSignUpCta}
+              headingLevel="h3"
+            />
+          </div>
         </Section>
       )}
       <Section>
-        <h2 className="font-bold">{homeContent.testimonials.sectionLabel}</h2>
-        <div className="flex gap-4">
-          {homeContent.testimonials.items.map((item) => (
-            <div
-              key={item.name}
-              className="border p-2 flex flex-col justify-center gap-2"
-            >
-              <div className="flex gap-2">
-                <p>{item.name}</p>
-                <p>
-                  Rating: <span>{item.rating}</span>
-                </p>
-              </div>
-              <p>{item.quote}</p>
-            </div>
-          ))}
-        </div>
+        <Testimonials />
       </Section>
     </Main>
   );

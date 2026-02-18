@@ -22,7 +22,7 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body className={`${outfit.className} antialiased`}>
-          <Header />
+          {/* <Header /> */}
           {children}
           <Toaster richColors position="top-right" />
           <Footer />
