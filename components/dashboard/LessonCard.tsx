@@ -158,7 +158,9 @@ const LessonCard = ({
         {lessonType === "online" ? (
           <>
             <Headset size={12} />
-            <p>{meetingUrl ? <p>{meetingUrl}</p> : <NoMeetingUrlProvided />}</p>
+            <div>
+              {meetingUrl ? <p>{meetingUrl}</p> : <NoMeetingUrlProvided />}
+            </div>
           </>
         ) : (
           <>

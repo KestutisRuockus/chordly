@@ -3,16 +3,14 @@ import type { TeacherFullProfile } from "@/types/teachers";
 import type { StudentFullProfile } from "@/types/students";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import HeaderClient from "./HeaderClient";
-import ProfileAvatar from "@/components/ui/ProfileAvatar";
 import { getStudentById, getStudentDbIdByClerkId } from "@/db/students";
 import { getTeacherById, getTeacherDbIdByClerkId } from "@/db/teachers";
-import TeacherPlan from "./TeacherPlan";
 import logo from "@/public/logo.png";
 import Image from "next/image";
 import NavLink from "@/components/ui/NavLink";
 import Link from "next/link";
 
-type UserSummary =
+export type UserSummary =
   | {
       role: "student";
       data: Pick<StudentFullProfile, "id" | "fullName" | "avatarUrl">;
@@ -29,25 +27,20 @@ const Header = async () => {
   const { userId } = await auth();
   if (!userId) {
     return (
-      <header className="flex items-center gap-16 px-20 bg-secondary h-14">
+      <header className="flex items-center justify-between lg:justify-start gap-16 max-xl:gap-4 px-4 bg-secondary h-14">
         <Link href={"/"} className="cursor-pointer">
           <Image src={logo} alt="Chordly logo" width={72} />
         </Link>
-        <nav className="flex justify-between items-center w-full">
-          <div className="flex gap-8">
-            <NavLink href="/">Home</NavLink>
-            <NavLink href="/find-teachers">Find Teachers</NavLink>
-            <NavLink href="/for-students">For Students</NavLink>
-            <NavLink href="/for-teachers">For Teachers</NavLink>
-            <NavLink href="/pricing">Pricing</NavLink>
-            <NavLink href="/faq">FAQ</NavLink>
-            <NavLink href="/about">About</NavLink>
-          </div>
-          <div className="flex gap-8">
-            <NavLink href="/sign-in">Sign In</NavLink>
-            <NavLink href="/sign-up">Sign Up</NavLink>
-          </div>
+        <nav className="hidden md:flex gap-8 max-[1440px]:gap-4 items-center w-full">
+          <NavLink href="/">Home</NavLink>
+          <NavLink href="/find-teachers">Find Teachers</NavLink>
+          <NavLink href="/for-students">For Students</NavLink>
+          <NavLink href="/for-teachers">For Teachers</NavLink>
+          <NavLink href="/pricing">Pricing</NavLink>
+          <NavLink href="/faq">FAQ</NavLink>
+          <NavLink href="/about">About</NavLink>
         </nav>
+        <HeaderClient />
       </header>
     );
   }
@@ -77,12 +70,12 @@ const Header = async () => {
   }
 
   return (
-    <header className="flex justify-between items-center gap-4 px-20 bg-secondary h-14">
-      <div className="flex items-center gap-16">
+    <header className="flex justify-between items-center gap-4 px-4 max-xl:px-4 bg-secondary h-14">
+      <div className="flex items-center">
         <Link href={"/"} className="cursor-pointer">
           <Image src={logo} alt="Chordly logo" width={72} />
         </Link>
-        <nav className="flex items-center gap-8">
+        <nav className="hidden sm:flex items-center gap-4 xl:gap-8">
           <NavLink href="/">Home</NavLink>
           <NavLink href="/find-teachers">Find Teachers</NavLink>
           <NavLink href={`/dashboard/${userRole}`}>Dashboard</NavLink>
@@ -92,30 +85,7 @@ const Header = async () => {
         </nav>
       </div>
 
-      <div className="flex items-center gap-8">
-        <div className="flex gap-1">
-          <p className="text-secondary-foreground">
-            Welcome back,{" "}
-            <span className="text-lg font-semibold">
-              {userSummary.data.fullName.split(" ")[0]}
-            </span>
-          </p>
-          <ProfileAvatar
-            avatarUrl={userSummary.data.avatarUrl}
-            fullName={userSummary.data.fullName}
-            size={28}
-          />
-        </div>
-
-        {userSummary.role === "teacher" && (
-          <TeacherPlan
-            plan={userSummary.data.plan}
-            activeStudentsCount={userSummary.data.studentIds.length}
-          />
-        )}
-
-        <HeaderClient />
-      </div>
+      <HeaderClient userSummary={userSummary} userRole={userRole} />
     </header>
   );
 };

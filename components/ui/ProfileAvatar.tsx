@@ -3,13 +3,14 @@ import Image from "next/image";
 
 type Props = {
   avatarUrl: string | null;
-  fullName?: string;
+  fullName: string;
   size?: number;
 };
 
 const ProfileAvatar = ({ avatarUrl, fullName, size = 220 }: Props) => {
   return (
-    <div className="flex flex-col justify-center items-center gap-2">
+    <div className="flex justify-center items-center gap-2">
+      <span className="text-lg font-semibold">{fullName.split(" ")[0]}</span>
       <Image
         src={avatarUrl ? avatarUrl : noAvatar}
         alt={fullName ?? "User avatar"}
