@@ -4,7 +4,6 @@ import Main from "@/components/layout/Main";
 import Section from "@/components/layout/Section";
 import { pricing } from "../../content/pricing";
 import CallToActionCard from "@/components/ui/CallToActionCard";
-import AccordionOld from "@/components/ui/AccordionOld";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import PlanUpdate from "@/components/PlanUpdate";
 import { getTeacherDbIdByClerkId, getTeacherPlan } from "@/db/teachers";
@@ -50,7 +49,7 @@ const PricingPage = async () => {
       </Section>
       <Section>
         <h2 className="font-bold">{pricing.faq.sectionLabel}</h2>
-        <AccordionOld items={pricing.faq.items} />
+        {/* <AccordionOld items={pricing.faq.items} /> */}
       </Section>
       {!role && <CallToActionCard {...pricing.buttonCta} />}
     </Main>
