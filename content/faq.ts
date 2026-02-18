@@ -1,7 +1,7 @@
 export const faq = {
   header: {
-    title: "Frequently Asked Questions",
-    description: "Everything you need to know before getting started.",
+    headline: "Frequently Asked Questions",
+    subHeadline: "Everything you need to know before getting started.",
   },
   categories: [
     {

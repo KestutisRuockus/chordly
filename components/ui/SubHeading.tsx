@@ -1,10 +1,20 @@
+import { cn } from "@/lib/utils";
+
 type Props = {
   subHeading: string;
+  textCentered?: boolean;
+  className?: string;
 };
 
-const SubHeading = ({ subHeading }: Props) => {
+const SubHeading = ({ subHeading, textCentered = true, className }: Props) => {
   return (
-    <h3 className="font-medium text-xl text-center text-foreground">
+    <h3
+      className={cn(
+        "font-medium text-xl",
+        `${textCentered ? "text-center" : ""} text-foreground"`,
+        className,
+      )}
+    >
       {subHeading}
     </h3>
   );

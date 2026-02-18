@@ -61,9 +61,7 @@ const AboutPage = async () => {
               >
                 <div className="flex gap-4 items-center">
                   <Icon size={18} />
-                  <h3 className="font-medium text-xl text-foreground">
-                    {item.title}
-                  </h3>
+                  <SubHeading subHeading={item.title} textCentered={false} />
                 </div>
                 <p className="text-sm text-muted-foreground">
                   {item.description}

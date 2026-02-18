@@ -1,17 +1,25 @@
 import Main from "@/components/layout/Main";
-import HeaderSection from "@/components/sections/HeaderSection";
 import { faq } from "../../content/faq";
 import Section from "@/components/layout/Section";
-import Accordion from "@/components/ui/Accordion";
+import HeroSection from "@/components/sections/HeroSection";
+import SubHeading from "@/components/ui/SubHeading";
+import { AccordionMultiple } from "@/components/ui/AccordionMultiple";
 
 const FAQPage = () => {
   return (
     <Main>
-      <HeaderSection {...faq.header} />
+      <HeroSection {...faq.header} />
       {faq.categories.map((category) => (
         <Section key={category.label}>
-          <h2 className="font-bold mt-4 mb-1">{category.label}</h2>
-          <Accordion items={category.items} />
+          <SubHeading
+            subHeading={category.label}
+            textCentered={false}
+            className={"sm:ml-[20%]"}
+          />
+          <AccordionMultiple
+            items={category.items}
+            className="sm:w-3/5 mx-auto"
+          />
         </Section>
       ))}
     </Main>
