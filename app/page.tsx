@@ -9,6 +9,7 @@ import { currentUser } from "@clerk/nextjs/server";
 import SectionTitle from "@/components/sections/SectionTitle";
 import HowItWorksFlow from "@/components/HowItWorksFlow";
 import Testimonials from "@/components/Testimonials";
+import CallToActionCardWrapper from "@/components/ui/CallToActionCardWrapper";
 
 export default async function Home() {
   const user = await currentUser();
@@ -48,18 +49,16 @@ export default async function Home() {
         </Section>
       )}
       {!role && (
-        <Section>
-          <div className="w-full justify-center items-center flex flex-col sm:flex-row gap-4 sm:gap-8">
-            <CallToActionCard
-              {...homeContent.noRoleSignInCta}
-              headingLevel="h3"
-            />
-            <CallToActionCard
-              {...homeContent.noRoleSignUpCta}
-              headingLevel="h3"
-            />
-          </div>
-        </Section>
+        <CallToActionCardWrapper>
+          <CallToActionCard
+            {...homeContent.noRoleSignInCta}
+            headingLevel="h3"
+          />
+          <CallToActionCard
+            {...homeContent.noRoleSignUpCta}
+            headingLevel="h3"
+          />
+        </CallToActionCardWrapper>
       )}
       <Section>
         <Testimonials />

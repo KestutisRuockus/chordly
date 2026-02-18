@@ -1,7 +1,14 @@
+import {
+  Sparkles,
+  GraduationCap,
+  BadgeCheck,
+  ChartNoAxesCombined,
+} from "lucide-react";
+
 export const aboutContent = {
   header: {
-    title: "Chordly platform",
-    description: "A platform designed to support meaningful music education.",
+    headline: "Chordly platform",
+    subHeadline: "A platform designed to support meaningful music education.",
   },
   mission: {
     sectionLabel: "Our Mission",
@@ -46,25 +53,25 @@ export const aboutContent = {
       "We envision a platform where learning and teaching music feels clear, structured, and human. Chordly is built to support long-term progress, meaningful connections, and a healthier learning rhythm for both students and teachers.",
     items: [
       {
-        icon: "Icon",
+        icon: Sparkles,
         title: "Clarity",
         description:
           "We believe simple tools lead to better learning experiences and less friction for everyone involved.",
       },
       {
-        icon: "Icon",
+        icon: GraduationCap,
         title: "Respect for Teachers",
         description:
           "Teachers deserve control, fair conditions, and tools that support their work — not complicate it.",
       },
       {
-        icon: "Icon",
+        icon: BadgeCheck,
         title: "Consistency Over Perfection",
         description:
           "Progress comes from steady practice and guidance, not from chasing perfection.",
       },
       {
-        icon: "Icon",
+        icon: ChartNoAxesCombined,
         title: "Sustainable Growth",
         description:
           "We design features that support long-term learning and teaching, not short-term pressure.",
