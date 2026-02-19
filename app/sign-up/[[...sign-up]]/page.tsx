@@ -1,12 +1,12 @@
-import HeaderSection from "@/components/sections/HeaderSection";
 import { auth } from "@/content/auth";
 import SignUpClient from "./components/SignUpClient";
 import Main from "@/components/layout/Main";
+import HeroSection from "@/components/sections/HeroSection";
 
 const SingUpPage = () => {
   return (
     <Main>
-      <HeaderSection {...auth.registration} />
+      <HeroSection {...auth.registration} />
       <SignUpClient />
     </Main>
   );

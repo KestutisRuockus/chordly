@@ -1,14 +1,14 @@
 "use client";
 
+import type { ClerkAPIResponseError } from "@clerk/shared";
 import { useSignIn, useClerk } from "@clerk/nextjs";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import type { ClerkAPIResponseError } from "@clerk/shared";
-import HeaderSection from "@/components/sections/HeaderSection";
 import { auth } from "@/content/auth";
 import Main from "@/components/layout/Main";
 import Section from "@/components/layout/Section";
+import HeroSection from "@/components/sections/HeroSection";
 
 const SignInPage = () => {
   const { signIn, isLoaded } = useSignIn();
@@ -54,8 +54,8 @@ const SignInPage = () => {
 
   return (
     <Main>
-      <HeaderSection {...auth.login} />
-      <Section>
+      <HeroSection {...auth.login} />
+      <Section className="max-w-sm">
         <form onSubmit={handleSignIn} className="flex flex-col gap-3">
           <input
             type="email"
@@ -63,7 +63,7 @@ const SignInPage = () => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            className="border p-2"
+            className="border p-2 outline-ring"
           />
 
           <input
@@ -72,7 +72,7 @@ const SignInPage = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-            className="border p-2"
+            className="border p-2 outline-ring"
           />
 
           <div className="flex items-center justify-between text-sm">
@@ -81,6 +81,7 @@ const SignInPage = () => {
                 type="checkbox"
                 checked={rememberMe}
                 onChange={(e) => setRememberMe(e.target.checked)}
+                className="accent-primary"
               />
               Remember me
             </label>
@@ -92,7 +93,10 @@ const SignInPage = () => {
 
           {error && <p className="text-red-500 text-sm">{error}</p>}
 
-          <button disabled={loading} className="border p-2">
+          <button
+            disabled={loading}
+            className="border p-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/70 transition-colors duration-300"
+          >
             {loading ? "Signing in..." : "Sign In"}
           </button>
         </form>

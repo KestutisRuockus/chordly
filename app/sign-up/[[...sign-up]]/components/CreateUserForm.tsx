@@ -54,7 +54,7 @@ const CreateUserForm = ({
         placeholder="Full Name"
         value={fullName}
         onChange={(e) => setFullName(e.target.value)}
-        className="border p-2"
+        className="border p-2 outline-ring"
         required
       />
       <input
@@ -62,7 +62,7 @@ const CreateUserForm = ({
         placeholder="Email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
-        className="border p-2"
+        className="border p-2 outline-ring"
         required
       />
       <input
@@ -70,7 +70,7 @@ const CreateUserForm = ({
         placeholder="Password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
-        className="border p-2"
+        className="border p-2 outline-ring"
         required
       />
       <input
@@ -78,7 +78,7 @@ const CreateUserForm = ({
         placeholder="Confirm Password"
         value={confirmPassword}
         onChange={(e) => setConfirmPassword(e.target.value)}
-        className="border p-2"
+        className="border p-2 outline-ring"
         required
       />
 
@@ -87,7 +87,7 @@ const CreateUserForm = ({
       <button
         type="submit"
         disabled={isPending}
-        className="bg-blue-600 text-white p-2"
+        className="bg-primary text-primary-foreground hover:bg-primary/70 p-2 rounded-md"
       >
         {isPending ? "Submitting..." : `Register as ${role}`}
       </button>

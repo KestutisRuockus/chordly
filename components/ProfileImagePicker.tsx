@@ -13,8 +13,10 @@ const ProfileImagePicker = ({ value, onChange, currentImageUrl }: Props) => {
   const displayImage = preview || currentImageUrl;
 
   return (
-    <div className="flex flex-col gap-2 my-4 p-4 border rounded-md">
-      <label className="text-sm font-medium">Profile photo (optional)</label>
+    <div className="flex flex-col gap-2 my-4 p-4 border rounded-md w-full md:w-3/5 xl:w-2/3 mx-auto bg-card">
+      <label className="text-sm font-medium mx-auto">
+        Profile photo (optional)
+      </label>
 
       <div className="h-30 w-30 rounded-md border flex items-center justify-center overflow-hidden mx-auto">
         {displayImage ? (
@@ -36,6 +38,7 @@ const ProfileImagePicker = ({ value, onChange, currentImageUrl }: Props) => {
         onChange={(e) => {
           onChange(e.currentTarget.files?.[0] ?? null);
         }}
+        className="mx-auto max-sm:w-full"
       />
     </div>
   );

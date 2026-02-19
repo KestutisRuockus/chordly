@@ -55,7 +55,7 @@ const ProfileEditClient = ({ role, initialData }: Props) => {
 
   if (role === "student") {
     return (
-      <Section>
+      <Section className="w-full lg:w-4/5 2xl:w-3/5">
         <StudentProfileForm
           initialData={initialData as StudentRow}
           formAction={handleFormAction}
@@ -67,7 +67,7 @@ const ProfileEditClient = ({ role, initialData }: Props) => {
   }
 
   return (
-    <Section>
+    <Section className="w-full lg:w-4/5 2xl:w-3/5">
       <TeacherProfileForm
         initialData={initialData as TeacherRow}
         formAction={handleFormAction}

@@ -100,12 +100,16 @@ const VerifyEmail = ({ onVerified, fields, role }: Props) => {
           onChange={(e) => setCode(e.target.value)}
           placeholder="Enter verification code"
           required
-          className="border p-2"
+          className="border p-2 outline-ring"
         />
 
         {error && <p className="text-red-500 text-sm">{error}</p>}
 
-        <button type="submit" disabled={isVerifying} className="border p-2">
+        <button
+          type="submit"
+          disabled={isVerifying}
+          className="border p-2 bg-primary text-primary-foreground hover:bg-primary/70 transition-colors duration-300 rounded-md"
+        >
           {isVerifying ? "Verifying..." : "Verify Email"}
         </button>
 

@@ -1,17 +1,18 @@
 "use client";
 
+import type { RoleType } from "@/types/role";
 import {
   ValidateCreateUserFields,
   ValidateCreateUserState,
   validateCreateUserAction,
 } from "@/app/actions/validateCreateUser";
-import { RoleType } from "@/types/role";
 import CreateUserForm from "./CreateUserForm";
 import VerifyEmail from "./VerifyEmail";
 import { useState } from "react";
 import Section from "@/components/layout/Section";
 import { useSignUp } from "@clerk/nextjs";
 import { toast } from "sonner";
+import { cn } from "@/lib/utils";
 
 export default function SignUpClient() {
   const [role, setRole] = useState<RoleType | undefined>(undefined);
@@ -58,18 +59,18 @@ export default function SignUpClient() {
 
   if (!role) {
     return (
-      <Section>
+      <Section className="max-w-sm">
         <p>Select a role to register:</p>
         <div className="flex gap-4 mt-4">
           <button
             onClick={() => setRole("teacher")}
-            className="bg-blue-600 text-white p-2"
+            className="bg-background border-2 border-primary rounded-md hover:bg-muted-foreground/70 transition-colors duration-300 text-foreground p-2"
           >
             Register as Teacher
           </button>
           <button
             onClick={() => setRole("student")}
-            className="bg-blue-600 text-white p-2"
+            className="bg-background border-2 border-primary rounded-md hover:bg-muted-foreground/70 transition-colors duration-300 text-foreground p-2"
           >
             Register as Student
           </button>
@@ -89,7 +90,7 @@ export default function SignUpClient() {
   }
 
   return (
-    <Section>
+    <Section className="max-w-sm">
       <CreateUserForm
         role={role}
         formAction={handleFormAction}
@@ -102,13 +103,23 @@ export default function SignUpClient() {
       <div className="flex gap-4 mt-2">
         <button
           onClick={() => setRole("teacher")}
-          className="bg-blue-600 text-white p-2"
+          className={cn(
+            "p-2 rounded-md transition-colors duration-300",
+            role === "teacher"
+              ? "bg-primary text-primary-foreground hover:bg-primary/70"
+              : "bg-secondary text-secondary-foreground hover:bg-secondary/70",
+          )}
         >
           Register as Teacher
         </button>
         <button
           onClick={() => setRole("student")}
-          className="bg-blue-600 text-white p-2"
+          className={cn(
+            "p-2 rounded-md transition-colors duration-300",
+            role === "student"
+              ? "bg-primary text-primary-foreground hover:bg-primary/70"
+              : "bg-secondary text-secondary-foreground hover:bg-secondary/70",
+          )}
         >
           Register as Student
         </button>
