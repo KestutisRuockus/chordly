@@ -29,9 +29,11 @@ const WeekDayButton = ({
   const hasHours = (scheduleMap[day.weekday]?.length ?? 0) > 0;
 
   const baseClass =
-    "rounded border px-2 py-2 text-sm flex flex-col items-center";
-  const selectedClass = isSelected ? "bg-slate-900 text-white" : "bg-white";
-  const hasHoursClass = hasHours ? "border-emerald-600" : "border-slate-300";
+    "rounded border px-0 py-2 text-sm flex flex-col items-center text-foreground";
+  const selectedClass = isSelected
+    ? "bg-primary text-primary-foreground"
+    : "bg-white";
+  const hasHoursClass = hasHours ? "border-muted-foreground" : "border";
   const disabledClass = "opacity-40";
 
   return (

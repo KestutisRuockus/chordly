@@ -22,12 +22,13 @@ const HourSlotButton = ({
   const start = String(hour).padStart(2, "0");
   const label = `${start}:00 - ${start}:${LESSON_LENGTH}`;
 
-  const baseClass = "rounded border px-3 py-2 text-sm text-center";
+  const baseClass =
+    "rounded border px-3 py-2 text-xs text-center text-foreground";
   const activeClass =
-    "bg-emerald-600 text-white border-emerald-600 cursor-pointer";
-  const inactiveClass = "bg-white border-slate-300 hover:bg-slate-100";
+    "bg-primary text-primary-foreground border-muted-foreground cursor-pointer";
+  const inactiveClass = "bg-background border-slate-300 hover:bg-slate-100";
   const disabledClass = "opacity-40";
-  const bookedClass = "bg-red-400 text-white border-red-500";
+  const bookedClass = "bg-destructive text-primary-foreground border-red-500";
 
   const className = [
     baseClass,

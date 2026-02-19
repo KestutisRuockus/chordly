@@ -1,6 +1,7 @@
 "use client";
 
 import { X } from "lucide-react";
+import SubHeading from "./SubHeading";
 
 type Props = {
   title: string;
@@ -23,14 +24,13 @@ const Modal = ({
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="w-fit min-w-lg rounded-lg bg-white p-8"
+        className="w-fit min-w-lg rounded-lg bg-card text-foreground p-2 sm:p-8"
       >
-        <div className="flex items-center justify-between">
-          <h2 className="text-lg font-semibold">{title}</h2>
-
+        <div className="flex items-center justify-between bg-secondary shadow-md p-2 rounded-md">
+          <SubHeading subHeading={title} textCentered={false} />
           <button
             onClick={onClose}
-            className="rounded border px-2 py-1"
+            className="rounded border px-2 py-1 bg-destructive/70 text-foreground hover:bg-destructive/30 hover:text-destructive transition-colors duration-300"
             type="button"
           >
             <X className="w-4 h-4" />

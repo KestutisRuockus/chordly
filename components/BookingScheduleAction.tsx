@@ -303,7 +303,7 @@ const BookingScheduleAction = ({
   };
 
   return (
-    <div className="flex flex-col gap-1 bg-primary rounded-md hover:bg-primary/70 transition-colors duration-300">
+    <div className="flex flex-col gap-1 bg-primary rounded-md text-primary-foreground hover:bg-primary/70 transition-colors duration-300">
       {isTeacher && isCompletable && (
         <button
           onClick={updateLessonStatusAsCompleted}
@@ -364,21 +364,21 @@ const BookingScheduleAction = ({
                 isSubmitting={isSubmitting}
               />
               {!currentScheduledLesson && (
-                <div className="flex gap-4 w-ful border-t mt-2">
-                  <div className="w-1/2">
-                    <h3 className="my-2">Selecet lesson type</h3>
+                <div className="flex flex-col min-[500px]:flex-row gap-4 w-fit mx-auto  min-[500px]:w-full border-t mt-2 bg-secondary shadow-md text-foreground p-2 rounded-md">
+                  <div className="w-full sm:w-1/2">
+                    <h4 className="my-2">Selecet lesson type</h4>
                     <LessonTypeSelector
                       lessonType={lessonType}
                       selectedLessonType={selectedLessonType}
                       onChange={setSelectedLessonType}
                     />
                   </div>
-                  <div className="w-1/2">
-                    <h3 className="my-2">Selecet instrument</h3>
+                  <div className="w-full sm:w-1/2">
+                    <h4 className="my-2">Selecet instrument</h4>
                     <select
                       value={instrument}
                       onChange={(e) => setInstrument(e.target.value)}
-                      className="border rounded px-2 py-1"
+                      className="border px-2 py-1 bg-surface outline-ring"
                     >
                       <option value="" disabled>
                         Select an instrument
