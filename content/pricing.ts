@@ -2,14 +2,14 @@ import type { TeacherPlan } from "@/db/types";
 
 export const pricing = {
   header: {
-    title: "Choose the Plan That Fits Your Teaching",
-    description: "Flexible plans designed to support teachers at every stage.",
+    headline: "Choose the Plan That Fits Your Teaching",
+    subHeadline: "Flexible plans designed to support teachers at every stage.",
   },
   plans: {
-    sectionLabel: "Pricing Plans ( For teachers only )",
+    sectionLabel: "Pricing Plans",
     cards: [
       {
-        studentsLimit: "Up to 1 student",
+        studentsLimit: 1,
         label: "Basic",
         plan: "basic" as TeacherPlan,
         price: "19€",
@@ -25,7 +25,7 @@ export const pricing = {
         },
       },
       {
-        studentsLimit: "Up to 3 students",
+        studentsLimit: 3,
         label: "Medium",
         plan: "medium" as TeacherPlan,
         price: "39€",
@@ -41,7 +41,7 @@ export const pricing = {
         },
       },
       {
-        studentsLimit: "Unlimited students",
+        studentsLimit: "unlimited",
         label: "Pro",
         plan: "pro" as TeacherPlan,
         price: "79€",

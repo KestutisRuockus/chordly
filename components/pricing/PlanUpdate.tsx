@@ -3,8 +3,9 @@
 import { useState } from "react";
 import { updateTeacherPlanAction } from "@/app/actions/teacher/teacherPlanActions";
 import { TeacherPlan } from "@/db/types";
-import Modal from "./ui/Modal";
 import { toast } from "sonner";
+import Modal from "../ui/Modal";
+import { cn } from "@/lib/utils";
 
 type Props = {
   label: string;
@@ -41,7 +42,12 @@ const PlanUpdate = ({ label, plan, teacherId, disabled }: Props) => {
     <div className="flex justify-center">
       <button
         onClick={() => setIsOpen(true)}
-        className={`border rounded-md px-4 ${disabled ? "opacity-50" : ""} cursor-pointer`}
+        className={cn(
+          "border rounded-md px-4 transition-colors duration-300",
+          disabled
+            ? "opacity-50"
+            : "cursor-pointer hover:bg-primary hover:text-primary-foreground",
+        )}
         disabled={disabled}
       >
         {label}
