@@ -3,15 +3,16 @@ import HeroSection from "@/components/sections/HeroSection";
 import { forStudents } from "../../content/forStudents";
 import BenefitsSection from "@/components/sections/BenefitsSection";
 import FeaturesPreview from "@/components/sections/FeaturesPreview";
-import CallToActionCard from "@/components/ui/CallToActionCard";
+import Section from "@/components/layout/Section";
 
 const ForStudentsPage = () => {
   return (
     <Main>
       <HeroSection {...forStudents.hero} />
-      <BenefitsSection {...forStudents.benefits} />
-      <FeaturesPreview {...forStudents.features} />
-      <CallToActionCard {...forStudents.buttonCta} />
+      <Section className="flex flex-col lg:flex-row gap-8 justify-center max-lg:items-center ">
+        <BenefitsSection {...forStudents.benefits} />
+        <FeaturesPreview {...forStudents.features} />
+      </Section>
     </Main>
   );
 };
