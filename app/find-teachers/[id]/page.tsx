@@ -8,10 +8,36 @@ import { getTeacherWeeklySchedule } from "@/db/teacherSchedule";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import { getAllLessonsByRoleAndId } from "@/db/lesson";
 import ProfileAvatar from "@/components/ui/ProfileAvatar";
+import Section from "@/components/layout/Section";
+import { cn } from "@/lib/utils";
+import Heading from "@/components/ui/Heading";
 
 type Props = {
   params: Promise<{ id: string }>;
 };
+type DivLabelAndValueProps = {
+  label: string;
+  value: string | null;
+  isCapitalized?: boolean;
+};
+
+const DivLabelAndValue = ({
+  label,
+  value,
+  isCapitalized = true,
+}: DivLabelAndValueProps) => (
+  <div className="flex flex-col">
+    <label className="text-sm text-muted-foreground">{label}:</label>
+    <p
+      className={cn(
+        "text-foreground text-sm font-semibold break-words",
+        isCapitalized ? "capitalize" : "",
+      )}
+    >
+      {value ?? "N/A"}
+    </p>
+  </div>
+);
 
 const TeacherFullProfileById = async ({ params }: Props) => {
   const { id } = await params;
@@ -29,8 +55,6 @@ const TeacherFullProfileById = async ({ params }: Props) => {
   if (!teacher) {
     return <div>Teacher not found</div>;
   }
-
-  console.log("ads", teacher);
 
   const today = new Date();
   const fromDate = today.toISOString().split("T")[0];
@@ -50,55 +74,50 @@ const TeacherFullProfileById = async ({ params }: Props) => {
   ]);
 
   return (
-    <section className="w-4/5 mx-auto my-8">
+    <Section className="w-full lg:w-3/5 mx-auto my-8">
       <BackButton text="Go back" />
-      <h1 className="mb-4">Teacher Profile</h1>
-      <div className="border flex justify-center gap-12 p-8 my-4 w-1/2 mx-auto">
+      <Heading heading="Teacher Profile" />
+      <div className="bg-card rounded-md flex max-[500px]:flex-col-reverse justify-center gap-12 p-8 my-4 w-full xl:w-4/5 mx-auto">
         <div className="flex flex-col gap-1 max-w-1/2">
-          <p>
-            Full name: <span className="font-bold">{teacher.fullName}</span>
-          </p>
-          <p>
-            Email: <span className="font-bold">{teacher.email}</span>
-          </p>
-          <p>
-            Primary instrument:{" "}
-            <span className="font-bold">{teacher.instruments[0]}</span>
-          </p>
+          <div className="flex flex-col">
+            <label className="text-sm text-muted-foreground">Full Name:</label>
+            <strong className="text-foreground text-sm text-wrap">
+              {teacher.fullName}
+            </strong>
+          </div>
+          <DivLabelAndValue
+            label={"Email"}
+            value={teacher.email}
+            isCapitalized={false}
+          />
+          <DivLabelAndValue
+            label={"Primary instrument"}
+            value={teacher.instruments[0]}
+          />
           {teacher.instruments.length > 1 && (
-            <p>
-              Secondary instruments:{" "}
-              <span className="font-bold">
-                {teacher.instruments.slice(1).join(", ")}
-              </span>
-            </p>
+            <DivLabelAndValue
+              label={"Secondary instrument"}
+              value={teacher.instruments.slice(1).join(", ")}
+            />
           )}
-          <p>
-            Lesson Type: <span className="font-bold">{teacher.lessonType}</span>
-          </p>
-          {teacher.location && (
-            <p>
-              Location: <span className="font-bold">{teacher.location}</span>
-            </p>
-          )}
-          <p>
-            Bio: <span className="font-bold">{teacher.bio}</span>
-          </p>
-          {teacher.experience && (
-            <p>
-              Experience:{" "}
-              <span className="font-bold">{teacher.experience} years</span>
-            </p>
-          )}
-          <p>
-            Hourly rate:{" "}
-            <span className="font-bold">{teacher.hourlyRate}€</span>
-          </p>
+          <DivLabelAndValue label={"Lesson Type:"} value={teacher.lessonType} />
+          <DivLabelAndValue label={"Location:"} value={teacher.location} />
+          <DivLabelAndValue label={"Bio:"} value={teacher.bio} />
+          <DivLabelAndValue
+            label={"Experience"}
+            value={`${teacher.experience} years`}
+            isCapitalized={false}
+          />
+          <DivLabelAndValue
+            label={"Hourly rate:"}
+            value={`${teacher.hourlyRate}€`}
+          />
         </div>
         <div className="flex flex-col gap-4">
           <ProfileAvatar
             avatarUrl={teacher.avatarUrl}
             fullName={teacher.fullName}
+            isTeacherProfilePage={true}
           />
           {userRole === "student" && studentDbId && (
             <BookingScheduleAction
@@ -115,7 +134,7 @@ const TeacherFullProfileById = async ({ params }: Props) => {
           )}
         </div>
       </div>
-    </section>
+    </Section>
   );
 };
 

@@ -1,7 +1,7 @@
 export const findTeachers = {
   header: {
-    title: "Discover Music Teachers",
-    description:
+    headline: "Discover Music Teachers",
+    subHeadline:
       "Explore qualified music teachers and book lessons that fit your goals.",
   },
   filters: {

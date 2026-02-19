@@ -303,7 +303,7 @@ const BookingScheduleAction = ({
   };
 
   return (
-    <div className="flex flex-col gap-1">
+    <div className="flex flex-col gap-1 bg-primary rounded-md hover:bg-primary/70 transition-colors duration-300">
       {isTeacher && isCompletable && (
         <button
           onClick={updateLessonStatusAsCompleted}

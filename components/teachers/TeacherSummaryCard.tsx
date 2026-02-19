@@ -1,5 +1,5 @@
 import { TeacherSummaryCardProps } from "@/types/teachers";
-import Link from "next/link";
+import CallToActionCard from "../ui/CallToActionCard";
 
 type Props = {
   teacher: TeacherSummaryCardProps;
@@ -8,19 +8,30 @@ type Props = {
 const TeacherCard = ({ teacher }: Props) => {
   const instrumensList = teacher.instruments.join(", ");
   return (
-    <div className="border p-6 w-fit">
-      <p>
-        Full Name: <span className="font-bold">{teacher.fullName}</span>
-      </p>
-      Instruments :<p className="font-bold">{instrumensList}</p>
-      <p>
-        Lesson Type:
-        <span className="font-bold">{teacher.lessonType}</span>
-      </p>
+    <div className="border flex flex-col gap-1 py-6 px-4 w-52 rounded-md bg-card">
+      <div className="flex flex-col">
+        <label className="text-sm text-muted-foreground">Full Name:</label>
+        <strong className="text-foreground text-sm text-wrap">
+          {teacher.fullName}
+        </strong>
+      </div>
+      <div className="flex flex-col">
+        <label className="text-sm text-muted-foreground">Instruments:</label>
+        <p className="text-foreground text-sm font-semibold">
+          {instrumensList}
+        </p>
+      </div>
+      <div className="flex flex-col">
+        <label className="text-sm text-muted-foreground">Lesson Type:</label>
+        <p className="text-foreground text-sm font-semibold capitalize">
+          {teacher.lessonType}
+        </p>
+      </div>
       <div className="flex justify-center mt-2">
-        <Link href={`/find-teachers/${teacher.id}`}>
-          <button className="border px-2">View Profile</button>
-        </Link>
+        <CallToActionCard
+          buttonLabel="View Profile"
+          href={`/find-teachers/${teacher.id}`}
+        />
       </div>
     </div>
   );
