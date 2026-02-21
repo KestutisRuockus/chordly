@@ -7,9 +7,13 @@ import Section from "../../layout/Section";
 import WeekDayHeader from "./WeekDayHeader";
 import { addDays, formatDateKey, getTodayWeekDay } from "@/lib/date";
 import { isSameDay } from "../helpers/getPracticeSummary";
-import { CALENDAR_RANGE_DAYS } from "@/lib/constants";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import SubHeading from "@/components/ui/SubHeading";
+import { useScreenSize } from "@/hooks/useCalendarResponsive/useScreenSize";
+import { useRouter } from "next/navigation";
+import { cn } from "@/lib/utils";
+import { useEffectEvent } from "react";
 
 type Props = {
   lessons: LessonRow[];
@@ -29,7 +33,17 @@ const WeekCalendar = ({
   teacherBookedSlots,
 }: Props) => {
   const [showCancelled, setShowCancelled] = useState(true);
+  const days = useScreenSize();
+  const router = useRouter();
   const now = new Date();
+  const gridCols = {
+    1: "grid-cols-1",
+    2: "grid-cols-2",
+    3: "grid-cols-3",
+    4: "grid-cols-4",
+    5: "grid-cols-5",
+    7: "grid-cols-7",
+  }[days];
 
   const [y, m, d] = fromDate.split("-").map(Number);
   const startDate = new Date(y, m - 1, d);
@@ -47,7 +61,7 @@ const WeekCalendar = ({
     arr.sort((a, b) => a.lessonHour - b.lessonHour),
   );
 
-  const weekDays = Array.from({ length: CALENDAR_RANGE_DAYS }, (_, i) => {
+  const weekDays = Array.from({ length: days }, (_, i) => {
     const dayDate = addDays(startDate, i);
     const dateKey = formatDateKey(dayDate);
 
@@ -63,12 +77,20 @@ const WeekCalendar = ({
   const prevOffsetWeeks = offsetWeeks - 1;
   const nextOffsetWeeks = offsetWeeks + 1;
 
+  const onDaysChange = useEffectEvent(() => {
+    router.push(`/dashboard/${currentRole}?offset=0&days=${days}`);
+  });
+
+  useEffect(() => {
+    onDaysChange();
+  }, [days]);
+
   return (
     <Section>
       <div className="flex justify-between items-center">
-        <h2 className="text-xl font-bold">Your schedule</h2>
+        <SubHeading subHeading="Your schedule" />
         <label className="inline-flex items-center cursor-pointer bg-gray-300 py-1 px-2 rounded-md">
-          <span className="mr-3 text-sm font-medium text-gray-900">
+          <span className="mr-3 text-sm font-medium text-foreground">
             Cancelled lessons
           </span>
           <input
@@ -77,7 +99,7 @@ const WeekCalendar = ({
             checked={showCancelled}
             onChange={(e) => setShowCancelled(e.target.checked)}
           />
-          <div className="relative w-9 h-5 bg-red-400 peer-checked:bg-green-500 rounded-full transition-colors duration-300">
+          <div className="relative w-9 h-5 bg-destructive peer-checked:bg-success rounded-full transition-colors duration-300">
             <div
               className={`w-4 h-4 rounded-full bg-white absolute top-0.5 left-0.5
       transition-transform duration-300 ease-in-out
@@ -86,26 +108,34 @@ const WeekCalendar = ({
           </div>
         </label>
       </div>
-      <div className="flex gap-4 mt-2 mb-1">
+      <div className="flex gap-4 mt-2 mb-1 text-foreground">
         <Link
-          href={`/dashboard/${currentRole}?offset=${prevOffsetWeeks}`}
-          className="text-sm"
+          href={`/dashboard/${currentRole}?offset=${prevOffsetWeeks}&days=${days}`}
+          className="text-sm hover:text-foreground/70 transition-colors duration-300"
         >
           ← Previous
         </Link>
 
-        <Link href={`/dashboard/${currentRole}?offset=0`} className="text-sm">
+        <Link
+          href={`/dashboard/${currentRole}?offset=0&days=${days}`}
+          className="text-sm hover:text-foreground/70 transition-colors duration-300"
+        >
           Today
         </Link>
 
         <Link
-          href={`/dashboard/${currentRole}?offset=${nextOffsetWeeks}`}
-          className="text-sm"
+          href={`/dashboard/${currentRole}?offset=${nextOffsetWeeks}&days=${days}`}
+          className="text-sm hover:text-foreground/70 transition-colors duration-300"
         >
           Next →
         </Link>
       </div>
-      <div className="grid grid-cols-7 gap-3 max-h-120 overflow-y-auto">
+      <div
+        className={cn(
+          "grid gap-3 max-h-120 overflow-y-auto justify-items-center",
+          gridCols,
+        )}
+      >
         {weekDays.map((day) => (
           <WeekDayHeader
             key={day.key}

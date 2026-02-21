@@ -49,11 +49,11 @@ const TeacherScheduleAction = ({
   };
 
   return (
-    <>
+    <div className="flex justify-end">
       <button
         type="button"
         onClick={() => setIsOpen(true)}
-        className="rounded border px-3 py-2 w-fit mx-auto h-fit"
+        className="rounded border px-3 py-2 w-fit h-fit bg-secondary text-secondary-foreground hover:bg-secondary/70 transition-colors duration-300"
       >
         {buttonLabel}
       </button>
@@ -72,7 +72,7 @@ const TeacherScheduleAction = ({
           />
         </Modal>
       )}
-    </>
+    </div>
   );
 };
 

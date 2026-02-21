@@ -57,16 +57,16 @@ const PlanUpdate = ({ label, plan, teacherId, disabled }: Props) => {
           title={`Plan will be changed to ${label}?`}
           onClose={() => setIsOpen(false)}
         >
-          <div className="flex gap-4">
+          <div className="flex justify-center gap-4">
             <button
               onClick={handleSubmit}
-              className="border px-4 rounded-md cursor-pointer"
+              className="border px-4 rounded-md cursor-pointer bg-primary text-primary-foreground hover:bg-primary/70 transition-colors duration-300"
             >
               {isSubmitting ? "Updating..." : "Confirm"}
             </button>
             <button
               onClick={() => setIsOpen(false)}
-              className="border px-4 rounded-md cursor-pointer"
+              className="border px-4 rounded-md cursor-pointer bg-destructive/50 text-foreground hover:bg-destructive/80 transition-colors duration-300"
             >
               Cancel
             </button>

@@ -5,7 +5,6 @@ import { teachersDashboard } from "@/content/teachersDashboard";
 import LessonCard from "@/components/dashboard/LessonCard";
 import Main from "@/components/layout/Main";
 import Section from "@/components/layout/Section";
-import HeaderSection from "@/components/sections/HeaderSection";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import WeekCalendar from "@/components/dashboard/calendar/WeekCalendar";
 import StudentSummaryCard from "@/components/dashboard/StudentSummaryCard";
@@ -23,13 +22,16 @@ import {
 } from "@/db/lesson";
 import { getNextUpcomingLesson } from "@/lib/lessons";
 import { addDays, getDateRange } from "@/lib/date";
-import { CALENDAR_RANGE_DAYS } from "@/lib/constants";
 import { getStudentSummaries } from "@/db/students";
 import CallToActionCard from "@/components/ui/CallToActionCard";
 import FormerRelationCard from "@/components/FormerRelationCard";
+import Heading from "@/components/ui/Heading";
+import CallToActionCardWrapper from "@/components/ui/CallToActionCardWrapper";
+import HeroSection from "@/components/sections/HeroSection";
+import SubHeading from "@/components/ui/SubHeading";
 
 type Props = {
-  searchParams?: Promise<{ offset?: string }>;
+  searchParams?: Promise<{ offset?: string; days?: string }>;
 };
 
 const TeacherDashboardPage = async ({ searchParams }: Props) => {
@@ -51,20 +53,23 @@ const TeacherDashboardPage = async ({ searchParams }: Props) => {
   if (plan === "none") {
     return (
       <Main>
-        <h2 className="text-center text-2xl mt-20">
-          Choose a plan to start teaching
-        </h2>
-        <CallToActionCard buttonLabel={"See plans"} href={"/pricing"} />
+        <Section>
+          <Heading heading="Choose a plan to start teaching" />
+        </Section>
+        <CallToActionCardWrapper>
+          <CallToActionCard buttonLabel={"See plans"} href={"/pricing"} />
+        </CallToActionCardWrapper>
       </Main>
     );
   }
 
   const queryParams = (await searchParams) ?? {};
   const offsetFromUrl = Number(queryParams.offset ?? 0);
+  const days = Number(queryParams.days ?? 7);
   const offsetWeeks = Number.isFinite(offsetFromUrl) ? offsetFromUrl : 0;
 
-  const anchor = addDays(new Date(), offsetWeeks * CALENDAR_RANGE_DAYS);
-  const { fromDate, toDate } = getDateRange(anchor, CALENDAR_RANGE_DAYS);
+  const anchor = addDays(new Date(), offsetWeeks * days);
+  const { fromDate, toDate } = getDateRange(anchor, days);
 
   const [teacherWeeklySchedule, teacherLessons] = await Promise.all([
     getTeacherWeeklySchedule(teachersDbId),
@@ -100,8 +105,13 @@ const TeacherDashboardPage = async ({ searchParams }: Props) => {
   ]);
 
   return (
-    <Main>
-      <HeaderSection {...teachersDashboard.header} />
+    <Main className={"2xl:w-11/12 lg:w-full"}>
+      <HeroSection {...teachersDashboard.header} />
+      <TeacherScheduleAction
+        buttonLabel={teachersDashboard.button.buttonLabel}
+        teacherId={teachersDbId}
+        teacherWeeklySchedule={teacherWeeklySchedule}
+      />
       <WeekCalendar
         lessons={teacherLessons}
         currentRole={role}
@@ -110,10 +120,10 @@ const TeacherDashboardPage = async ({ searchParams }: Props) => {
         offsetWeeks={offsetWeeks}
         teacherBookedSlots={teacherBookedSlotsByTeacherId}
       />
-      <div className="flex justify-center gap-4 w-[85%] mx-auto border py-6">
+      <div className="flex flex-col sm:flex-row justify-center gap-4 mx-auto">
         {nextLesson && (
-          <Section>
-            <h2 className="font-bold text-xl">Next Lesson</h2>
+          <Section className="w-fit">
+            <SubHeading subHeading="Next Lesson" textCentered={false} />
             <LessonCard
               currentRole={role}
               {...nextLesson}
@@ -123,25 +133,20 @@ const TeacherDashboardPage = async ({ searchParams }: Props) => {
           </Section>
         )}
         {currentStudentsSummaries.length > 0 && (
-          <Section>
-            <h2 className="font-bold text-xl">Your students</h2>
-            <div className="flex flex-wrap gap-4 mt-2">
+          <Section className="w-4/5 sm:w-fit">
+            <SubHeading subHeading="Your students" textCentered={days < 3} />
+            <div className="flex flex-wrap gap-4 justify-start">
               {currentStudentsSummaries.map((student) => (
                 <StudentSummaryCard key={student.id} student={student} />
               ))}
             </div>
           </Section>
         )}
-        <TeacherScheduleAction
-          buttonLabel={teachersDashboard.button.buttonLabel}
-          teacherId={teachersDbId}
-          teacherWeeklySchedule={teacherWeeklySchedule}
-        />
       </div>
       {formerStudentsSummaries.length > 0 && (
         <Section>
-          <h2 className="mb-2">Your former students</h2>
-          <div className="flex gap-8">
+          <SubHeading subHeading="Your former students" textCentered={false} />
+          <div className="flex flex-wrap gap-4">
             {formerStudentsSummaries.map((student) => (
               <FormerRelationCard
                 key={student.id}

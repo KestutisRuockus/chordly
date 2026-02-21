@@ -309,7 +309,7 @@ const BookingScheduleAction = ({
           onClick={updateLessonStatusAsCompleted}
           type="button"
           disabled={isCompleted}
-          className={`rounded border px-3 py-1 w-full mx-auto ${isCompleted ? "bg-green-300 opacity-60" : ""}`}
+          className={`rounded border px-3 py-1 w-full mx-auto ${isCompleted ? "bg-success text-success-foreground opacity-60" : ""}`}
         >
           {isCompleted ? "✓ Completed" : "Mark as completed"}
         </button>

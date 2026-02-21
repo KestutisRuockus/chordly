@@ -2,6 +2,7 @@ import Section from "@/components/layout/Section";
 import type { PracticeSummaryData } from "./helpers/getPracticeSummary";
 import type { WeekDay } from "@/app/dashboard/types";
 import { getDateRange, getMonday, WEEK_DAYS } from "@/lib/date";
+import SubHeading from "../ui/SubHeading";
 
 type Props = {
   summary: PracticeSummaryData;
@@ -23,17 +24,14 @@ const PracticeSummary = ({ summary, showFullSummary = true }: Props) => {
   const dateRangeString = `${dateRange.fromDate} - ${dateRange.toDate}`;
 
   return (
-    <Section>
+    <Section className="flex flex-col justify-center gap-4">
       <div className="flex flex-col mb-4">
-        <h2 className="font-bold text-xl text-center">
-          Current Week Practice Summary
-        </h2>
-        <span className="text-center text-xs font-semibold">
+        <SubHeading subHeading="Current Week Practice Summary" />
+        <span className="text-center text-xs text-foreground font-semibold">
           {dateRangeString}
         </span>
       </div>
-
-      <div className="flex flex-col items-center gap-3">
+      <div className="flex flex-col justify-center items-center gap-3">
         <div className="flex gap-6 text-sm">
           <p>
             {lessonsLabel}

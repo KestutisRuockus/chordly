@@ -1,3 +1,5 @@
+import { cn } from "@/lib/utils";
+
 type SectionProps = {
   children: React.ReactNode;
   className?: string;
@@ -6,7 +8,10 @@ type SectionProps = {
 const Section = ({ children, className }: SectionProps) => {
   return (
     <section
-      className={`bg-surface border rounded-md shadow-sm mx-auto w-full p-4 sm:p-6 ${className}`}
+      className={cn(
+        "bg-surface border rounded-md shadow-sm mx-auto w-full p-4 sm:p-6",
+        className,
+      )}
     >
       {children}
     </section>

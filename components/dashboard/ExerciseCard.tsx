@@ -9,6 +9,7 @@ import {
   deleteExerciseAction,
   markExercisePracticedTodayAction,
 } from "@/app/actions/teacher/exercisesActions";
+import { cn } from "@/lib/utils";
 
 type Props = {
   exercise: ExerciseRow;
@@ -47,7 +48,12 @@ const ExerciseCard = ({ exercise, isStudent = true, studentId }: Props) => {
   };
 
   return (
-    <div className="flex flex-col justify-between gap-2 min-w-52 max-w-96 p-2 border rounded-lg relative">
+    <div
+      className={cn(
+        "flex flex-col justify-between gap-2 min-w-52 max-w-96 bg-background text-foreground p-2 rounded-lg relative",
+        isDoneThisWeek || practicedToday ? "border border-success" : "border",
+      )}
+    >
       {!isStudent && (
         <div className="absolute right-0.5 top-0.5 flex gap-1">
           <Trash2 onClick={handleDelete} className="w-4 h-4 cursor-pointer" />
@@ -63,22 +69,25 @@ const ExerciseCard = ({ exercise, isStudent = true, studentId }: Props) => {
         <p className="flex items-center gap-2 text-sm">
           Practiced today:
           {practicedToday ? (
-            <Check className="text-green-500 w-4 h-4" />
+            <Check className="text-success w-4 h-4" />
           ) : (
-            <X className="text-red-500 w-4 h-4" />
+            <X className="text-destructive w-4 h-4" />
           )}
         </p>
-        <p className="text-sm text-gray-600">
-          Weekly progress:{" "}
-          <span className="font-semibold text-black">{practicedCount}</span>/
-          {target}
+        <p className="text-sm">
+          Weekly progress: <b>{practicedCount}</b>/{target}
         </p>
       </div>
       <div>
         {isStudent && (
           <button
             onClick={handleMarkPracticedToday}
-            className="border px-2 py-1 rounded-lg disabled:opacity-50 w-full"
+            className={cn(
+              "border px-2 py-1 rounded-lg disabled:opacity-50 w-full text-foreground",
+              isDoneThisWeek || practicedToday
+                ? "bg-success text-success-foreground"
+                : "hover:bg-primary/20 transition-colors duration-300",
+            )}
             disabled={isDoneThisWeek || practicedToday}
           >
             {buttonText}

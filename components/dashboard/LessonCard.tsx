@@ -110,7 +110,7 @@ const LessonCard = ({
 
   if (isUpcomingCard) {
     return (
-      <article className="list-none flex flex-col gap-2 my-3">
+      <article className="list-none flex flex-col gap-2 my-3 text-foreground">
         <p>
           Lesson Date: <span className="font-bold">{lessonDate}</span>
         </p>
@@ -130,14 +130,16 @@ const LessonCard = ({
           <span className="font-bold capitalize">{lessonType}</span>
         </p>
         <p>
-          Lesson Status:{" "}
-          <span className="font-bold capitalize">{lessonStatus}</span>
+          Lesson address:{" "}
+          <span className="font-bold capitalize">
+            {lessonType === "online" ? meetingUrl : location}
+          </span>
         </p>
       </article>
     );
   }
   return (
-    <article className="text-xs border p-2 pt-5 relative rounded-lg">
+    <article className="text-xs border p-2 pt-5 relative rounded-md w-full text-foreground bg-background">
       <div className="flex">
         <p>{formatLessonTime(lessonHour)}</p>
         {!participantName && <p>{`, ${formatMonthDayFromKey(lessonDate)}`}</p>}
@@ -165,7 +167,9 @@ const LessonCard = ({
         ) : (
           <>
             <MapPin size={12} />
-            <p>{location ? <p>{location}</p> : <NoLessonAddressProvided />}</p>
+            <div>
+              {location ? <p>{location}</p> : <NoLessonAddressProvided />}
+            </div>
           </>
         )}
       </div>

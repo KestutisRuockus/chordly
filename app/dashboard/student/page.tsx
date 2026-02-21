@@ -4,7 +4,6 @@ import { studentsDashboard } from "@/content/studentsDashboard";
 import LessonCard from "@/components/dashboard/LessonCard";
 import Main from "@/components/layout/Main";
 import Section from "@/components/layout/Section";
-import HeaderSection from "@/components/sections/HeaderSection";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import WeekCalendar from "@/components/dashboard/calendar/WeekCalendar";
 import ExerciseCard from "@/components/dashboard/ExerciseCard";
@@ -23,13 +22,14 @@ import {
 import { getTeacherWeeklySchedule } from "@/db/teacherSchedule";
 import { getNextUpcomingLesson } from "@/lib/lessons";
 import { addDays, getDateRange } from "@/lib/date";
-import { CALENDAR_RANGE_DAYS } from "@/lib/constants";
 import { getTeachersSummaryByIds } from "@/db/teachers";
 import TeacherCard from "@/components/teachers/TeacherSummaryCard";
 import FormerRelationCard from "@/components/FormerRelationCard";
+import HeroSection from "@/components/sections/HeroSection";
+import SubHeading from "@/components/ui/SubHeading";
 
 type Props = {
-  searchParams?: Promise<{ offset?: string }>;
+  searchParams?: Promise<{ offset?: string; days?: string }>;
 };
 
 const StudentDashboardPage = async ({ searchParams }: Props) => {
@@ -41,10 +41,11 @@ const StudentDashboardPage = async ({ searchParams }: Props) => {
 
   const queryParams = (await searchParams) ?? {};
   const offsetFromUrl = Number(queryParams.offset ?? 0);
+  const days = Number(queryParams.days ?? 7);
   const offsetWeeks = Number.isFinite(offsetFromUrl) ? offsetFromUrl : 0;
 
-  const anchor = addDays(new Date(), offsetWeeks * CALENDAR_RANGE_DAYS);
-  const { fromDate, toDate } = getDateRange(anchor, CALENDAR_RANGE_DAYS);
+  const anchor = addDays(new Date(), offsetWeeks * days);
+  const { fromDate, toDate } = getDateRange(anchor, days);
 
   const lessons = await getAllLessonsByRoleAndId({
     role,
@@ -96,8 +97,8 @@ const StudentDashboardPage = async ({ searchParams }: Props) => {
   const exercises = await getExercisesByStudentId(studentId);
   const summary = getPracticeSummary({ lessons, exercises });
   return (
-    <Main>
-      <HeaderSection {...studentsDashboard.header} />
+    <Main className={"2xl:w-11/12 lg:w-full"}>
+      <HeroSection {...studentsDashboard.header} />
       <WeekCalendar
         lessons={lessons}
         currentRole={role}
@@ -106,10 +107,10 @@ const StudentDashboardPage = async ({ searchParams }: Props) => {
         offsetWeeks={offsetWeeks}
         teacherBookedSlots={teacherBookedSlots}
       />
-      <div className="flex justify-center gap-4 w-[85%] mx-auto border py-6">
+      <div className="flex flex-col sm:flex-row justify-center gap-4 mx-auto">
         {nextLesson && (
-          <Section>
-            <h2 className="font-bold text-xl">Next Lesson</h2>
+          <Section className="w-fit">
+            <SubHeading subHeading="Next Lesson" textCentered={false} />
             <LessonCard
               currentRole={role}
               {...nextLesson}
@@ -118,30 +119,31 @@ const StudentDashboardPage = async ({ searchParams }: Props) => {
             />
           </Section>
         )}
-        {exercises.length > 0 ? (
-          <Section className="max-1/2 overflow-x-auto">
-            <h2 className="font-bold text-xl">Exercises</h2>
-            <div className="flex flex-wrap gap-4">
-              {exercises.map((exercise) => (
-                <ExerciseCard
-                  key={exercise.id}
-                  exercise={exercise}
-                  studentId={studentId}
-                />
-              ))}
-            </div>
-          </Section>
-        ) : (
-          <Section>
-            <h2 className="font-bold text-xl">There is no exercises</h2>
-          </Section>
-        )}
         <PracticeSummary summary={summary} />
       </div>
+      {exercises.length > 0 ? (
+        <Section className="max-1/2 overflow-x-auto">
+          <h2 className="font-bold text-xl"></h2>
+          <SubHeading subHeading="Exercises" />
+          <div className="flex justify-center flex-wrap gap-4">
+            {exercises.map((exercise) => (
+              <ExerciseCard
+                key={exercise.id}
+                exercise={exercise}
+                studentId={studentId}
+              />
+            ))}
+          </div>
+        </Section>
+      ) : (
+        <Section>
+          <h2 className="font-bold text-xl">There is no exercises</h2>
+        </Section>
+      )}
       {currentTeachersSummaries && (
         <Section>
-          <h2 className="font-bold text-xl">Your Teachers</h2>
-          <div className="flex gap-8 mt-2">
+          <SubHeading subHeading="Your Teachers" />
+          <div className="flex flex-wrap gap-4 justify-center">
             {currentTeachersSummaries.map((teacher) => (
               <TeacherCard key={teacher.id} teacher={teacher} />
             ))}
@@ -150,8 +152,8 @@ const StudentDashboardPage = async ({ searchParams }: Props) => {
       )}
       {formerTeachersSummaries.length !== 0 && (
         <Section>
-          <h2 className="mb-2">Your former teachers</h2>
-          <div className="flex gap-8">
+          <SubHeading subHeading="Your former teachers" textCentered={false} />
+          <div className="flex flex-wrap gap-4">
             {formerTeachersSummaries.map((teacher) => (
               <FormerRelationCard
                 key={teacher.id}

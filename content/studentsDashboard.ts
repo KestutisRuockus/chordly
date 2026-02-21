@@ -1,7 +1,7 @@
 export const studentsDashboard = {
   header: {
-    title: "My Learning Dashboard",
-    description:
+    headline: "My Learning Dashboard",
+    subHeadline:
       "Everything you need to manage your music learning in one place.",
   },
   button: {
