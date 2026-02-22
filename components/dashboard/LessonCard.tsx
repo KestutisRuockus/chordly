@@ -139,7 +139,7 @@ const LessonCard = ({
     );
   }
   return (
-    <article className="text-xs border p-2 pt-5 relative rounded-md w-full text-foreground bg-background">
+    <article className="text-xs border p-2 pt-5 relative rounded-md w-full min-[460px]:max-w-48 text-foreground bg-background">
       <div className="flex">
         <p>{formatLessonTime(lessonHour)}</p>
         {!participantName && <p>{`, ${formatMonthDayFromKey(lessonDate)}`}</p>}

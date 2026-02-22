@@ -42,12 +42,15 @@ const NotesForm = ({ onClose, setFormIsEmpty, studentId }: Props) => {
       <textarea
         value={note}
         onChange={handleChange}
-        className="border rounded-lg p-2"
+        className="border rounded-lg p-2 min-h-32 w-72 outline-ring"
         rows={5}
         placeholder="Write note..."
       />
       {errMsg && <p className="text-sm text-red-500">{errMsg}</p>}
-      <button type="submit" className="rounded border px-3 py-2">
+      <button
+        type="submit"
+        className="rounded border px-3 py-2 bg-primary text-primary-foreground hover:bg-primary/70 transition-colors duration-300"
+      >
         Save
       </button>
     </form>

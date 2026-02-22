@@ -142,26 +142,26 @@ const ExerciseForm = ({
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-5 mt-2">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-5 mt-2 w-72">
       <div className="flex flex-col gap-1">
         <input
           name="title"
           value={form.title}
           onChange={handleText}
-          className="border rounded-lg p-2"
+          className="border rounded-lg p-2 outline-ring"
           placeholder="Title"
         />
         {errors.title && <p className="text-sm text-red-500">{errors.title}</p>}
       </div>
 
       <div className="flex flex-col gap-1 relative">
-        <label className="absolute -top-2 left-2 px-1 text-xs bg-white">
+        <label className="absolute -top-2 left-2 px-1 text-xs">
           Select instrument
         </label>
         <select
           value={form.difficulty}
           onChange={handleInstrumentChange}
-          className="border rounded-lg p-2"
+          className="border rounded-lg p-2 outline-ring"
         >
           {teacherInstrumentsList.map((instrument) => (
             <option key={instrument} value={instrument} className="capitalize">
@@ -175,13 +175,13 @@ const ExerciseForm = ({
       </div>
 
       <div className="flex flex-col gap-1 relative">
-        <label className="absolute -top-2 left-2 px-1 text-xs bg-white">
+        <label className="absolute -top-2 left-2 px-1 text-xs">
           Select exercise difficulty
         </label>
         <select
           value={form.difficulty}
           onChange={handleDifficultyChange}
-          className="border rounded-lg p-2"
+          className="border rounded-lg p-2 outline-ring"
         >
           <option value="beginner">Beginner</option>
           <option value="intermediate">Intermediate</option>
@@ -197,7 +197,7 @@ const ExerciseForm = ({
           name="goal"
           value={form.goal}
           onChange={handleText}
-          className="border rounded-lg p-2"
+          className="border rounded-lg p-2 min-h-32 outline-ring"
           rows={4}
           placeholder="Goal"
         />
@@ -205,13 +205,13 @@ const ExerciseForm = ({
       </div>
 
       <div className="flex flex-col gap-1 relative">
-        <label className="absolute -top-2 left-2 px-1 text-xs bg-white">
+        <label className="absolute -top-2 left-2 px-1 text-xs">
           Exercise times per week
         </label>
         <select
           value={form.targetPerWeek}
           onChange={handleTargetChange}
-          className="border rounded-lg p-2"
+          className="border rounded-lg p-2 outline-ring"
         >
           <option value={1}>1</option>
           <option value={3}>3</option>
@@ -222,7 +222,10 @@ const ExerciseForm = ({
         )}
       </div>
 
-      <button type="submit" className="rounded border px-3 py-2">
+      <button
+        type="submit"
+        className="rounded border px-3 py-2 bg-primary text-primary-foreground hover:bg-primary/70 transition-colors duration-300"
+      >
         Save
       </button>
     </form>

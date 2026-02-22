@@ -24,14 +24,14 @@ const PracticeSummary = ({ summary, showFullSummary = true }: Props) => {
   const dateRangeString = `${dateRange.fromDate} - ${dateRange.toDate}`;
 
   return (
-    <Section className="flex flex-col justify-center gap-4">
+    <Section className="flex flex-col justify-center gap-4 shadow-sm">
       <div className="flex flex-col mb-4">
         <SubHeading subHeading="Current Week Practice Summary" />
         <span className="text-center text-xs text-foreground font-semibold">
           {dateRangeString}
         </span>
       </div>
-      <div className="flex flex-col justify-center items-center gap-3">
+      <div className="flex flex-col justify-center items-center gap-3 text-foreground">
         <div className="flex gap-6 text-sm">
           <p>
             {lessonsLabel}
@@ -58,12 +58,12 @@ const PracticeSummary = ({ summary, showFullSummary = true }: Props) => {
 
               return (
                 <div key={day} className="flex flex-col items-center gap-1">
-                  <span className="text-xs text-gray-500">{day}</span>
+                  <span className="text-xs text-muted-foreground">{day}</span>
                   <span
                     className={`w-3 h-3 rounded-sm border ${
                       practiced
-                        ? "bg-green-500 border-green-500"
-                        : "bg-gray-300"
+                        ? "bg-success border-success"
+                        : "bg-muted-foreground"
                     }`}
                   />
                 </div>

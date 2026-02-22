@@ -21,7 +21,7 @@ const StudentProfileActions = ({
         <button
           type="button"
           onClick={() => setMode("notes")}
-          className="rounded border px-3 w-full"
+          className="rounded border px-3 w-full bg-secondary text-secondary-foreground hover:bg-secondary/70 transition-colors duration-300"
         >
           Add notes
         </button>
@@ -29,7 +29,7 @@ const StudentProfileActions = ({
         <button
           type="button"
           onClick={() => setMode("new-exercise")}
-          className="rounded border px-3 w-full"
+          className="rounded border px-3 w-full bg-secondary text-secondary-foreground hover:bg-secondary/70 transition-colors duration-300"
         >
           Add new exercise
         </button>

@@ -27,6 +27,8 @@ import { getTeacherWeeklySchedule } from "@/db/teacherSchedule";
 import { getStudentById } from "@/db/students";
 import DeactivateStudent from "@/components/deactiveStudent/DeactivateStudent";
 import ProfileAvatar from "@/components/ui/ProfileAvatar";
+import DivLabelAndValueColumn from "@/components/ui/DivLabelAndValueColumn";
+import SubHeading from "@/components/ui/SubHeading";
 
 type Props = {
   params: { id: string };
@@ -100,45 +102,40 @@ const StudentFullProfileById = async ({ params }: Props) => {
   });
 
   return (
-    <Main>
+    <Main className=" lg:w-11/12 2xl:w-4/5">
       <BackButton text="Back to dashboard" />
-      <Section className="w-full grid grid-cols-5 gap-4 border-0">
-        <aside className="border rounded-lg bg-slate-300 p-4 col-span-2">
-          <div className="flex items-start justify-between gap-1 p-2 mb-4">
-            <div className="flex flex-col gap-1 max-w-2/3">
-              <p>
-                Name:{" "}
-                <span className="text-sm italic capitalize">
-                  {student.fullName}
-                </span>
-              </p>
-              <p>
-                Email: <span className="text-sm italic">{student.email}</span>
-              </p>
-              <p>
-                Age:{" "}
-                <span className="text-sm italic capitalize">{student.age}</span>
-              </p>
-              <p>
-                Skill Level:{" "}
-                <span className="text-sm italic capitalize">
-                  {student.skillLevel}
-                </span>
-              </p>
-              <p>
-                Bio:{" "}
-                <span className="text-sm italic capitalize">{student.bio}</span>
-              </p>
-              <p>
-                Location:{" "}
-                <span className="text-sm italic capitalize">
-                  {student.location}
-                </span>
-              </p>
+      <Section className="w-full grid grid-cols-5 gap-4 border-0 bg-background shadow-md">
+        <aside className="border rounded-lg bg-card shadow-sm p-4 col-span-5 lg:col-span-2">
+          <div className="flex flex-col-reverse md:flex-row lg:flex-col-reverse xl:flex-row items-center md:items-start lg:item-center xl:items-start justify-between gap-1 p-2 mb-4">
+            <div className="flex flex-col gap-1 w-full lg:w-full xl:w-1/2">
+              <DivLabelAndValueColumn label={"Name"} value={student.fullName} />
+              <DivLabelAndValueColumn
+                label={"Email"}
+                value={student.email ?? "N/A"}
+                isCapitalized={false}
+              />
+              <DivLabelAndValueColumn
+                label={"Age"}
+                value={student?.age ?? "N/A"}
+              />
+              <DivLabelAndValueColumn
+                label={"Skill level"}
+                value={student?.skillLevel ?? "N/A"}
+              />
+              <DivLabelAndValueColumn
+                label={"Bio"}
+                value={student?.bio ?? "N/A"}
+                isCapitalized={false}
+              />
+              <DivLabelAndValueColumn
+                label={"Location"}
+                value={student?.location ?? "N/A"}
+              />
             </div>
             <ProfileAvatar
               avatarUrl={student.avatarUrl}
               fullName={student.fullName}
+              showName={false}
             />
           </div>
           <PracticeSummary summary={summary} showFullSummary={false} />
@@ -154,15 +151,19 @@ const StudentFullProfileById = async ({ params }: Props) => {
             disabled={isFormerStudent}
           />
         </aside>
-        <div className="flex flex-col gap-4 col-span-3 bg-slate-300 p-4 rounded-lg">
-          <div className="flex gap-2 overflow-x-auto">
+        <div className="flex flex-col gap-4 col-span-5 lg:col-span-3 bg-card shadow-sm p-4 rounded-lg">
+          <div className="flex flex-col sm:flex-row gap-2 overflow-x-auto">
             {relatedNotes.map((note) => (
               <Note key={note.id} note={note} studentId={studentId} />
             ))}
           </div>
-          <div className="flex gap-20">
-            <div>
-              <h3 className="font-semibold mb-2">Upcoming lessons</h3>
+
+          <div className="flex flex-col sm:flex-col gap-4">
+            <>
+              <SubHeading
+                subHeading="Your Next 3 Lessons"
+                textCentered={false}
+              />
               <div className="flex gap-2 flex-wrap">
                 {upcomingLessons.length ? (
                   upcomingLessons.map((lesson) => (
@@ -175,12 +176,17 @@ const StudentFullProfileById = async ({ params }: Props) => {
                     />
                   ))
                 ) : (
-                  <p className="text-sm text-gray-600">No upcoming lessons</p>
+                  <p className="text-sm text-muted-foreground">
+                    No upcoming lessons
+                  </p>
                 )}
               </div>
-            </div>
-            <div>
-              <h3 className="font-semibold mb-2">Lesson history</h3>
+            </>
+            <>
+              <SubHeading
+                subHeading="Your Last 3 Lessons"
+                textCentered={false}
+              />
               <div className="flex gap-2 flex-wrap">
                 {lastLessons.length ? (
                   lastLessons.map((lesson) => (
@@ -195,18 +201,24 @@ const StudentFullProfileById = async ({ params }: Props) => {
                   <p className="text-sm text-gray-600">No past lessons</p>
                 )}
               </div>
+            </>
+          </div>
+          <>
+            <SubHeading
+              subHeading="Your Assigned Exercises"
+              textCentered={false}
+            />
+            <div className="flex gap-2 overflow-x-auto">
+              {relatedExercises.map((exercise) => (
+                <ExerciseCard
+                  key={exercise.id}
+                  exercise={exercise}
+                  isStudent={false}
+                  studentId={student.id}
+                />
+              ))}
             </div>
-          </div>
-          <div className="flex gap-2 overflow-x-auto">
-            {relatedExercises.map((exercise) => (
-              <ExerciseCard
-                key={exercise.id}
-                exercise={exercise}
-                isStudent={false}
-                studentId={student.id}
-              />
-            ))}
-          </div>
+          </>
         </div>
       </Section>
     </Main>

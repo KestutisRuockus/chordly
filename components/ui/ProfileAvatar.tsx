@@ -5,18 +5,18 @@ type Props = {
   avatarUrl: string | null;
   fullName: string;
   size?: number;
-  isTeacherProfilePage?: boolean;
+  showName?: boolean;
 };
 
 const ProfileAvatar = ({
   avatarUrl,
   fullName,
   size = 220,
-  isTeacherProfilePage = false,
+  showName = true,
 }: Props) => {
   return (
     <div className="flex justify-center items-center gap-2">
-      {!isTeacherProfilePage && (
+      {showName && (
         <span className="text-lg font-semibold">{fullName.split(" ")[0]}</span>
       )}
       <Image

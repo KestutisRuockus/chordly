@@ -9,35 +9,12 @@ import { auth, currentUser } from "@clerk/nextjs/server";
 import { getAllLessonsByRoleAndId } from "@/db/lesson";
 import ProfileAvatar from "@/components/ui/ProfileAvatar";
 import Section from "@/components/layout/Section";
-import { cn } from "@/lib/utils";
 import Heading from "@/components/ui/Heading";
+import DivLabelAndValueColumn from "@/components/ui/DivLabelAndValueColumn";
 
 type Props = {
   params: Promise<{ id: string }>;
 };
-type DivLabelAndValueProps = {
-  label: string;
-  value: string | null;
-  isCapitalized?: boolean;
-};
-
-const DivLabelAndValue = ({
-  label,
-  value,
-  isCapitalized = true,
-}: DivLabelAndValueProps) => (
-  <div className="flex flex-col">
-    <label className="text-sm text-muted-foreground">{label}:</label>
-    <p
-      className={cn(
-        "text-foreground text-sm font-semibold break-words",
-        isCapitalized ? "capitalize" : "",
-      )}
-    >
-      {value ?? "N/A"}
-    </p>
-  </div>
-);
 
 const TeacherFullProfileById = async ({ params }: Props) => {
   const { id } = await params;
@@ -85,30 +62,36 @@ const TeacherFullProfileById = async ({ params }: Props) => {
               {teacher.fullName}
             </strong>
           </div>
-          <DivLabelAndValue
+          <DivLabelAndValueColumn
             label={"Email"}
             value={teacher.email}
             isCapitalized={false}
           />
-          <DivLabelAndValue
+          <DivLabelAndValueColumn
             label={"Primary instrument"}
             value={teacher.instruments[0]}
           />
           {teacher.instruments.length > 1 && (
-            <DivLabelAndValue
+            <DivLabelAndValueColumn
               label={"Secondary instrument"}
               value={teacher.instruments.slice(1).join(", ")}
             />
           )}
-          <DivLabelAndValue label={"Lesson Type:"} value={teacher.lessonType} />
-          <DivLabelAndValue label={"Location:"} value={teacher.location} />
-          <DivLabelAndValue label={"Bio:"} value={teacher.bio} />
-          <DivLabelAndValue
+          <DivLabelAndValueColumn
+            label={"Lesson Type:"}
+            value={teacher.lessonType}
+          />
+          <DivLabelAndValueColumn
+            label={"Location:"}
+            value={teacher.location}
+          />
+          <DivLabelAndValueColumn label={"Bio:"} value={teacher.bio} />
+          <DivLabelAndValueColumn
             label={"Experience"}
             value={`${teacher.experience} years`}
             isCapitalized={false}
           />
-          <DivLabelAndValue
+          <DivLabelAndValueColumn
             label={"Hourly rate:"}
             value={`${teacher.hourlyRate}€`}
           />
@@ -117,7 +100,7 @@ const TeacherFullProfileById = async ({ params }: Props) => {
           <ProfileAvatar
             avatarUrl={teacher.avatarUrl}
             fullName={teacher.fullName}
-            isTeacherProfilePage={true}
+            showName={false}
           />
           {userRole === "student" && studentDbId && (
             <BookingScheduleAction

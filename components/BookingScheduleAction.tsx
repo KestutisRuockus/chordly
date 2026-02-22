@@ -316,8 +316,8 @@ const BookingScheduleAction = ({
       )}
 
       {currentScheduledLesson?.currentScheduledLessonStatus !== "cancelled" &&
-        currentScheduledLesson?.currentScheduledLessonStatus !==
-          "completed" && (
+        currentScheduledLesson?.currentScheduledLessonStatus !== "completed" &&
+        !isCompletable && (
           <div
             title={
               showTooltip
