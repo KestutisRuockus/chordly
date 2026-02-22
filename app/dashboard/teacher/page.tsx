@@ -65,7 +65,7 @@ const TeacherDashboardPage = async ({ searchParams }: Props) => {
 
   const queryParams = (await searchParams) ?? {};
   const offsetFromUrl = Number(queryParams.offset ?? 0);
-  const days = Number(queryParams.days ?? 7);
+  const days = Number(queryParams.days ?? 1);
   const offsetWeeks = Number.isFinite(offsetFromUrl) ? offsetFromUrl : 0;
 
   const anchor = addDays(new Date(), offsetWeeks * days);

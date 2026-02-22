@@ -3,7 +3,7 @@ import Link from "next/link";
 
 const StudentSummaryCard = ({ student }: { student: StudentSummary }) => {
   return (
-    <div className="flex flex-col w-3/5 max-sm:mx-auto sm:w-60 p-3 border rounded-lg text-foreground bg-background">
+    <div className="flex flex-col w-full max-sm:mx-auto sm:w-60 p-3 border rounded-lg text-foreground bg-background">
       <p>
         Name: <b>{student.name}</b>
       </p>

@@ -142,7 +142,10 @@ const ExerciseForm = ({
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-5 mt-2 w-72">
+    <form
+      onSubmit={handleSubmit}
+      className="flex flex-col gap-5 mt-2 min-w-[280px] w-full"
+    >
       <div className="flex flex-col gap-1">
         <input
           name="title"

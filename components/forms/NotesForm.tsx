@@ -42,7 +42,7 @@ const NotesForm = ({ onClose, setFormIsEmpty, studentId }: Props) => {
       <textarea
         value={note}
         onChange={handleChange}
-        className="border rounded-lg p-2 min-h-32 w-72 outline-ring"
+        className="border rounded-lg p-2 min-h-32 min-w-[280px] w-full  outline-ring"
         rows={5}
         placeholder="Write note..."
       />

@@ -250,21 +250,21 @@ const SchedulePicker = ({
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-6 relative">
       {showCancelValidationWindow && (
-        <div className="absolute -top-11 right-0 bg-red-400 w-full h-101 z-50 rounded-lg flex flex-col gap-0 justify-center items-center">
+        <div className="absolute -top-11 right-0 bg-destructive text-destructive-foreground w-full p-8 h-101 z-50 rounded-lg flex flex-col gap-0 justify-center items-center">
           <p className="text-xl">Do you want to cancel Lesson?</p>
           <p>This action is permanent</p>
           <div className="flex gap-2 justify-center text-lg mt-6">
             <button
               type="button"
               onClick={handleDelete}
-              className="px-4 border rounded-lg"
+              className="px-4 border rounded-lg bg-primary text-primary-foreground hover:bg-primary/70 transition-colors duration-300"
             >
               Yes
             </button>
             <button
               type="button"
               onClick={() => setShowCancelValidationWindow(false)}
-              className="px-4 border rounded-lg"
+              className="px-4 border rounded-lg bg-secondary text-secondary-foreground hover:bg-secondary/70 transition-colors duration-300"
             >
               No
             </button>
@@ -310,7 +310,7 @@ const SchedulePicker = ({
           )}
         </div>
 
-        <div className="grid grid-cols-4 gap-2">
+        <div className="grid max-[360px]:grid-cols-2 max-[500px]:grid-cols-3 grid-cols-4 gap-2">
           {dayTimeSlots.map((hour) => {
             const disabled =
               selectionMode === "single" &&
@@ -339,7 +339,7 @@ const SchedulePicker = ({
           <textarea
             value={statusNote}
             onChange={(e) => setStatusNote(e.target.value)}
-            className="w-full h-full border rounded-lg bg-slate-100 resize-none p-4"
+            className="w-full h-full border rounded-lg bg-slate-100 resize-none p-4 outline-ring"
           />
         </div>
       )}

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 export const useScreenSize = () => {
-  const [days, setDays] = useState(7);
+  const [days, setDays] = useState(1);
 
   useEffect(() => {
     const handleResize = () => {

@@ -32,7 +32,7 @@ const WeekDayHeader = ({
   );
   return (
     <div
-      className={`rounded-xl border p-3 flex flex-col gap-3 max-w-52 w-full ${
+      className={`rounded-xl border p-3 flex flex-col gap-3 min-sm:max-w-52 w-full ${
         day.isToday ? "border-black" : "border-gray-300"
       } relative`}
     >
