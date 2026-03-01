@@ -17,6 +17,7 @@ import { cn } from "@/lib/utils";
 import { UserSummary } from "./Header";
 import ProfileAvatar from "@/components/ui/ProfileAvatar";
 import TeacherPlan from "./TeacherPlan";
+import { useState } from "react";
 
 type Props = {
   userSummary?: UserSummary;
@@ -24,6 +25,7 @@ type Props = {
 };
 
 const HeaderClient = ({ userSummary, userRole }: Props) => {
+  const [isOpen, setIsOpen] = useState(false);
   const session = useSession();
 
   if (!session.isSignedIn) {
@@ -34,11 +36,17 @@ const HeaderClient = ({ userSummary, userRole }: Props) => {
           <NavLink href="/sign-up">Sign Up</NavLink>
         </div>
         <div className="flex items-center lg:hidden">
-          <DropdownMenu>
+          <DropdownMenu onOpenChange={setIsOpen}>
             <DropdownMenuTrigger asChild>
-              <button className="group outline-none cursor-pointer">
+              <button
+                aria-label={
+                  isOpen ? "Close navigation menu" : "Open navigation menu"
+                }
+                className="group cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+              >
                 <PanelBottomClose
                   size={24}
+                  aria-hidden="true"
                   className="transition-all duration-300 text-foreground hover:text-foreground/70 group-data-[state=open]:rotate-180"
                 />
               </button>
@@ -51,7 +59,10 @@ const HeaderClient = ({ userSummary, userRole }: Props) => {
                 "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:slide-in-from-top-2 data-[state=closed]:slide-out-to-top-2 duration-300",
               )}
             >
-              <nav className="flex flex-col gap-4 md:hidden">
+              <nav
+                aria-label="Mobile navigation"
+                className="flex flex-col gap-4 md:hidden"
+              >
                 <NavLink href="/">Home</NavLink>
                 <NavLink href="/find-teachers">Find Teachers</NavLink>
                 <NavLink href="/for-students">For Students</NavLink>
@@ -92,11 +103,17 @@ const HeaderClient = ({ userSummary, userRole }: Props) => {
           )}
         </div>
       )}
-      <DropdownMenu>
+      <DropdownMenu onOpenChange={setIsOpen}>
         <DropdownMenuTrigger asChild>
-          <button className="group outline-none cursor-pointer">
+          <button
+            aria-label={
+              isOpen ? "Close navigation menu" : "Open navigation menu"
+            }
+            className="group cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+          >
             <PanelBottomClose
               size={24}
+              aria-hidden="true"
               className="transition-all duration-300 text-foreground hover:text-foreground/70 group-data-[state=open]:rotate-180"
             />
           </button>
@@ -111,24 +128,25 @@ const HeaderClient = ({ userSummary, userRole }: Props) => {
           )}
         >
           {userSummary && (
-            <DropdownMenuItem asChild>
-              <div className="lg:hidden flex flex-col gap-2">
-                <ProfileAvatar
-                  avatarUrl={userSummary.data.avatarUrl}
-                  fullName={userSummary.data.fullName}
-                  size={28}
-                />
+            <div className="lg:hidden flex flex-col gap-2">
+              <ProfileAvatar
+                avatarUrl={userSummary.data.avatarUrl}
+                fullName={userSummary.data.fullName}
+                size={28}
+              />
 
-                {userSummary.role === "teacher" && (
-                  <TeacherPlan
-                    plan={userSummary.data.plan}
-                    activeStudentsCount={userSummary.data.studentIds.length}
-                  />
-                )}
-              </div>
-            </DropdownMenuItem>
+              {userSummary.role === "teacher" && (
+                <TeacherPlan
+                  plan={userSummary.data.plan}
+                  activeStudentsCount={userSummary.data.studentIds.length}
+                />
+              )}
+            </div>
           )}
-          <nav className="flex flex-col gap-4 sm:hidden">
+          <nav
+            aria-label="Mobile navigation"
+            className="flex flex-col gap-4 sm:hidden"
+          >
             <NavLink href="/">Home</NavLink>
             <NavLink href="/find-teachers">Find Teachers</NavLink>
             <NavLink href={`/dashboard/${userRole}`}>Dashboard</NavLink>
@@ -142,7 +160,7 @@ const HeaderClient = ({ userSummary, userRole }: Props) => {
               href="/profile/edit"
               className="flex items-center gap-2 cursor-pointer"
             >
-              <UserIcon size={20} />
+              <UserIcon size={20} aria-hidden="true" />
               Profile
             </Link>
           </DropdownMenuItem>
@@ -150,7 +168,7 @@ const HeaderClient = ({ userSummary, userRole }: Props) => {
           <DropdownMenuItem asChild variant="destructive">
             <SignOutButton>
               <button className="flex items-centers gap-2 w-full cursor-pointer">
-                <LogOutIcon size={20} />
+                <LogOutIcon size={20} aria-hidden="true" />
                 Sign out
               </button>
             </SignOutButton>

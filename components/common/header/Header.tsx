@@ -5,10 +5,8 @@ import { auth, currentUser } from "@clerk/nextjs/server";
 import HeaderClient from "./HeaderClient";
 import { getStudentById, getStudentDbIdByClerkId } from "@/db/students";
 import { getTeacherById, getTeacherDbIdByClerkId } from "@/db/teachers";
-import logo from "@/public/logo.png";
-import Image from "next/image";
 import NavLink from "@/components/ui/NavLink";
-import Link from "next/link";
+import LogoLinkToHomepage from "@/components/ui/LogoLinkToHomepage";
 
 export type UserSummary =
   | {
@@ -28,10 +26,11 @@ const Header = async () => {
   if (!userId) {
     return (
       <header className="flex items-center justify-between lg:justify-start gap-16 max-xl:gap-4 px-4 bg-secondary h-14">
-        <Link href={"/"} className="cursor-pointer">
-          <Image src={logo} alt="Chordly logo" width={72} />
-        </Link>
-        <nav className="hidden md:flex gap-8 max-[1440px]:gap-4 items-center w-full">
+        <LogoLinkToHomepage />
+        <nav
+          aria-label="Main navigation"
+          className="hidden md:flex gap-8 max-[1440px]:gap-4 items-center w-full"
+        >
           <NavLink href="/">Home</NavLink>
           <NavLink href="/find-teachers">Find Teachers</NavLink>
           <NavLink href="/for-students">For Students</NavLink>
@@ -72,10 +71,11 @@ const Header = async () => {
   return (
     <header className="flex justify-between items-center gap-4 px-4 max-xl:px-4 bg-secondary h-14">
       <div className="flex items-center">
-        <Link href={"/"} className="cursor-pointer">
-          <Image src={logo} alt="Chordly logo" width={72} />
-        </Link>
-        <nav className="hidden sm:flex items-center gap-4 xl:gap-8">
+        <LogoLinkToHomepage />
+        <nav
+          aria-label="Main navigation"
+          className="hidden sm:flex items-center gap-4 xl:gap-8"
+        >
           <NavLink href="/">Home</NavLink>
           <NavLink href="/find-teachers">Find Teachers</NavLink>
           <NavLink href={`/dashboard/${userRole}`}>Dashboard</NavLink>

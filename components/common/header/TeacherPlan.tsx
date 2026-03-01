@@ -12,9 +12,9 @@ const TeacherPlan = ({ plan, activeStudentsCount }: Props) => {
 
   return (
     <div className="flex items-center gap-2 text-secondary-foreground border border-primary p-2 rounded-md relative">
-      <label className="absolute -top-2 right-0.5 text-[10px] text-foreground px-1 bg-secondary">
+      <span className="absolute -top-2 right-0.5 text-[10px] text-foreground px-1 bg-secondary">
         Subscription
-      </label>
+      </span>
       {plan !== "none" && (
         <p title="Current students / Plan limit">
           {plan === "pro" ? limit : `${activeStudentsCount} / ${limit}`}

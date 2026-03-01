@@ -22,6 +22,12 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body className={`${outfit.className} antialiased`}>
+          <a
+            href="#mainContent"
+            className="absolute -top-full focus:top-0 left-0 z-50 p-4 bg-background text-foreground focus:outline-none"
+          >
+            Skip to main content
+          </a>
           <Header />
           {children}
           <Toaster richColors position="top-right" />

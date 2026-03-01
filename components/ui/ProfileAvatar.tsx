@@ -21,7 +21,7 @@ const ProfileAvatar = ({
       )}
       <Image
         src={avatarUrl ? avatarUrl : noAvatar}
-        alt={fullName ?? "User avatar"}
+        alt={fullName}
         width={size}
         height={size}
         className="rounded-full"
