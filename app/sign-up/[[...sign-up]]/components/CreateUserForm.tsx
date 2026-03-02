@@ -49,40 +49,69 @@ const CreateUserForm = ({
       onSubmit={handleSubmit}
       className="flex flex-col gap-4 max-w-md mx-auto"
     >
-      <input
-        type="text"
-        placeholder="Full Name"
-        value={fullName}
-        onChange={(e) => setFullName(e.target.value)}
-        className="border p-2 outline-ring"
-        required
-      />
-      <input
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        className="border p-2 outline-ring"
-        required
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        className="border p-2 outline-ring"
-        required
-      />
-      <input
-        type="password"
-        placeholder="Confirm Password"
-        value={confirmPassword}
-        onChange={(e) => setConfirmPassword(e.target.value)}
-        className="border p-2 outline-ring"
-        required
-      />
+      <div className="flex flex-col">
+        <label htmlFor="fullname" className="text-xs font-medium">
+          Fullname
+        </label>
+        <input
+          id="fullname"
+          type="text"
+          placeholder="Full Name"
+          value={fullName}
+          onChange={(e) => setFullName(e.target.value)}
+          className="border p-2 outline-ring"
+          required
+        />
+      </div>
+      <div className="flex flex-col">
+        <label htmlFor="email" className="text-xs font-medium">
+          Email
+        </label>
+        <input
+          id="email"
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className="border p-2 outline-ring"
+          required
+        />
+      </div>
 
-      {state.error && <p className="text-red-500">{state.error}</p>}
+      <div className="flex flex-col">
+        <label htmlFor="password" className="text-xs font-medium">
+          Password
+        </label>
+        <input
+          id="password"
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          className="border p-2 outline-ring"
+          required
+        />
+      </div>
+      <div className="flex flex-col">
+        <label htmlFor="confirmPassword" className="text-xs font-medium">
+          Confirm Password
+        </label>
+        <input
+          id="confirmPassword"
+          type="password"
+          placeholder="Confirm Password"
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
+          className="border p-2 outline-ring"
+          required
+        />
+      </div>
+
+      {state.error && (
+        <p role="alert" className="text-red-500">
+          {state.error}
+        </p>
+      )}
 
       <button
         type="submit"

@@ -60,21 +60,25 @@ export default function SignUpClient() {
   if (!role) {
     return (
       <Section className="max-w-sm">
-        <p>Select a role to register:</p>
-        <div className="flex gap-4 mt-4">
-          <button
-            onClick={() => setRole("teacher")}
-            className="bg-background border-2 border-primary rounded-md hover:bg-muted-foreground/70 transition-colors duration-300 text-foreground p-2"
-          >
-            Register as Teacher
-          </button>
-          <button
-            onClick={() => setRole("student")}
-            className="bg-background border-2 border-primary rounded-md hover:bg-muted-foreground/70 transition-colors duration-300 text-foreground p-2"
-          >
-            Register as Student
-          </button>
-        </div>
+        <fieldset>
+          <legend className="text-sm font-medium mb-4">
+            Select a role to register:
+          </legend>
+          <div className="flex gap-4 mt-4">
+            <button
+              onClick={() => setRole("teacher")}
+              className="bg-background border-2 border-primary rounded-md hover:bg-muted-foreground/70 transition-colors duration-300 text-foreground p-2"
+            >
+              Register as Teacher
+            </button>
+            <button
+              onClick={() => setRole("student")}
+              className="bg-background border-2 border-primary rounded-md hover:bg-muted-foreground/70 transition-colors duration-300 text-foreground p-2"
+            >
+              Register as Student
+            </button>
+          </div>
+        </fieldset>
       </Section>
     );
   }
@@ -99,31 +103,35 @@ export default function SignUpClient() {
         onSuccess={handleSuccess}
       />
 
-      <p className="mt-4">Or switch role:</p>
-      <div className="flex gap-4 mt-2">
-        <button
-          onClick={() => setRole("teacher")}
-          className={cn(
-            "p-2 rounded-md transition-colors duration-300",
-            role === "teacher"
-              ? "bg-primary text-primary-foreground hover:bg-primary/70"
-              : "bg-secondary text-secondary-foreground hover:bg-secondary/70",
-          )}
-        >
-          Register as Teacher
-        </button>
-        <button
-          onClick={() => setRole("student")}
-          className={cn(
-            "p-2 rounded-md transition-colors duration-300",
-            role === "student"
-              ? "bg-primary text-primary-foreground hover:bg-primary/70"
-              : "bg-secondary text-secondary-foreground hover:bg-secondary/70",
-          )}
-        >
-          Register as Student
-        </button>
-      </div>
+      <fieldset className="mt-4">
+        <legend className="text-sm mt-4">Or switch role:</legend>
+        <div className="flex gap-4 mt-2">
+          <button
+            onClick={() => setRole("teacher")}
+            aria-pressed={role === "teacher"}
+            className={cn(
+              "p-2 rounded-md transition-colors duration-300",
+              role === "teacher"
+                ? "bg-primary text-primary-foreground hover:bg-primary/70"
+                : "bg-secondary text-secondary-foreground hover:bg-secondary/70",
+            )}
+          >
+            Register as Teacher
+          </button>
+          <button
+            onClick={() => setRole("student")}
+            aria-pressed={role === "student"}
+            className={cn(
+              "p-2 rounded-md transition-colors duration-300",
+              role === "student"
+                ? "bg-primary text-primary-foreground hover:bg-primary/70"
+                : "bg-secondary text-secondary-foreground hover:bg-secondary/70",
+            )}
+          >
+            Register as Student
+          </button>
+        </div>
+      </fieldset>
     </Section>
   );
 }

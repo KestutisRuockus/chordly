@@ -91,7 +91,11 @@ const VerifyEmail = ({ onVerified, fields, role }: Props) => {
           We sent a 6-digit verification code to your email address.
         </p>
 
+        <label htmlFor="verificationCode" className="text-xs font-medium">
+          Verification code
+        </label>
         <input
+          id="verificationCode"
           type="text"
           inputMode="numeric"
           pattern="[0-9]*"
@@ -103,7 +107,11 @@ const VerifyEmail = ({ onVerified, fields, role }: Props) => {
           className="border p-2 outline-ring"
         />
 
-        {error && <p className="text-red-500 text-sm">{error}</p>}
+        {error && (
+          <p role="alert" className="text-red-500 text-sm">
+            {error}
+          </p>
+        )}
 
         <button
           type="submit"
