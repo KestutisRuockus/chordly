@@ -4,17 +4,18 @@
 
 @layer base {
   :root {
-    --background: 142 40% 96%;
-    --surface: 142 40% 90%;
-    --card: 142 40% 87%;
-    --foreground: 142 20% 18%;
-    --muted-foreground: 142 10% 60%;
+    --background: 30 31% 96%;
+    --surface: 60 20% 92%;
+    --card: 81 25% 80%;
 
-    --primary: 160 55% 55%;
-    --primary-foreground: 0 0% 100%;
+    --foreground: 0 0% 5%;
+    --muted-foreground: 26 91% 19%;
 
-    --secondary: 150 60% 78%;
-    --secondary-foreground: 142 20% 18%;
+    --primary: 86 43% 68%;
+    --primary-foreground: 0 0% 9%;
+
+    --secondary: 137 20% 70%;
+    --secondary-foreground: 141 46% 9%;
 
     --success: 142 55% 45%;
     --success-foreground: 0 0% 100%;

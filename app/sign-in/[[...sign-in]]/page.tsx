@@ -57,27 +57,39 @@ const SignInPage = () => {
       <HeroSection {...auth.login} />
       <Section className="max-w-sm">
         <form onSubmit={handleSignIn} className="flex flex-col gap-3">
-          <input
-            type="email"
-            placeholder="Email address"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            className="border p-2 outline-ring"
-          />
-
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            className="border p-2 outline-ring"
-          />
+          <div className="flex flex-col">
+            <label htmlFor="email" className="text-xs font-medium">
+              Email address
+            </label>
+            <input
+              id="email"
+              type="email"
+              placeholder="email@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="border p-2 outline-ring"
+            />
+          </div>
+          <div className="flex flex-col">
+            <label htmlFor="password" className="text-xs font-medium">
+              Password
+            </label>
+            <input
+              id="password"
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              className="border p-2 outline-ring"
+            />
+          </div>
 
           <div className="flex items-center justify-between text-sm">
-            <label className="flex items-center gap-2">
+            <label htmlFor="rememberMe" className="flex items-center gap-2">
               <input
+                id="rememberMe"
                 type="checkbox"
                 checked={rememberMe}
                 onChange={(e) => setRememberMe(e.target.checked)}
@@ -91,9 +103,14 @@ const SignInPage = () => {
             </Link>
           </div>
 
-          {error && <p className="text-red-500 text-sm">{error}</p>}
+          {error && (
+            <p role="alert" className="text-red-500 text-sm">
+              {error}
+            </p>
+          )}
 
           <button
+            type="submit"
             disabled={loading}
             className="border p-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/70 transition-colors duration-300"
           >

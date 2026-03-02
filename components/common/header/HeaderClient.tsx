@@ -75,6 +75,7 @@ const HeaderClient = ({ userSummary, userRole }: Props) => {
               <DropdownMenuItem asChild>
                 <NavLink href="/sign-in">Sign In</NavLink>
               </DropdownMenuItem>
+              <DropdownMenuSeparator />
               <DropdownMenuItem asChild>
                 <NavLink href="/sign-up">Sign Up</NavLink>
               </DropdownMenuItem>
@@ -155,7 +156,7 @@ const HeaderClient = ({ userSummary, userRole }: Props) => {
             <NavLink href="/about">About</NavLink>
             <DropdownMenuSeparator />
           </nav>
-          <DropdownMenuItem asChild>
+          <DropdownMenuItem asChild className="bg-card w-full mt-2">
             <Link
               href="/profile/edit"
               className="flex items-center gap-2 cursor-pointer"
@@ -165,7 +166,11 @@ const HeaderClient = ({ userSummary, userRole }: Props) => {
             </Link>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem asChild variant="destructive">
+          <DropdownMenuItem
+            asChild
+            variant="destructive"
+            className="bg-card w-full"
+          >
             <SignOutButton>
               <button className="flex items-centers gap-2 w-full cursor-pointer">
                 <LogOutIcon size={20} aria-hidden="true" />

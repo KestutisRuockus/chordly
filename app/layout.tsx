@@ -21,7 +21,9 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en">
-        <body className={`${outfit.className} antialiased`}>
+        <body
+          className={`${outfit.className} antialiased min-h-screen flex flex-col`}
+        >
           <a
             href="#mainContent"
             className="absolute -top-full focus:top-0 left-0 z-50 p-4 bg-background text-foreground focus:outline-none"

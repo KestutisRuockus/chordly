@@ -10,7 +10,7 @@ const Main = ({ children, className }: MainProps) => {
     <main
       id="mainContent"
       className={cn(
-        "w-full lg:w-4/5 mx-auto my-8 flex flex-col gap-8",
+        "w-full lg:w-4/5 mx-auto my-8 flex flex-col gap-8 flex-1",
         className,
       )}
     >
