@@ -6,22 +6,25 @@ type Props = {
   onChange: (value: LessonType) => void;
 };
 
-type CheckboxInputProps = {
+type RadioInputProps = {
   label: string;
   checked?: boolean;
   readOnly?: boolean;
   onChange?: () => void;
+  name?: string;
 };
 
-const CheckboxInput = ({
+const RadioInput = ({
   label,
   checked = true,
   readOnly = true,
   onChange,
-}: CheckboxInputProps) => (
+  name,
+}: RadioInputProps) => (
   <label className="flex items-center text-foreground text-sm">
     <input
-      type="checkbox"
+      type="radio"
+      name={name}
       checked={checked}
       readOnly={readOnly}
       onChange={onChange}
@@ -37,21 +40,23 @@ const LessonTypeSelector = ({
   onChange,
 }: Props) => {
   if (lessonType === "in-person") {
-    return <CheckboxInput label="In person" />;
+    return <RadioInput label="In person" name="lessonType" />;
   }
   if (lessonType === "online") {
-    return <CheckboxInput label="Online" />;
+    return <RadioInput label="Online" name="lessonType" />;
   }
   return (
     <div className="flex gap-4">
-      <CheckboxInput
+      <RadioInput
         label="In person"
+        name="lessonType"
         checked={selectedLessonType === "in-person"}
         readOnly={false}
         onChange={() => onChange("in-person")}
       />
-      <CheckboxInput
+      <RadioInput
         label="Online"
+        name="lessonType"
         checked={selectedLessonType === "online"}
         readOnly={false}
         onChange={() => onChange("online")}

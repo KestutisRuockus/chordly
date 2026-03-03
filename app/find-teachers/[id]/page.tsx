@@ -10,7 +10,7 @@ import { getAllLessonsByRoleAndId } from "@/db/lesson";
 import ProfileAvatar from "@/components/ui/ProfileAvatar";
 import Section from "@/components/layout/Section";
 import Heading from "@/components/ui/Heading";
-import DivLabelAndValueColumn from "@/components/ui/DivLabelAndValueColumn";
+import DescriptionList from "@/components/ui/DescriptionList";
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -56,42 +56,31 @@ const TeacherFullProfileById = async ({ params }: Props) => {
       <Heading heading="Teacher Profile" />
       <div className="bg-card rounded-md flex max-[500px]:flex-col-reverse justify-center gap-12 p-8 my-4 w-full xl:w-4/5 mx-auto">
         <div className="flex flex-col gap-1 max-w-1/2">
-          <div className="flex flex-col">
-            <label className="text-sm text-muted-foreground">Full Name:</label>
-            <strong className="text-foreground text-sm text-wrap">
-              {teacher.fullName}
-            </strong>
-          </div>
-          <DivLabelAndValueColumn
+          <DescriptionList label="Full Name" value={teacher.fullName} />
+          <DescriptionList
             label={"Email"}
             value={teacher.email}
             isCapitalized={false}
           />
-          <DivLabelAndValueColumn
+          <DescriptionList
             label={"Primary instrument"}
             value={teacher.instruments[0]}
           />
           {teacher.instruments.length > 1 && (
-            <DivLabelAndValueColumn
+            <DescriptionList
               label={"Secondary instrument"}
               value={teacher.instruments.slice(1).join(", ")}
             />
           )}
-          <DivLabelAndValueColumn
-            label={"Lesson Type:"}
-            value={teacher.lessonType}
-          />
-          <DivLabelAndValueColumn
-            label={"Location:"}
-            value={teacher.location}
-          />
-          <DivLabelAndValueColumn label={"Bio:"} value={teacher.bio} />
-          <DivLabelAndValueColumn
+          <DescriptionList label={"Lesson Type:"} value={teacher.lessonType} />
+          <DescriptionList label={"Location:"} value={teacher.location} />
+          <DescriptionList label={"Bio:"} value={teacher.bio} />
+          <DescriptionList
             label={"Experience"}
             value={`${teacher.experience} years`}
             isCapitalized={false}
           />
-          <DivLabelAndValueColumn
+          <DescriptionList
             label={"Hourly rate:"}
             value={`${teacher.hourlyRate}€`}
           />

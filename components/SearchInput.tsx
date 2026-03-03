@@ -37,7 +37,11 @@ const SearchInput = () => {
   return (
     <div className="flex flex-col gap-2">
       <div className="flex rounded-md w-full">
+        <label htmlFor="search" className="sr-only">
+          Search
+        </label>
         <input
+          id="search"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           type="text"
@@ -46,6 +50,7 @@ const SearchInput = () => {
         />
         <button
           onClick={handleSearch}
+          type="button"
           className="border bg-primary text-primary-foreground hover:bg-primary/70 transition-colors duration-300 rounded-r-md px-4"
         >
           Search
@@ -53,6 +58,7 @@ const SearchInput = () => {
       </div>
       <button
         onClick={clearAllFilters}
+        type="button"
         className="w-fit border bg-secondary text-xs text-secondary-foreground hover:bg-secondary/70 transition-colors duration-300 px-4 rounded-md"
       >
         Clear all filters

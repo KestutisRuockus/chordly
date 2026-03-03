@@ -27,7 +27,7 @@ import { getTeacherWeeklySchedule } from "@/db/teacherSchedule";
 import { getStudentById } from "@/db/students";
 import DeactivateStudent from "@/components/deactiveStudent/DeactivateStudent";
 import ProfileAvatar from "@/components/ui/ProfileAvatar";
-import DivLabelAndValueColumn from "@/components/ui/DivLabelAndValueColumn";
+import DescriptionList from "@/components/ui/DescriptionList";
 import SubHeading from "@/components/ui/SubHeading";
 
 type Props = {
@@ -108,26 +108,23 @@ const StudentFullProfileById = async ({ params }: Props) => {
         <aside className="border rounded-lg bg-card shadow-sm p-4 col-span-5 lg:col-span-2">
           <div className="flex flex-col-reverse md:flex-row lg:flex-col-reverse xl:flex-row items-center md:items-start lg:item-center xl:items-start justify-between gap-1 p-2 mb-4">
             <div className="flex flex-col gap-1 w-full lg:w-full xl:w-1/2">
-              <DivLabelAndValueColumn label={"Name"} value={student.fullName} />
-              <DivLabelAndValueColumn
+              <DescriptionList label={"Name"} value={student.fullName} />
+              <DescriptionList
                 label={"Email"}
                 value={student.email ?? "N/A"}
                 isCapitalized={false}
               />
-              <DivLabelAndValueColumn
-                label={"Age"}
-                value={student?.age ?? "N/A"}
-              />
-              <DivLabelAndValueColumn
+              <DescriptionList label={"Age"} value={student?.age ?? "N/A"} />
+              <DescriptionList
                 label={"Skill level"}
                 value={student?.skillLevel ?? "N/A"}
               />
-              <DivLabelAndValueColumn
+              <DescriptionList
                 label={"Bio"}
                 value={student?.bio ?? "N/A"}
                 isCapitalized={false}
               />
-              <DivLabelAndValueColumn
+              <DescriptionList
                 label={"Location"}
                 value={student?.location ?? "N/A"}
               />

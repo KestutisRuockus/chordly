@@ -250,8 +250,15 @@ const SchedulePicker = ({
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-6 relative">
       {showCancelValidationWindow && (
-        <div className="absolute -top-11 right-0 bg-destructive text-destructive-foreground w-full p-8 h-101 z-50 rounded-lg flex flex-col gap-0 justify-center items-center">
-          <p className="text-xl">Do you want to cancel Lesson?</p>
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="cancelDialogTitle"
+          className="absolute -top-11 right-0 bg-destructive text-destructive-foreground w-full p-8 h-101 z-50 rounded-lg flex flex-col gap-0 justify-center items-center"
+        >
+          <p id="cancelDialogTitle" className="text-xl">
+            Do you want to cancel Lesson?
+          </p>
           <p>This action is permanent</p>
           <div className="flex gap-2 justify-center text-lg mt-6">
             <button
@@ -294,19 +301,20 @@ const SchedulePicker = ({
 
       <div className="flex flex-col gap-3">
         <div className="flex justify-between items-center">
-          <h3 className="text-sm font-semibold">
+          <p className="text-sm font-semibold">
             Select available hours for {WEEK_DAYS[selectedWeekday]}
-          </h3>
+          </p>
 
           {selectionMode === "multi" && (
-            <div
+            <button
               onClick={toggleAllDay}
+              type="button"
               className="border rounded-lg px-2 cursor-pointer"
             >
               {selectedHours.length === 0
                 ? "Select all hours"
                 : "Unselect all hours"}
-            </div>
+            </button>
           )}
         </div>
 
@@ -335,8 +343,11 @@ const SchedulePicker = ({
 
       {currentScheduledLesson && (
         <div className="flex flex-col w-full h-40">
-          <h3 className="p-1">Reason for rescheduling or cancelling</h3>
+          <label htmlFor="statusNote" className="p-1">
+            Reason for rescheduling or cancelling
+          </label>
           <textarea
+            id="statusNote"
             value={statusNote}
             onChange={(e) => setStatusNote(e.target.value)}
             className="w-full h-full border rounded-lg bg-slate-100 resize-none p-4 outline-ring"

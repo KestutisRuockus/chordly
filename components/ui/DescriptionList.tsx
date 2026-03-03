@@ -6,24 +6,20 @@ type Props = {
   isCapitalized?: boolean;
 };
 
-const DivLabelAndValueColumn = ({
-  label,
-  value,
-  isCapitalized = true,
-}: Props) => {
+const DescriptionList = ({ label, value, isCapitalized = true }: Props) => {
   return (
-    <div className="flex flex-col">
-      <label className="text-sm text-muted-foreground">{label}:</label>
-      <p
+    <dl className="flex flex-col">
+      <dt className="text-sm text-muted-foreground">{label}</dt>
+      <dd
         className={cn(
           "text-foreground text-sm font-semibold break-words",
           isCapitalized ? "capitalize" : "",
         )}
       >
         {value ?? "N/A"}
-      </p>
-    </div>
+      </dd>
+    </dl>
   );
 };
 
-export default DivLabelAndValueColumn;
+export default DescriptionList;

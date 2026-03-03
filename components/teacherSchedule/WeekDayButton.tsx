@@ -39,6 +39,7 @@ const WeekDayButton = ({
   return (
     <button
       type="button"
+      aria-pressed={isSelected}
       onClick={() => onSelect(day.weekday, day.key)}
       className={`${baseClass} ${selectedClass} ${hasHoursClass} ${!hasAvailableHours && disabledClass}`}
       disabled={!hasAvailableHours}

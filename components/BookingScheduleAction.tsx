@@ -365,17 +365,20 @@ const BookingScheduleAction = ({
               />
               {!currentScheduledLesson && (
                 <div className="flex flex-col min-[500px]:flex-row gap-4 w-fit mx-auto  min-[500px]:w-full border-t mt-2 bg-secondary shadow-md text-foreground p-2 rounded-md">
-                  <div className="w-full sm:w-1/2">
-                    <h4 className="my-2">Selecet lesson type</h4>
+                  <fieldset className="w-full sm:w-1/2">
+                    <legend className="my-2">Select lesson type</legend>
                     <LessonTypeSelector
                       lessonType={lessonType}
                       selectedLessonType={selectedLessonType}
                       onChange={setSelectedLessonType}
                     />
-                  </div>
+                  </fieldset>
                   <div className="w-full sm:w-1/2">
-                    <h4 className="my-2">Selecet instrument</h4>
+                    <label htmlFor="instrument" className="my-2">
+                      Select instrument
+                    </label>
                     <select
+                      id="instrument"
                       value={instrument}
                       onChange={(e) => setInstrument(e.target.value)}
                       className="border px-2 py-1 bg-surface outline-ring"

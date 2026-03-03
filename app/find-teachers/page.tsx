@@ -7,7 +7,7 @@ import Main from "@/components/layout/Main";
 import Section from "@/components/layout/Section";
 import { findTeachers } from "../../content/findTeachers";
 import HeroSection from "@/components/sections/HeroSection";
-import SubHeading from "@/components/ui/SubHeading";
+import Heading from "@/components/ui/Heading";
 
 type Props = {
   searchParams: Promise<{ q?: string; instruments?: string; limit?: string }>;
@@ -53,11 +53,15 @@ const FindTeachersPage = async ({ searchParams }: Props) => {
       <HeroSection {...findTeachers.header} />
       <div className="flex flex-col md:flex-row gap-6 w-full">
         <Section className="flex flex-col gap-2 w-full md:max-w-64">
+          <Heading
+            heading="search and filter by instruments section"
+            className="sr-only"
+          />
           <SearchInput />
           <InstrumentsFilter items={findTeachers.filters.items} />
         </Section>
         <Section>
-          <SubHeading subHeading="Teachers:" textCentered={false} />
+          <Heading heading="Teachers:" textCentered={false} />
           {visibleTeachersList.length === 0 && <p>No teachers found</p>}
           <div className="flex flex-wrap justify-center gap-4 mt-1">
             {visibleTeachersList.map((teacher) => (

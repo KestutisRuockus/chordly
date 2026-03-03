@@ -21,7 +21,12 @@ const LoadMoreButton = ({ step = 5 }: Props) => {
   };
 
   return (
-    <button onClick={handleLoadMore} className="border px-4 mt-6">
+    <button
+      onClick={handleLoadMore}
+      type="button"
+      aria-label="Load more teachers"
+      className="border px-4 mt-6"
+    >
       Load More
     </button>
   );

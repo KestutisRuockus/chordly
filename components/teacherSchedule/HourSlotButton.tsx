@@ -47,6 +47,7 @@ const HourSlotButton = ({
   return (
     <button
       type="button"
+      aria-pressed={isActive}
       onClick={() => onToggle(hour)}
       className={className}
       disabled={disabled}

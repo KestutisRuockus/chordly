@@ -8,25 +8,29 @@ type Props = {
 const TeacherCard = ({ teacher }: Props) => {
   const instrumensList = teacher.instruments.join(", ");
   return (
-    <div className="border flex flex-col gap-1 py-6 px-4 w-52 rounded-md bg-card">
-      <div className="flex flex-col">
-        <label className="text-sm text-muted-foreground">Full Name:</label>
-        <strong className="text-foreground text-sm text-wrap">
+    <div
+      aria-label={`${teacher.fullName} profile card`}
+      className="border flex flex-col gap-1 py-6 px-4 w-52 rounded-md bg-card"
+    >
+      <dl className="flex flex-col">
+        <dt className="text-xs text-muted-foreground">Full Name:</dt>
+        <dd className="text-foreground text-sm font-semibold">
           {teacher.fullName}
-        </strong>
-      </div>
-      <div className="flex flex-col">
-        <label className="text-sm text-muted-foreground">Instruments:</label>
-        <p className="text-foreground text-sm font-semibold">
+        </dd>
+      </dl>
+      <dl className="flex flex-col">
+        <dt className="text-xs text-muted-foreground">Instruments:</dt>
+        <dd className="text-foreground text-sm font-semibold">
           {instrumensList}
-        </p>
-      </div>
-      <div className="flex flex-col">
-        <label className="text-sm text-muted-foreground">Lesson Type:</label>
-        <p className="text-foreground text-sm font-semibold capitalize">
+        </dd>
+      </dl>
+      <dl className="flex flex-col">
+        <dt className="text-xs text-muted-foreground">Lesson Type:</dt>
+        <dd className="text-foreground text-sm font-semibold">
           {teacher.lessonType}
-        </p>
-      </div>
+        </dd>
+      </dl>
+
       <div className="flex justify-center mt-2">
         <CallToActionCard
           buttonLabel="View Profile"

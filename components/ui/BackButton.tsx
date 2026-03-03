@@ -11,6 +11,7 @@ const BackButton = ({ text }: Props) => {
   return (
     <button
       onClick={() => router.back()}
+      type="button"
       className="border px-4 rounded-md w-fit bg-secondary text-secondary-foreground hover:bg-secondary/70 transition-colors duration-300"
     >
       {text}
