@@ -13,6 +13,7 @@ const RatingStars = ({ value, max = 5, size = 12 }: Props) => {
         <Star
           key={i}
           size={size}
+          aria-hidden="true"
           className="text-yellow-500"
           fill="currentColor"
         />
@@ -23,6 +24,7 @@ const RatingStars = ({ value, max = 5, size = 12 }: Props) => {
         <StarHalf
           key={i}
           size={size}
+          aria-hidden="true"
           className="text-yellow-500"
           fill="currentColor"
         />
@@ -33,7 +35,15 @@ const RatingStars = ({ value, max = 5, size = 12 }: Props) => {
     );
   });
 
-  return <div className="flex gap-1">{stars}</div>;
+  return (
+    <div
+      className="flex gap-1"
+      role="img"
+      aria-label={`Rating: ${value} out of ${max}`}
+    >
+      {stars}
+    </div>
+  );
 };
 
 export default RatingStars;

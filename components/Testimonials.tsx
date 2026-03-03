@@ -14,6 +14,7 @@ import RatingStars from "./ui/RatingStars";
 const Testimonials = () => {
   return (
     <Carousel
+      aria-label="Customer testimonials"
       opts={{
         align: "start",
       }}
