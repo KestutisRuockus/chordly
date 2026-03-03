@@ -20,7 +20,7 @@ const CallToActionCard = ({
         <Heading className="font-medium text-foreground">{headline}</Heading>
       )}
       <Link
-        className="w-full text-center bg-surface px-2 rounded-md hover:bg-muted-foreground/80 transition-colors duration-300"
+        className="w-full text-center bg-surface px-2 rounded-md hover:bg-surface/70 transition-colors duration-300"
         href={href}
       >
         {buttonLabel}

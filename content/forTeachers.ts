@@ -32,6 +32,7 @@ export const forTeachers = {
           "Keep lessons, schedules, and student activity clearly organized.",
       },
     ],
+    ariaLabel: "Teacher benefits",
   },
   features: {
     sectionLabel: "Features Preview",

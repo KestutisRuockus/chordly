@@ -32,6 +32,7 @@ export const forStudents = {
           "Build strong practice habits with simple tracking and clear weekly summaries.",
       },
     ],
+    ariaLabel: "Student benefits",
   },
   features: {
     sectionLabel: "Features Preview",

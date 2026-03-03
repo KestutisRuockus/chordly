@@ -44,6 +44,7 @@ export type BenefitsContent = {
     title: string;
     description: string;
   }[];
+  ariaLabel: string;
 };
 
 export type FeaturesPreviewContent = {

@@ -2,8 +2,8 @@ import Main from "@/components/layout/Main";
 import { faq } from "../../content/faq";
 import Section from "@/components/layout/Section";
 import HeroSection from "@/components/sections/HeroSection";
-import SubHeading from "@/components/ui/SubHeading";
 import { AccordionMultiple } from "@/components/ui/AccordionMultiple";
+import Heading from "@/components/ui/Heading";
 
 const FAQPage = () => {
   return (
@@ -11,10 +11,10 @@ const FAQPage = () => {
       <HeroSection {...faq.header} />
       {faq.categories.map((category) => (
         <Section key={category.label}>
-          <SubHeading
-            subHeading={category.label}
-            textCentered={false}
+          <Heading
+            heading={category.label}
             className={"sm:ml-[20%]"}
+            textCentered={false}
           />
           <AccordionMultiple
             items={category.items}

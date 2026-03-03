@@ -60,7 +60,7 @@ const AboutPage = async () => {
                 className="bg-card p-4 rounded-md w-4/5 md:w-2/5"
               >
                 <div className="flex gap-4 items-center">
-                  <Icon size={18} />
+                  <Icon size={18} aria-hidden="true" />
                   <SubHeading subHeading={item.title} textCentered={false} />
                 </div>
                 <p className="text-sm text-muted-foreground">

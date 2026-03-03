@@ -38,7 +38,10 @@ const PricingPlanCard = ({
       ? "Unlimited number of students"
       : `Up to ${studentsLimit} ${studentsLimit === 1 ? "student" : "students"}`;
   return (
-    <Card className={cn("w-72 flex flex-col", planBackgroundColor[plan])}>
+    <Card
+      aria-label={`${label} plan`}
+      className={cn("w-72 flex flex-col", planBackgroundColor[plan])}
+    >
       <CardHeader>
         <CardTitle className="flex gap-1 justify-center items-center">
           <SubHeading subHeading={label} />
@@ -68,26 +71,3 @@ const PricingPlanCard = ({
 };
 
 export default PricingPlanCard;
-
-{
-  /* <div key={card.label}>
-              <h3 className="font-mediums text-lg">
-                {card.label}
-                <span className="font-bold">{` ( ${card.price} ) `}</span>
-              </h3>
-              <ul className="mt-2 mb-6">
-                <li>• {card.studentsLimit}</li>
-                {card.items.map((item) => (
-                  <li key={item}>• {item}</li>
-                ))}
-              </ul>
-              {role === "teacher" && teacherId && (
-                <PlanUpdate
-                  label={card.label}
-                  plan={card.plan}
-                  teacherId={teacherId}
-                  disabled={currentPlan === card.plan}
-                />
-              )}
-            </div> */
-}

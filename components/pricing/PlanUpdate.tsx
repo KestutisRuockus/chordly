@@ -41,6 +41,7 @@ const PlanUpdate = ({ label, plan, teacherId, disabled }: Props) => {
   return (
     <div className="flex justify-center">
       <button
+        type="button"
         onClick={() => setIsOpen(true)}
         className={cn(
           "border rounded-md px-4 transition-colors duration-300",
@@ -59,12 +60,14 @@ const PlanUpdate = ({ label, plan, teacherId, disabled }: Props) => {
         >
           <div className="flex justify-center gap-4">
             <button
+              type="button"
               onClick={handleSubmit}
               className="border px-4 rounded-md cursor-pointer bg-primary text-primary-foreground hover:bg-primary/70 transition-colors duration-300"
             >
               {isSubmitting ? "Updating..." : "Confirm"}
             </button>
             <button
+              type="button"
               onClick={() => setIsOpen(false)}
               className="border px-4 rounded-md cursor-pointer bg-destructive/50 text-foreground hover:bg-destructive/80 transition-colors duration-300"
             >
