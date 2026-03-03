@@ -26,7 +26,7 @@ import { getTeachersSummaryByIds } from "@/db/teachers";
 import TeacherCard from "@/components/teachers/TeacherSummaryCard";
 import FormerRelationCard from "@/components/FormerRelationCard";
 import HeroSection from "@/components/sections/HeroSection";
-import SubHeading from "@/components/ui/SubHeading";
+import Heading from "@/components/ui/Heading";
 
 type Props = {
   searchParams?: Promise<{ offset?: string; days?: string }>;
@@ -110,7 +110,7 @@ const StudentDashboardPage = async ({ searchParams }: Props) => {
       <div className="flex flex-col sm:flex-row justify-center gap-4 mx-auto">
         {nextLesson && (
           <Section className="w-fit">
-            <SubHeading subHeading="Next Lesson" textCentered={false} />
+            <Heading heading="Next Lesson" textCentered={false} />
             <LessonCard
               currentRole={role}
               {...nextLesson}
@@ -123,8 +123,7 @@ const StudentDashboardPage = async ({ searchParams }: Props) => {
       </div>
       {exercises.length > 0 ? (
         <Section className="max-1/2 overflow-x-auto">
-          <h2 className="font-bold text-xl"></h2>
-          <SubHeading subHeading="Exercises" />
+          <Heading heading="Exercises" />
           <div className="flex justify-center flex-wrap gap-4">
             {exercises.map((exercise) => (
               <ExerciseCard
@@ -137,12 +136,12 @@ const StudentDashboardPage = async ({ searchParams }: Props) => {
         </Section>
       ) : (
         <Section>
-          <h2 className="font-bold text-xl">There is no exercises</h2>
+          <Heading heading="There is no exercises" />
         </Section>
       )}
       {currentTeachersSummaries && (
         <Section>
-          <SubHeading subHeading="Your Teachers" />
+          <Heading heading="Your Teachers" />
           <div className="flex flex-wrap gap-4 justify-center">
             {currentTeachersSummaries.map((teacher) => (
               <TeacherCard key={teacher.id} teacher={teacher} />
@@ -152,7 +151,7 @@ const StudentDashboardPage = async ({ searchParams }: Props) => {
       )}
       {formerTeachersSummaries.length !== 0 && (
         <Section>
-          <SubHeading subHeading="Your former teachers" textCentered={false} />
+          <Heading heading="Your former teachers" textCentered={false} />
           <div className="flex flex-wrap gap-4">
             {formerTeachersSummaries.map((teacher) => (
               <FormerRelationCard

@@ -9,11 +9,11 @@ import { addDays, formatDateKey, getTodayWeekDay } from "@/lib/date";
 import { isSameDay } from "../helpers/getPracticeSummary";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import SubHeading from "@/components/ui/SubHeading";
 import { useScreenSize } from "@/hooks/useCalendarResponsive/useScreenSize";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { useEffectEvent } from "react";
+import Heading from "@/components/ui/Heading";
 
 type Props = {
   lessons: LessonRow[];
@@ -88,7 +88,7 @@ const WeekCalendar = ({
   return (
     <Section>
       <div className="flex justify-between items-center">
-        <SubHeading subHeading="Your schedule" />
+        <Heading heading="Your schedule" />
         <label className="inline-flex items-center cursor-pointer bg-gray-300 py-1 px-2 rounded-md">
           <span className="mr-3 text-sm font-medium text-foreground">
             Cancelled lessons
@@ -110,6 +110,7 @@ const WeekCalendar = ({
       </div>
       <div className="flex gap-4 mt-2 mb-1 text-foreground">
         <Link
+          aria-label="Previous week"
           href={`/dashboard/${currentRole}?offset=${prevOffsetWeeks}&days=${days}`}
           className="text-sm hover:text-foreground/70 transition-colors duration-300"
         >
@@ -117,6 +118,7 @@ const WeekCalendar = ({
         </Link>
 
         <Link
+          aria-label="Today"
           href={`/dashboard/${currentRole}?offset=0&days=${days}`}
           className="text-sm hover:text-foreground/70 transition-colors duration-300"
         >
@@ -124,6 +126,7 @@ const WeekCalendar = ({
         </Link>
 
         <Link
+          aria-label="Next week"
           href={`/dashboard/${currentRole}?offset=${nextOffsetWeeks}&days=${days}`}
           className="text-sm hover:text-foreground/70 transition-colors duration-300"
         >

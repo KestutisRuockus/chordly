@@ -15,6 +15,7 @@ const FormerRelationCard = ({ id, name, lastLessonDate, role }: Props) => {
   return (
     <Link
       href={revalidatePath}
+      aria-label={`View profile of ${name}`}
       className="text-sm p-2 rounded-md cursor-pointer bg-background text-foreground hover:bg-primary/20 transition-colors duration-300"
     >
       <p className="font-medium">{name}</p>

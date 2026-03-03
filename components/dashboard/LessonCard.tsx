@@ -148,9 +148,15 @@ const LessonCard = ({
         <p>
           {instrument} • {lessonType}
         </p>
-        <button onClick={handleOpenEdit} disabled={isEditIconDisabbled}>
+        <button
+          onClick={handleOpenEdit}
+          type="button"
+          aria-label="Change lesson type"
+          disabled={isEditIconDisabbled}
+        >
           <Pencil
             size={12}
+            aria-hidden="true"
             className={`mt-0.5 bg-gray-300 p-0.5 rounded-sm ${isEditIconDisabbled ? "opacity-50 cursor-not-allowed" : "hover:opacity-70 cursor-pointer"}`}
           />
         </button>
@@ -159,14 +165,14 @@ const LessonCard = ({
       <div className="flex gap-1 items-center mb-1">
         {lessonType === "online" ? (
           <>
-            <Headset size={12} />
+            <Headset size={12} aria-hidden="true" />
             <div>
               {meetingUrl ? <p>{meetingUrl}</p> : <NoMeetingUrlProvided />}
             </div>
           </>
         ) : (
           <>
-            <MapPin size={12} />
+            <MapPin size={12} aria-hidden="true" />
             <div>
               {location ? <p>{location}</p> : <NoLessonAddressProvided />}
             </div>
@@ -200,7 +206,7 @@ const LessonCard = ({
       <StatusBadge status={lessonStatus} statusNote={statusNote} />
       {isEditLessonTypeOpen && (
         <Modal
-          title={""}
+          title={"Edit lesson type"}
           onClose={() => {
             setIsEditLessonTypeOpen(false);
           }}
@@ -213,6 +219,7 @@ const LessonCard = ({
           />
           <button
             onClick={handleLessonTypeUpdate}
+            type="button"
             className="border rounded-md py- px-2 cursor-pointer mt-2"
           >
             {isSubmitting ? "Updating..." : "Update Lesson Type"}

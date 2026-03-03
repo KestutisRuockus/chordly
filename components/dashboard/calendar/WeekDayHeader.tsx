@@ -64,7 +64,7 @@ const WeekDayHeader = ({
           ))}
         </div>
       ) : (
-        <p className="text-xs text-gray-400">No lessons</p>
+        <p className="text-xs text-secondary-foreground">No lessons</p>
       )}
     </div>
   );

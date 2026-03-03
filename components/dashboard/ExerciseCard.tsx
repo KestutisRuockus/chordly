@@ -56,7 +56,11 @@ const ExerciseCard = ({ exercise, isStudent = true, studentId }: Props) => {
     >
       {!isStudent && (
         <div className="absolute right-0.5 top-0.5 flex gap-1">
-          <Trash2 onClick={handleDelete} className="w-4 h-4 cursor-pointer" />
+          <Trash2
+            onClick={handleDelete}
+            className="w-4 h-4 cursor-pointer"
+            aria-hidden="true"
+          />
         </div>
       )}
       <div>
@@ -69,9 +73,9 @@ const ExerciseCard = ({ exercise, isStudent = true, studentId }: Props) => {
         <p className="flex items-center gap-2 text-sm">
           Practiced today:
           {practicedToday ? (
-            <Check className="text-success w-4 h-4" />
+            <Check className="text-success w-4 h-4" aria-hidden="true" />
           ) : (
-            <X className="text-destructive w-4 h-4" />
+            <X className="text-destructive w-4 h-4" aria-hidden="true" />
           )}
         </p>
         <p className="text-sm">
@@ -82,6 +86,7 @@ const ExerciseCard = ({ exercise, isStudent = true, studentId }: Props) => {
         {isStudent && (
           <button
             onClick={handleMarkPracticedToday}
+            type="button"
             className={cn(
               "border px-2 py-1 rounded-lg disabled:opacity-50 w-full text-foreground",
               isDoneThisWeek || practicedToday

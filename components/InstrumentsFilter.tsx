@@ -59,9 +59,9 @@ const InstrumentsFilter = ({ items }: Props) => {
                   <label
                     key={instrument}
                     className={cn(
-                      "flex items-center text-sm gap-2 text-nowrap",
+                      "flex items-center text-sm gap-2 text-nowrap py-1",
                       isSelected
-                        ? "text-primary font-medium"
+                        ? "text-muted-foreground font-medium"
                         : "text-foreground",
                     )}
                   >
@@ -69,7 +69,7 @@ const InstrumentsFilter = ({ items }: Props) => {
                       type="checkbox"
                       checked={isSelected}
                       onChange={() => toggleInstrument(instrument)}
-                      className="accent-primary"
+                      className="accent-muted-foreground"
                     />
                     {instrument}
                   </label>

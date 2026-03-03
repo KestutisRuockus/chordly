@@ -60,6 +60,12 @@ const PracticeSummary = ({ summary, showFullSummary = true }: Props) => {
                 <div key={day} className="flex flex-col items-center gap-1">
                   <span className="text-xs text-muted-foreground">{day}</span>
                   <span
+                    role="img"
+                    aria-label={
+                      practiced
+                        ? `${day} - practiced`
+                        : `${day} - not practiced`
+                    }
                     className={`w-3 h-3 rounded-sm border ${
                       practiced
                         ? "bg-success border-success"
