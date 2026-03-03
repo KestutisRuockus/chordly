@@ -41,20 +41,22 @@ const StudentProfileForm = ({
       <Heading heading="Edit Student Profile" />
 
       <div className="flex flex-col gap-2 w-full md:w-3/5 2xl:w-2/3 mx-auto">
-        <label>
+        <label htmlFor="location">
           Location<span className="text-red-500">*</span>
         </label>
         <input
+          id="location"
           name="location"
           placeholder="Location"
           className="border p-2 outline-ring"
           defaultValue={initialData.location ?? ""}
         />
 
-        <label>
+        <label htmlFor="skillLevel">
           Skill level<span className="text-red-500">*</span>
         </label>
         <select
+          id="skillLevel"
           name="skillLevel"
           className="border p-2 outline-ring"
           defaultValue={initialData.skillLevel ?? ""}
@@ -65,10 +67,11 @@ const StudentProfileForm = ({
           <option value="advanced">Advanced</option>
         </select>
 
-        <label>
+        <label htmlFor="bio">
           Bio<span className="text-red-500">*</span>
         </label>
         <textarea
+          id="bio"
           name="bio"
           placeholder="Tell us about yourself"
           className="border p-2 outline-ring"
@@ -76,8 +79,9 @@ const StudentProfileForm = ({
           rows={4}
         />
 
-        <label>Age (optional)</label>
+        <label htmlFor="age">Age (optional)</label>
         <input
+          id="age"
           name="age"
           type="number"
           placeholder="Age"
@@ -92,7 +96,11 @@ const StudentProfileForm = ({
         currentImageUrl={initialData.avatarUrl ?? undefined}
       />
 
-      {error && <p className="text-red-500">{error}</p>}
+      {error && (
+        <p role="alert" className="text-red-500">
+          {error}
+        </p>
+      )}
 
       <button
         type="submit"

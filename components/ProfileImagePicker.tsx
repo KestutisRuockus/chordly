@@ -28,11 +28,16 @@ const ProfileImagePicker = ({ value, onChange, currentImageUrl }: Props) => {
             className="object-cover"
           />
         ) : (
-          <span className="text-xs opacity-60">No image</span>
+          <span className="text-xs">No image</span>
         )}
       </div>
 
+      <label htmlFor="profilePhoto" className="text-sm font-medium mx-auto">
+        Profile photo (optional)
+      </label>
+
       <input
+        id="profilePhoto"
         type="file"
         accept="image/*"
         onChange={(e) => {

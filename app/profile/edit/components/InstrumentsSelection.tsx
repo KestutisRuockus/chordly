@@ -29,10 +29,14 @@ const InstrumentsSelection = ({ defaultSelected = [] }: Props) => {
                 const isSelected = defaultSelected.includes(instrument);
                 return (
                   <label
+                    htmlFor={instrument}
                     key={instrument}
-                    className={cn("flex items-center gap-2 cursor-pointer")}
+                    className={cn(
+                      "flex items-center gap-2 cursor-pointer py-0.5",
+                    )}
                   >
                     <input
+                      id={instrument}
                       type="checkbox"
                       name="instruments"
                       value={instrument}

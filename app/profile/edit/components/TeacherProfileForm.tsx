@@ -43,10 +43,11 @@ const TeacherProfileForm = ({
       <div className="flex flex-col sm:flex-row gap-2 bg-card p-4 rounded-md">
         <InstrumentsSelection defaultSelected={initialData.instruments ?? []} />
         <div className="flex flex-col gap-2 w-full sm:w-3/5 2xl:w-2/3">
-          <label>
+          <label htmlFor="experience">
             Experience<span className="text-red-500">*</span>
           </label>
           <select
+            id="experience"
             name="experience"
             className="border outline-ring"
             defaultValue={initialData.experience ?? ""}
@@ -58,28 +59,34 @@ const TeacherProfileForm = ({
             <option value="5+">5+ years</option>
           </select>
 
-          <label>
-            LessonType<span className="text-red-500">*</span>
-          </label>
-          <div className="flex gap-4">
-            {lessonTypeList.map((type) => (
-              <label key={type}>
-                <input
-                  type="radio"
-                  name="lessonType"
-                  value={type}
-                  defaultChecked={(initialData.lessonType ?? "hybrid") === type}
-                  className="accent-primary"
-                />
-                {type}
-              </label>
-            ))}
-          </div>
+          <fieldset>
+            <legend>
+              Lesson Type<span className="text-red-500">*</span>
+            </legend>
+            <div className="flex gap-4">
+              {lessonTypeList.map((type) => (
+                <label htmlFor={`lessonType-${type}`} key={type}>
+                  <input
+                    id={`lessonType-${type}`}
+                    type="radio"
+                    name="lessonType"
+                    value={type}
+                    defaultChecked={
+                      (initialData.lessonType ?? "hybrid") === type
+                    }
+                    className="accent-primary"
+                  />
+                  {type}
+                </label>
+              ))}
+            </div>
+          </fieldset>
 
-          <label>
+          <label htmlFor="hourlyRate">
             Hourly rate<span className="text-red-500">*</span>
           </label>
           <input
+            id="hourlyRate"
             name="hourlyRate"
             type="number"
             placeholder="Hourly rate (€)"
@@ -87,10 +94,11 @@ const TeacherProfileForm = ({
             defaultValue={initialData.hourlyRate ?? ""}
           />
 
-          <label>
+          <label htmlFor="bio">
             Bio<span className="text-red-500">*</span>
           </label>
           <textarea
+            id="bio"
             name="bio"
             placeholder="Tell us about yourself"
             className="border p-2 outline-ring"
@@ -98,27 +106,30 @@ const TeacherProfileForm = ({
             rows={4}
           />
 
-          <label>
+          <label htmlFor="location">
             Location
             <span className="text-red-500">*</span>
           </label>
           <input
+            id="location"
             name="location"
             placeholder="Your city/area"
             className="border p-2 outline-ring"
             defaultValue={initialData.location ?? ""}
           />
 
-          <label>Lesson location</label>
+          <label htmlFor="lessonLocation">Lesson location</label>
           <input
+            id="lessonLocation"
             name="lessonLocation"
             placeholder="Address where you teach"
             className="border p-2 outline-ring"
             defaultValue={initialData.lessonLocation ?? ""}
           />
 
-          <label>Online lessons link</label>
+          <label htmlFor="meetingUrl">Online lessons link</label>
           <input
+            id="meetingUrl"
             name="meetingUrl"
             placeholder="Meeting link"
             className="border p-2 outline-ring"

@@ -4,6 +4,7 @@ import type { RoleType } from "@/types/role";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import ProfileEditClient from "./components/ProfileEditClient";
+import Main from "@/components/layout/Main";
 
 const ProfileEdit = async () => {
   const { userId } = await auth();
@@ -26,7 +27,11 @@ const ProfileEdit = async () => {
     userData = await getTeacherById(userDbId);
   }
 
-  return <ProfileEditClient role={role} initialData={userData} />;
+  return (
+    <Main>
+      <ProfileEditClient role={role} initialData={userData} />
+    </Main>
+  );
 };
 
 export default ProfileEdit;
