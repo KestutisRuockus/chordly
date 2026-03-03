@@ -19,12 +19,14 @@ const DeactivateConfirmWindow = ({
       <div className="flex gap-4">
         <button
           onClick={onSubmit}
+          type="button"
           className="px-4 cursor-pointer border rounded-md bg-destructive text-destructive-foreground hover:bg-destructive/70 transition-colors duration-300"
         >
           {isSubmitting ? "Saving..." : "Confirm"}
         </button>
         <button
           onClick={onClose}
+          type="button"
           className="px-4 cursor-pointer border rounded-md bg-secondary text-secondbg-secondary-foreground hover:bg-secondary/70 transition-colors duration-300"
         >
           Cancel

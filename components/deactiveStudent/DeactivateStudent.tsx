@@ -47,6 +47,7 @@ const DeactivateStudent = ({ teacherId, studentId, disabled }: Props) => {
     <>
       <button
         onClick={() => setIsOpen(true)}
+        type="button"
         className={`w-full text-sm rounded-md bg-destructive text-destructive-foreground hover:bg-destructive/70 transition-colors duration-300 ${disabled ? "cursor-not-allowed" : "cursor-pointer"}`}
         disabled={disabled}
       >

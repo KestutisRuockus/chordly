@@ -147,22 +147,34 @@ const ExerciseForm = ({
       className="flex flex-col gap-5 mt-2 min-w-[280px] w-full"
     >
       <div className="flex flex-col gap-1">
+        <label htmlFor="title" className="sr-only">
+          Title
+        </label>
         <input
+          id="title"
           name="title"
           value={form.title}
           onChange={handleText}
           className="border rounded-lg p-2 outline-ring"
           placeholder="Title"
         />
-        {errors.title && <p className="text-sm text-red-500">{errors.title}</p>}
+        {errors.title && (
+          <p role="alert" className="text-sm text-red-500">
+            {errors.title}
+          </p>
+        )}
       </div>
 
       <div className="flex flex-col gap-1 relative">
-        <label className="absolute -top-2 left-2 px-1 text-xs">
+        <label
+          htmlFor="selectInstrument"
+          className="absolute -top-2 left-2 px-1 text-xs"
+        >
           Select instrument
         </label>
         <select
-          value={form.difficulty}
+          id="selectInstrument"
+          value={form.instrument}
           onChange={handleInstrumentChange}
           className="border rounded-lg p-2 outline-ring"
         >
@@ -173,15 +185,21 @@ const ExerciseForm = ({
           ))}
         </select>
         {errors.difficulty && (
-          <p className="text-sm text-red-500">{errors.difficulty}</p>
+          <p role="alert" className="text-sm text-red-500">
+            {errors.difficulty}
+          </p>
         )}
       </div>
 
       <div className="flex flex-col gap-1 relative">
-        <label className="absolute -top-2 left-2 px-1 text-xs">
+        <label
+          htmlFor="selectExerciseDifficulty"
+          className="absolute -top-2 left-2 px-1 text-xs"
+        >
           Select exercise difficulty
         </label>
         <select
+          id="selectExerciseDifficulty"
           value={form.difficulty}
           onChange={handleDifficultyChange}
           className="border rounded-lg p-2 outline-ring"
@@ -191,12 +209,15 @@ const ExerciseForm = ({
           <option value="advanced">Advanced</option>
         </select>
         {errors.difficulty && (
-          <p className="text-sm text-red-500">{errors.difficulty}</p>
+          <p role="alert" className="text-sm text-red-500">
+            {errors.difficulty}
+          </p>
         )}
       </div>
 
       <div className="flex flex-col gap-1">
         <textarea
+          aria-label="Exercise goal content"
           name="goal"
           value={form.goal}
           onChange={handleText}
@@ -204,14 +225,22 @@ const ExerciseForm = ({
           rows={4}
           placeholder="Goal"
         />
-        {errors.goal && <p className="text-sm text-red-500">{errors.goal}</p>}
+        {errors.goal && (
+          <p role="alert" className="text-sm text-red-500">
+            {errors.goal}
+          </p>
+        )}
       </div>
 
       <div className="flex flex-col gap-1 relative">
-        <label className="absolute -top-2 left-2 px-1 text-xs">
+        <label
+          htmlFor="timesPerWeek"
+          className="absolute -top-2 left-2 px-1 text-xs"
+        >
           Exercise times per week
         </label>
         <select
+          id="timesPerWeek"
           value={form.targetPerWeek}
           onChange={handleTargetChange}
           className="border rounded-lg p-2 outline-ring"
@@ -221,7 +250,9 @@ const ExerciseForm = ({
           <option value={5}>5</option>
         </select>
         {errors.targetPerWeek && (
-          <p className="text-sm text-red-500">{errors.targetPerWeek}</p>
+          <p role="alert" className="text-sm text-red-500">
+            {errors.targetPerWeek}
+          </p>
         )}
       </div>
 

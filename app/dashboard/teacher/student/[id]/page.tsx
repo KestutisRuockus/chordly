@@ -105,7 +105,10 @@ const StudentFullProfileById = async ({ params }: Props) => {
     <Main className=" lg:w-11/12 2xl:w-4/5">
       <BackButton text="Back to dashboard" />
       <Section className="w-full grid grid-cols-5 gap-4 border-0 bg-background shadow-md">
-        <aside className="border rounded-lg bg-card shadow-sm p-4 col-span-5 lg:col-span-2">
+        <aside
+          aria-label="Student profile"
+          className="border rounded-lg bg-card shadow-sm p-4 col-span-5 lg:col-span-2"
+        >
           <div className="flex flex-col-reverse md:flex-row lg:flex-col-reverse xl:flex-row items-center md:items-start lg:item-center xl:items-start justify-between gap-1 p-2 mb-4">
             <div className="flex flex-col gap-1 w-full lg:w-full xl:w-1/2">
               <DescriptionList label={"Name"} value={student.fullName} />
@@ -195,7 +198,9 @@ const StudentFullProfileById = async ({ params }: Props) => {
                     />
                   ))
                 ) : (
-                  <p className="text-sm text-gray-600">No past lessons</p>
+                  <p className="text-sm text-muted-foreground">
+                    No past lessons
+                  </p>
                 )}
               </div>
             </>

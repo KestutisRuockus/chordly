@@ -9,6 +9,7 @@ const StudentSummaryCard = ({ student }: { student: StudentSummary }) => {
       </p>
       <Link
         href={`/dashboard/teacher/student/${student.id}`}
+        aria-label={`View ${student.name}'s profile`}
         className="border rounded-lg px-2 mt-2 text-center bg-primary text-primary-foreground hover:bg-primary/70 transition-colors duration-300"
       >
         View Profile

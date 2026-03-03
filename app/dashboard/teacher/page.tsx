@@ -28,7 +28,6 @@ import FormerRelationCard from "@/components/FormerRelationCard";
 import Heading from "@/components/ui/Heading";
 import CallToActionCardWrapper from "@/components/ui/CallToActionCardWrapper";
 import HeroSection from "@/components/sections/HeroSection";
-import SubHeading from "@/components/ui/SubHeading";
 
 type Props = {
   searchParams?: Promise<{ offset?: string; days?: string }>;
@@ -123,7 +122,7 @@ const TeacherDashboardPage = async ({ searchParams }: Props) => {
       <div className="flex flex-col sm:flex-row justify-center gap-4 mx-auto">
         {nextLesson && (
           <Section className="w-fit">
-            <SubHeading subHeading="Next Lesson" textCentered={false} />
+            <Heading heading="Next Lesson" textCentered={false} />
             <LessonCard
               currentRole={role}
               {...nextLesson}
@@ -134,7 +133,7 @@ const TeacherDashboardPage = async ({ searchParams }: Props) => {
         )}
         {currentStudentsSummaries.length > 0 && (
           <Section className="w-4/5 sm:w-fit">
-            <SubHeading subHeading="Your students" textCentered={days < 3} />
+            <Heading heading="Your students" textCentered={days < 3} />
             <div className="flex flex-wrap gap-4 justify-start">
               {currentStudentsSummaries.map((student) => (
                 <StudentSummaryCard key={student.id} student={student} />
@@ -145,7 +144,7 @@ const TeacherDashboardPage = async ({ searchParams }: Props) => {
       </div>
       {formerStudentsSummaries.length > 0 && (
         <Section>
-          <SubHeading subHeading="Your former students" textCentered={false} />
+          <Heading heading="Your former students" textCentered={false} />
           <div className="flex flex-wrap gap-4">
             {formerStudentsSummaries.map((student) => (
               <FormerRelationCard

@@ -40,13 +40,18 @@ const NotesForm = ({ onClose, setFormIsEmpty, studentId }: Props) => {
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-2">
       <textarea
+        aria-label="Note content"
         value={note}
         onChange={handleChange}
         className="border rounded-lg p-2 min-h-32 min-w-[280px] w-full  outline-ring"
         rows={5}
         placeholder="Write note..."
       />
-      {errMsg && <p className="text-sm text-red-500">{errMsg}</p>}
+      {errMsg && (
+        <p role="alert" className="text-sm text-red-500">
+          {errMsg}
+        </p>
+      )}
       <button
         type="submit"
         className="rounded border px-3 py-2 bg-primary text-primary-foreground hover:bg-primary/70 transition-colors duration-300"
