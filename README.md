@@ -1,21 +1,23 @@
 # Chordly 🎵
 
-Chordly is a SaaS platform designed to connect music students with teachers and support the full learning process in one place.
+Chordly is a SaaS platform that connects music students with teachers and supports the full learning journey in one place.
 
-The platform goes beyond simple lesson booking by focusing on long-term progress tracking, practice management, and role-based dashboards for both students and teachers.
+Unlike simple booking tools, Chordly gives teachers the tools to manage their students, assign exercises, track practice habits, and handle scheduling — all from a single dashboard. Students get a clear view of their progress, upcoming lessons, and assigned exercises.
 
-The project is currently under active development and is being built as a real-world SaaS product.
+Built with a focus on real-world usability, role-based access, and clean architecture.
 
 ---
 
-## ✨ Features (Work in Progress)
+## ✨ Features
 
-- User authentication with role-based access (students / teachers)
-- Teacher discovery and profile pages
-- Lesson booking flow
+- Role-based authentication (students / teachers)
+- Teacher discovery with search and instrument filters
+- Lesson booking and rescheduling system
 - Student and teacher dashboards
-- Practice and learning progress tracking
-- Calendar-based lesson management
+- Weekly calendar with lesson management
+- Practice tracking and exercise assignment
+- Pricing plans with plan management
+- WCAG accessibility (Lighthouse score 100)
 
 ---
 
@@ -28,6 +30,7 @@ The project is currently under active development and is being built as a real-w
 - **Clerk** – authentication
 - **Neon** – serverless PostgreSQL
 - **Drizzle ORM** – database access
+- **Uploadthing** – file/image uploads
 
 ---
 
@@ -52,7 +55,13 @@ Create a .env.local file in the root directory and add the following environment
 
 - NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=your_clerk_publishable_key
 - CLERK_SECRET_KEY=your_clerk_secret_key
+- NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
+- NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
+- NEXT_PUBLIC_CLERK_SIGN_IN_FALLBACK_REDIRECT_URL=/
+- NEXT_PUBLIC_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL=/
 - DATABASE_URL=your_neon_database_url
+- UPLOADTHING_TOKEN=your_uploadthing_token
+- NEXT_PUBLIC_BASE_URL=your_base_url
 
 ### 4. Run the development server
 
@@ -68,8 +77,6 @@ Open http://localhost:3000 in your browser to view the application.
 
 ### 🔑 Demo Accounts
 
-If you want to test the app with different roles, you can log in using these demo credentials:
-
 **Teacher account**
 
 - Email: `demo.teacher@demo.com`
@@ -79,17 +86,3 @@ If you want to test the app with different roles, you can log in using these dem
 
 - Email: `demo.student@demo.com`
 - Password: `chordly_demo`
-
-## 📌 Project Status
-
-Chordly is under active development.
-
-## Current focus:
-
-Core functionality
-
-Application architecture
-
-Authentication and data layer
-
-UI design and visual polish are planned for a later development phase.
